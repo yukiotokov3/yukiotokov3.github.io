@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <title>路地の奥にある小さな喫茶店と、ネルドリップのコーヒーとケーキのイラスト（AIで生成・架空）</title>
+  <rect width="1600" height="900" fill="#f6ead6"/>
+  <!-- sky / morning light -->
+  <circle cx="1380" cy="150" r="90" fill="#f4c97a"/>
+  <!-- alley walls -->
+  <polygon points="0,0 360,120 360,760 0,900" fill="#c9b08f"/>
+  <polygon points="1600,0 1240,120 1240,760 1600,900" fill="#bfa27f"/>
+  <rect x="40" y="200" width="160" height="120" fill="#a98a66"/>
+  <rect x="1400" y="220" width="150" height="110" fill="#9f8160"/>
+  <!-- ground -->
+  <polygon points="0,900 360,760 1240,760 1600,900" fill="#d8c3a2"/>
+  <g stroke="#c4ab86" stroke-width="4">
+    <line x1="480" y1="760" x2="300" y2="900"/><line x1="800" y1="760" x2="800" y2="900"/><line x1="1120" y1="760" x2="1300" y2="900"/>
+    <line x1="200" y1="830" x2="1400" y2="830"/>
+  </g>
+  <!-- cafe building -->
+  <rect x="460" y="230" width="680" height="530" fill="#6b4a35"/>
+  <polygon points="430,240 800,120 1170,240" fill="#4a3226"/>
+  <!-- awning -->
+  <g>
+    <rect x="470" y="320" width="660" height="70" fill="#2f5d50"/>
+    <g fill="#f6ead6">
+      <rect x="530" y="320" width="55" height="70"/><rect x="640" y="320" width="55" height="70"/><rect x="750" y="320" width="55" height="70"/><rect x="860" y="320" width="55" height="70"/><rect x="970" y="320" width="55" height="70"/><rect x="1080" y="320" width="50" height="70"/>
+    </g>
+  </g>
+  <!-- sign -->
+  <rect x="640" y="250" width="320" height="56" rx="10" fill="#f6ead6"/>
+  <text x="800" y="289" text-anchor="middle" font-family="sans-serif" font-size="34" font-weight="700" fill="#4a3226">喫茶 ろじのね</text>
+  <!-- window -->
+  <rect x="510" y="430" width="300" height="230" rx="8" fill="#f3d9a4"/>
+  <line x1="660" y1="430" x2="660" y2="660" stroke="#6b4a35" stroke-width="8"/>
+  <line x1="510" y1="545" x2="810" y2="545" stroke="#6b4a35" stroke-width="8"/>
+  <!-- door -->
+  <rect x="880" y="430" width="200" height="330" rx="100" ry="40" fill="#3a271d"/>
+  <rect x="905" y="470" width="150" height="120" rx="60" ry="24" fill="#f3d9a4"/>
+  <circle cx="1050" cy="640" r="9" fill="#e8b65c"/>
+  <!-- plants -->
+  <ellipse cx="480" cy="740" rx="50" ry="40" fill="#5c8a5a"/><rect x="450" y="740" width="60" height="30" fill="#8a5a3c"/>
+  <ellipse cx="1150" cy="740" rx="45" ry="36" fill="#5c8a5a"/><rect x="1122" y="740" width="56" height="30" fill="#8a5a3c"/>
+  <!-- foreground table: cup and cake -->
+  <rect x="200" y="790" width="1200" height="110" fill="#8a5a3c"/>
+  <ellipse cx="560" cy="800" rx="120" ry="22" fill="#fffaf2"/>
+  <path d="M480 700 h160 v60 a80 40 0 0 1 -160 0 z" fill="#fffaf2"/>
+  <ellipse cx="560" cy="700" rx="80" ry="16" fill="#5a3522"/>
+  <path d="M640 715 a30 30 0 0 1 0 50" fill="none" stroke="#fffaf2" stroke-width="12"/>
+  <path d="M530 680 q-15 -30 0 -60 M570 680 q-15 -30 0 -60" fill="none" stroke="#fffaf2" stroke-width="6" opacity=".8"/>
+  <ellipse cx="1000" cy="805" rx="110" ry="20" fill="#fffaf2"/>
+  <polygon points="930,795 1070,795 1070,720 930,750" fill="#f2d6a2"/>
+  <polygon points="930,750 1070,720 1070,740 930,770" fill="#c97a5a"/>
+  <circle cx="1040" cy="715" r="14" fill="#c0392b"/>
+</svg>
