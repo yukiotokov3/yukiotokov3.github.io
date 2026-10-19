@@ -294,3 +294,7 @@ main{display:block}
 @media (max-width:760px) and (prefers-reduced-motion:reduce){
   .tabs,.tabs[data-state=closed],.tabs-handle{transition:none}
 }
+.credit-sec{padding:8px 0 56px;border-top:1px solid var(--rule)}
+.credit-sec>h2{margin:24px 0 8px}
+.credit-sec p{margin:0;max-width:52em;font-size:14px;line-height:1.8;color:var(--ink)}
+.team-sec.human{padding-bottom:40px}
