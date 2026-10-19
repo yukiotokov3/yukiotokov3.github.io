@@ -1,13 +1,9 @@
-/* テアシ商会 紹介サイト（案1「取扱説明書」）
-   書体：Teashi Sans JP ＝ IBM Plex Sans JP（SIL Open Font License 1.1）を、このサイトで使う文字だけに絞り、
-   予約フォント名「Plex」を名前から外したもの。ライセンスは assets/fonts/OFL.txt */
 @font-face{font-family:"Teashi Sans JP";src:url("fonts/TeashiSansJP-400.woff2") format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:"Teashi Sans JP";src:url("fonts/TeashiSansJP-500.woff2") format("woff2");font-weight:500;font-display:swap}
 @font-face{font-family:"Teashi Sans JP";src:url("fonts/TeashiSansJP-700.woff2") format("woff2");font-weight:700;font-display:swap}
 :root{
   --paper:#F5F6F4; --ink:#15191C; --blue:#1F55D6; --caution:#F2B300; --ok:#12804A;
-  --ink-2:#4A5157; /* 墨の淡（補助文字・終了） */
-  --rule:color-mix(in oklab,var(--ink) 22%,var(--paper));
+  --ink-2:#4A5157;   --rule:color-mix(in oklab,var(--ink) 22%,var(--paper));
   --font:"Teashi Sans JP","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
   --tab:64px;
 }
@@ -24,13 +20,11 @@ a:hover{text-decoration-thickness:2px}
 .skip:focus{top:8px}
 .wrap{max-width:1180px;margin:0 auto;padding:0 calc(var(--tab) + 40px) 0 48px}
 
-/* ヘッダー：ロゴ枠（差し替え）＋書類番号 */
 .head{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:28px;padding-bottom:20px;border-bottom:1.5px solid var(--ink)}
 .logo-slot{display:inline-flex;align-items:center;gap:10px;max-width:180px;height:44px;color:var(--ink);text-decoration:none;font-weight:700;font-size:20px;letter-spacing:.06em}
 .logo-slot img{display:block;max-width:180px;max-height:44px;width:auto;height:auto}
 .docno{margin:0;font-size:13px;color:var(--ink-2);letter-spacing:.04em}
 
-/* 爪見出し（ページ送り）：右端に固定、ページをまたいで残る */
 .tabs{position:fixed;right:0;top:50%;translate:0 -50%;z-index:10;view-transition-name:tabs}
 .tabs ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
 .tabs a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:var(--tab);min-height:92px;padding:10px 6px;background:color-mix(in oklab,var(--ink) 8%,var(--paper));color:var(--ink);text-decoration:none;border-radius:8px 0 0 8px;font-size:13px;line-height:1.25;writing-mode:vertical-rl;letter-spacing:.08em;transition:background .2s,translate .25s cubic-bezier(.16,1,.3,1)}
@@ -41,21 +35,18 @@ a:hover{text-decoration-thickness:2px}
 main{display:block}
 .page-body{view-transition-name:sheet}
 
-/* 表紙の部分 */
 .cover{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:56px;align-items:end;padding:48px 0 40px}
 .cover h1{margin:0;font-weight:700;font-size:clamp(30px,3.9vw,50px);line-height:1.22;letter-spacing:-.01em;text-wrap:balance}
 .cover h1 span{display:block;font-size:max(15px,.42em);font-weight:500;letter-spacing:.04em;margin-bottom:.6em;color:var(--ink-2)}
 .cover .lead{margin:0;font-size:17px;max-width:30em}
 .cover .lead strong{font-weight:700}
 
-/* 図の共通 */
 .fig{margin:0;padding:40px 0 56px;border-top:1px solid var(--rule)}
 .figcap{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px;margin:0 0 28px}
 .figcap h2{margin:0;font-size:24px;font-weight:700;letter-spacing:.02em}
 .figcap h2 em{font-style:normal;font-weight:500;color:var(--blue);margin-right:.6em}
 .figcap p{margin:0;color:var(--ink-2);font-size:14px}
 
-/* 図1 各部のなまえ */
 .parts{display:grid;grid-template-columns:1fr 460px 1fr;align-items:stretch}
 .parts ol{list-style:none;margin:0;padding:0;display:grid;grid-template-rows:repeat(3,140px)}
 .parts li{position:relative;display:flex;flex-direction:column;justify-content:center;font-size:14px;line-height:1.65}
@@ -74,7 +65,6 @@ main{display:block}
 .more{margin:28px 0 0;font-size:15px}
 .more a{font-weight:700}
 
-/* 図2 作ったもの */
 .plates{display:grid;grid-template-columns:7fr 5fr;gap:40px;align-items:start}
 .plate{margin:0}
 .plate a.shot{display:block;border:1.5px solid var(--ink);border-radius:4px;overflow:hidden;background:#fff;transition:translate .3s cubic-bezier(.16,1,.3,1),box-shadow .3s}
@@ -87,12 +77,10 @@ main{display:block}
 .plate .open{font-weight:700}
 .plate:nth-child(2){margin-top:72px}
 
-/* 状態の標識（色＋形＋文字） */
 .sign{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;line-height:1;padding:5px 9px 5px 6px;border-radius:999px;background:#fff;border:1.5px solid currentColor;vertical-align:middle;white-space:nowrap}
 .sign svg{width:16px;height:16px;flex:none}
 .sign.ok{color:var(--ok)} .sign.fix{color:var(--ink)} .sign.fix svg .bg{fill:var(--caution)} .sign.end{color:var(--ink-2)}
 
-/* ご使用の前に */
 .notes{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:56px;padding:48px 0 64px;border-top:1px solid var(--rule)}
 .notes h2{margin:0;font-size:24px}
 .notes p{margin:0 0 1em;max-width:38em}
@@ -104,7 +92,6 @@ main{display:block}
 .foot{border-top:1.5px solid var(--ink);padding-top:22px;padding-bottom:40px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:14px}
 .foot ul{list-style:none;margin:0;padding:0;display:flex;gap:20px}
 
-/* 作ったもの（部品表） */
 .list-head{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px;align-items:end;padding:64px 0 32px}
 .list-head h1{margin:0;font-size:clamp(32px,4.6vw,56px);line-height:1.25}
 .list-head h1 span{display:block;font-size:max(15px,.4em);font-weight:500;color:var(--ink-2);margin-bottom:.5em}
@@ -127,7 +114,6 @@ main{display:block}
 .btn:hover{background:color-mix(in oklab,var(--blue) 80%,var(--ink))}
 .bom .empty{display:block;padding:20px 0;color:var(--ink-2);font-size:14px}
 
-/* 動き：引き出し線が1回だけ描かれる／ページ送り */
 @media (prefers-reduced-motion:no-preference){
   .d-lead{stroke-dasharray:260;animation:draw 1s cubic-bezier(.16,1,.3,1) both}
   .d-lead:nth-of-type(2){animation-delay:.08s}.d-lead:nth-of-type(3){animation-delay:.16s}.d-lead:nth-of-type(4){animation-delay:.24s}.d-lead:nth-of-type(5){animation-delay:.32s}
@@ -140,7 +126,6 @@ main{display:block}
   @keyframes sheet-in{from{translate:6% 0;opacity:0;clip-path:inset(0 0 0 30%)}}
 }
 
-/* スマホ */
 @media (max-width:760px){
   :root{--tab:0px}
   .wrap{padding:0 20px 0 20px}
@@ -170,7 +155,6 @@ main{display:block}
 .tabs i{font-style:normal}
 @media (max-width:760px){.tabs .long{display:none}}
 
-/* ここから本番用の追加 */
 .foot p{margin:0}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .parts li.out b{font-size:17px}
@@ -184,7 +168,6 @@ main{display:block}
 .page-head{padding:56px 0 32px;border-bottom:1.5px solid var(--ink)}
 .page-head h1{margin:0;font-size:clamp(32px,4.6vw,56px);line-height:1.25}
 .endnote{display:flex;gap:10px;align-items:center;margin:0 0 56px;font-size:14px;color:var(--ink-2)}
-/* 分担 */
 .roles{list-style:none;margin:0;padding:0}
 .roles li{display:grid;grid-template-columns:40px 40px minmax(0,14em) minmax(0,1fr);gap:0 20px;align-items:center;padding:22px 0;border-bottom:1px solid var(--rule)}
 .roles .n{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700}
@@ -197,7 +180,6 @@ main{display:block}
 .doing li{padding:16px 0;border-bottom:1px solid var(--rule)}
 .doing h3{margin:0 0 4px;font-size:17px}
 .doing p{margin:0}
-/* 活動記録（改訂履歴の表） */
 .rev{width:100%;border-collapse:collapse;margin:32px 0 48px;font-size:15px}
 .rev th,.rev td{text-align:left;vertical-align:top;padding:14px 16px 14px 0;border-bottom:1px solid var(--rule)}
 .rev thead th{font-size:13px;color:var(--ink-2);font-weight:500;border-bottom:1.5px solid var(--ink)}
@@ -207,11 +189,9 @@ main{display:block}
 .channels p{margin:0 0 10px}
 .channels ul{margin:0;padding-left:1.2em}
 .channels li{padding:3px 0}
-/* お問い合わせ */
 .desk{margin:40px 0;padding:28px 28px 32px;border:1.5px solid var(--ink);border-radius:8px;max-width:44em;background:#fff}
 .desk p{margin:0 0 18px}
 .btn.big{font-size:17px;padding:14px 22px}
-/* 移りました */
 .moved{margin:0 0 48px;padding:22px 0 0;border-top:1px solid var(--rule);font-size:14px}
 .moved h2{font-size:16px;margin-bottom:4px}
 .moved p{margin:0 0 8px;color:var(--ink-2)}
@@ -231,7 +211,18 @@ main{display:block}
 }
 .d-num{fill:var(--blue)}
 @media (min-width:761px){.tabs a{white-space:nowrap}}
-.roles h2{font-size:25px}.doing h2{font-size:25px}.doing h3{font-size:20px}
-/* ⑥ 株主（人間）の1行：AIの①〜⑤と分けて、点線の枠で示す（番号は文に含まれる） */
+.roles h2{font-size:25px}
 .human-line{margin:28px 0 0;padding:14px 18px;border:1.5px dashed var(--ink);border-radius:6px;max-width:52em;font-size:15px;line-height:1.8;background:#fff}
 .roles+.human-line{margin:24px 0 8px}
+.foot .credit{flex-basis:100%;color:var(--ink);line-height:1.7}
+.foot .credit small{font-size:13px}
+.doing{padding:48px 0 56px}
+.doing h2{display:inline-block;margin:0 0 0;padding:6px 14px;background:var(--ink);color:#fff;font-size:20px;border-radius:6px 6px 0 0}
+.spec-tbl{margin:0;border:1.5px solid var(--ink);border-radius:0 6px 6px 6px;max-width:46em;background:#fff}
+.spec-tbl>div{display:grid;grid-template-columns:11em 1fr;border-top:1px dashed var(--ink)}
+.spec-tbl>div:first-child{border-top:0}
+.spec-tbl dt{padding:14px 16px;font-weight:700;font-size:17px;border-right:1.5px solid var(--ink);background:color-mix(in oklab,var(--blue) 8%,var(--paper))}
+.spec-tbl dd{margin:0;padding:14px 16px}
+@media (max-width:560px){.spec-tbl>div{grid-template-columns:1fr}.spec-tbl dt{border-right:0;border-bottom:1px dotted var(--ink);padding:10px 14px}.spec-tbl dd{padding:10px 14px 14px}}
+@media (max-width:760px){.tabs a{white-space:nowrap;padding:6px 0;letter-spacing:-.02em}}
+@media (max-width:360px){.tabs a{font-size:10px;letter-spacing:-.05em}}
