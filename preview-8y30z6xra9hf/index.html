@@ -20,8 +20,6 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script>
-/* 古いページ内リンク（/#works など）を新しいページへ送る。#top・#main・#about はこのページに残る。
-   JSが動かないときは、下の「ページが移りました」の欄の該当行に着く。 */
 (function () {
   var map = { "#works": "samples/", "#team": "team/", "#work": "team/#yatteiru", "#log": "log/" };
   function go() { var to = map[location.hash]; if (to) location.replace(to); }
@@ -34,7 +32,6 @@
 </head><body>
 <a class="skip" href="#main">本文へスキップ</a>
 <header class="wrap"><div class="head">
-<!-- ロゴ枠（差し替え）：今のロゴ＝文字の「テアシ商会」。新ロゴが決まったら、この a の中身だけを画像（幅180×高さ44pxまで）に替える -->
 <a class="logo-slot" href="./">テアシ商会</a>
 <p class="docno">取扱説明書　1／5ページ</p></div></header>
 <nav class="tabs" aria-label="ページ"><ol><li><a href="./" aria-current="page"><b>1</b>はじめに</a></li><li><a href="samples/"><b>2</b>作ったもの</a></li><li><a href="team/"><b>3</b><span><i class="long">AIと人間の</i>分担</span></a></li><li><a href="log/"><b>4</b>活動記録</a></li><li><a href="contact/"><b>5</b>お問い合わせ</a></li></ol></nav>
@@ -77,7 +74,7 @@
   <p class="human-line">⑥ 株主（人間）：会社の目的と、各AIへの指示文を決めています。アカウントの作成とログイン、独自ドメインの契約と支払い、DNSの設定、外部サービスの接続は、株主が行っています。ロゴやサイトのデザインなどの大きな判断は、株主が最後に決めます。</p>
 </figure>
 <figure class="fig" aria-labelledby="f2">
-  <div class="figcap"><h2 id="f2"><em>図2</em>作ったもの</h2><p>架空のお店を題材にしたサンプルサイトを、AIの社員だけで作って公開しています。</p></div>
+  <div class="figcap"><h2 id="f2"><em>図2</em>作ったもの</h2><p>架空のお店を題材にしたサンプルサイトです。制作の作業はAIの社員だけで行い、公開しています。</p></div>
   <div class="plates"><figure class="plate big">
   <a class="shot" href="https://teashi-shokai.com/samples/cafe/" tabindex="-1"><img src="images/cafe-w800.jpg" width="800" height="500" alt="サンプルサイト「喫茶 ろじのね（架空）」のトップ画面。店名と「路地の奥で、一杯ずつ。」の一文、喫茶店の建物のイラストが並ぶ" loading="lazy"></a>
   <figcaption><span class="no">#2</span><h3>喫茶 ろじのね（架空） <span class="sign ok"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7.5" fill="currentColor"/><path d="M4.5 8.3l2.3 2.3 4.7-5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>動いている</span></h3><p class="spec"><time datetime="2026-10-19">2026年10月19日</time>公開　着手から公開まで約8分　制作の作業で人の手 0回</p><a class="open" href="https://teashi-shokai.com/samples/cafe/">サンプルサイトを見る</a></figcaption>
@@ -100,6 +97,6 @@
   <p>以前このページにあった項目は、それぞれのページに移りました。</p>
   <ul><li id="works"><a href="samples/">制作実績 → 「作ったもの」のページ</a></li><li id="team"><a href="team/">体制 → 「AIと人間の分担」のページ</a></li><li id="work"><a href="team/#yatteiru">やっていること → 「AIと人間の分担」のページ</a></li><li id="log"><a href="log/">活動記録 → 「活動記録」のページ</a></li></ul>
 </section></div></main>
-<footer class="wrap"><div class="foot"><ul><li><a href="https://x.com/teashi_shokai">X</a></li><li><a href="https://note.com/teashi_shokai">note</a></li><li><a href="https://www.youtube.com/channel/UC_GGfFryMsGb6bUTjeS6sxQ">YouTube</a></li></ul><p><small>&copy; 2026 テアシ商会</small></p></div></footer>
+<footer class="wrap"><div class="foot"><ul><li><a href="https://x.com/teashi_shokai">X</a></li><li><a href="https://note.com/teashi_shokai">note</a></li><li><a href="https://www.youtube.com/channel/UC_GGfFryMsGb6bUTjeS6sxQ">YouTube</a></li></ul><p><small>&copy; 2026 テアシ商会</small></p><p class="credit"><small>画面写真：テアシ商会のサンプルサイト（架空のお店。画像はAIがコードで描いたイラストで、#2 喫茶 ろじのね はSVG、#1 麦ともくれん はJPG画像）／書体：IBM Plex Sans JP をもとにした Teashi Sans JP（<a href="assets/fonts/OFL.txt">SIL OFL 1.1</a>）</small></p></div></footer>
 </body>
 </html>
