@@ -273,3 +273,24 @@ main{display:block}
   .tabs a{transition:background .2s}
   .tabs a:hover{translate:none}
 }
+.tabs-handle[hidden]{display:none}
+@media (max-width:760px){
+  :root:has(.tabs[data-state]) .wrap{padding-right:48px}
+  .tabs-handle{position:fixed;right:0;top:50%;translate:0 -50%;z-index:11;width:44px;height:104px;margin:0;padding:0;border:0;background:transparent;color:#fff;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:right .25s cubic-bezier(.16,1,.3,1)}
+  .tabs-handle>span{position:absolute;right:0;top:0;bottom:0;width:30px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:var(--ink);border-radius:8px 0 0 8px;transition:background .2s}
+  .tabs-handle b{font-size:16px;line-height:1}
+  .tabs-handle .hl{writing-mode:vertical-rl;font-size:12px;letter-spacing:.1em;line-height:1}
+  .tabs-handle:active>span{background:var(--blue)}
+  .tabs-handle:focus-visible{outline:0}
+  .tabs-handle:focus-visible>span{outline:3px solid var(--blue);outline-offset:2px}
+  .tabs{transition:translate .25s cubic-bezier(.16,1,.3,1)}
+  .tabs[data-state=closed]{translate:calc(100% + 12px) -50%;visibility:hidden;transition:translate .25s cubic-bezier(.16,1,.3,1),visibility 0s .25s}
+  .tabs[data-state=open]{translate:0 -50%;visibility:visible}
+  .tabs-handle[aria-expanded=true]{right:54px}
+  .tabs[data-init]{transition:none!important}
+  .tabs-handle[aria-expanded=true]>span{border-radius:8px 0 0 8px}
+}
+@media (max-width:760px) and (hover:hover){.tabs-handle:hover>span{background:color-mix(in oklab,var(--ink) 80%,var(--blue))}}
+@media (max-width:760px) and (prefers-reduced-motion:reduce){
+  .tabs,.tabs[data-state=closed],.tabs-handle{transition:none}
+}
