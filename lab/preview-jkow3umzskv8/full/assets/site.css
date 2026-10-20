@@ -301,7 +301,9 @@ main{display:block}
 .tabs-handle b::before{content:attr(data-n)}.tabs-handle .hl::before{content:"目次"}
 
 /* TEASHIラボ入口（会社の作品より下、小さく） */
-.lab-door{margin:32px 0 0;padding:12px 16px;border:1px dashed var(--ink-2);font-size:14px;color:var(--ink-2)}
+.lab-door{margin:32px 0;padding:12px 16px;border:1px dashed var(--ink-2);font-size:14px;color:var(--ink-2)}
 .lab-door p{margin:0}
+/* スマホの「状態の見かた」は works.css で margin-top:-24px のため、入口の直後では打ち消して下の余白 32px を保つ */
+.lab-door + .leg-sp{margin-top:0}
 .lab-door-tag{display:inline-block;margin-right:6px;padding:0 8px;background:#FFF4D6;color:var(--ink);border:1px dashed #6A3FB5;font-weight:700}
 .lab-door a{color:#6A3FB5}
