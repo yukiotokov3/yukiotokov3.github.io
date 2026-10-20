@@ -1,0 +1,47 @@
+@font-face{font-family:"Teashi Sans JP";src:url("TeashiSansJPLab-400.woff2") format("woff2");font-weight:400;font-display:swap;unicode-range:U+4F7F,U+500B,U+518A,U+672D,U+7E3E,U+7F6E,U+904B,U+9805}
+@font-face{font-family:"Teashi Sans JP";src:url("TeashiSansJPLab-700.woff2") format("woff2");font-weight:700;font-display:swap;unicode-range:U+4F7F,U+500B,U+518A,U+672D,U+7E3E,U+7F6E,U+904B,U+9805}
+/* TEASHIラボ（案1「実験ノート」）。site.css の上に重ねる。ライム・青・運行ダイヤは使わない */
+.lab{--grid:#C9D3CF;--violet:#6A3FB5;--tape:#FFF4D6;--note:#EEF1EC}
+body:has(.lab){background:#EEF1EC}
+.lab{background-color:var(--note);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:8px 8px;background-position:-1px -1px;margin:32px 0 48px;padding:56px 24px 64px;border:1.5px solid var(--ink);border-left:6px double var(--violet)}
+.lab a{color:var(--violet)}
+.lab :focus-visible{outline-color:var(--violet)}
+.lab-cover{max-width:34em;margin:0 auto 56px;text-align:center}
+.lab-tag{display:inline-block;margin:0;padding:4px 14px;background:var(--tape);color:var(--ink);border:1.5px dashed var(--violet);font-weight:700;font-size:14px;letter-spacing:.08em;line-height:1.6;rotate:-1.2deg}
+.lab-tag-big{font-size:16px;padding:6px 18px}
+.lab h1{margin:20px 0 16px;font-size:36px;line-height:1.3;font-weight:700;letter-spacing:.04em}
+.lab h1 .en{display:block;font-size:15px;letter-spacing:.3em;color:var(--violet);margin-bottom:4px}
+.lab-open{margin:0 auto;text-align:left;background:var(--note);padding:16px 20px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);font-size:17px;line-height:2}
+.lab-back{margin:20px 0 0;font-size:15px}
+.lab-list{max-width:44em;margin:0 auto}
+.lab-list h2{margin:0 0 8px;font-size:22px;padding-left:12px;border-left:4px solid var(--violet)}
+.lab-note{margin:0 0 20px;font-size:15px;color:var(--ink-2);background:var(--note);display:inline-block}
+.lab-items{list-style:none;margin:0;padding:0}
+.lab-items:empty{display:none}
+.lab-item article{position:relative;display:grid;grid-template-columns:5em 1fr;gap:4px 16px;padding:18px 20px;margin:0 0 12px;background:#fff;border:1px solid var(--grid);border-left:4px solid var(--ink-2)}
+.lab-item .lab-tag{position:absolute;right:12px;top:-12px;font-size:12px;padding:2px 10px}
+.lab-no{margin:0;grid-row:span 2;font-variant-numeric:tabular-nums;color:var(--violet);font-weight:700}
+.lab-item h3{margin:0;font-size:18px}
+.lab-split{margin:0;display:flex;flex-wrap:wrap;gap:4px 20px;font-size:15px}
+.lab-split div{display:flex;gap:6px}.lab-split dt{font-weight:700}.lab-split dd{margin:0}
+.lab-split div+div::before{content:"／";margin-right:14px;color:var(--ink-2)}
+.lab-empty{margin:0;padding:28px 20px;text-align:center;background:#fff;border:1.5px dashed var(--ink-2);color:var(--ink);font-size:16px}
+@media (prefers-reduced-motion:no-preference){
+  .lab-item article{transition:border-left-color .2s,border-left-width .2s}
+  .lab-item article:hover{border-left-color:var(--violet);border-left-width:8px}
+  @supports (animation-timeline:view()){
+    .lab-item article,.lab-empty{animation:lab-up linear both;animation-timeline:view();animation-range:entry 0% entry 40%}
+    @keyframes lab-up{from{translate:0 4px;opacity:.6}to{translate:0 0;opacity:1}}
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  .lab-item article:hover{border-left-color:var(--violet)}
+  .lab-tag{rotate:none}
+}
+@media (max-width:760px){
+  .lab{margin:20px 0 32px;padding:32px 14px 40px}
+  .lab h1{font-size:28px}
+  .lab-open{font-size:16px;padding:12px 14px}
+  .lab-item article{grid-template-columns:1fr}
+  .lab-no{grid-row:auto}
+}
