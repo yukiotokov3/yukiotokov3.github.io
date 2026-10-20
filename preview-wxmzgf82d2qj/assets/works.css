@@ -54,3 +54,5 @@
 }
 @keyframes dia-grow{from{scale:0 1}}
 .run h2 .nw{white-space:nowrap;display:inline-block}
+.dia-note{margin:0 0 16px;font-size:13px;color:var(--d-sub)}
+.facts dd small{display:block;font-size:13px;font-weight:400;color:var(--d-sub);line-height:1.4}
