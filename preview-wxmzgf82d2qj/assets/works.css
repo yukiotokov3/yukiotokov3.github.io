@@ -1,0 +1,56 @@
+/* 作ったもの：案A「運行ダイヤ」。暗い地はこの帯の中だけ。色は今のサイトの墨・紙と、ロゴB1の dark のライム */
+.dia{--d-bg:#15191C;--d-ink:#F5F6F4;--d-sub:#B9C0C5;--d-grid:#3A4248;--d-ok:#C6F432;--d-fix:#F2B300;--d-end:#9AA3A9;
+  background:var(--d-bg);color:var(--d-ink);border-radius:12px;padding:36px 40px 12px;margin:0 0 40px}
+.dia-h{margin:0 0 8px;font-size:15px;font-weight:700;line-height:1.5}
+.dia-h span{display:block;font-weight:400;color:var(--d-sub);font-size:13px}
+.runs{list-style:none;margin:0;padding:0}
+.run{padding:32px 0 36px;border-top:1px solid var(--d-grid);--c:var(--d-ok)}
+.run[data-status=fix]{--c:var(--d-fix)} .run[data-status=end]{--c:var(--d-end)}
+.run-head{display:flex;gap:24px;align-items:center}
+.thumb{flex:none;display:block;width:200px;border-radius:6px;overflow:hidden;outline-offset:3px;box-shadow:0 0 0 1.5px var(--d-sub)}
+.thumb img{display:block;width:100%;height:auto}
+.run .no{margin:0;font-size:14px;color:var(--d-sub);font-variant-numeric:tabular-nums}
+.run h2{margin:2px 0 10px;font-size:clamp(22px,2.6vw,30px);line-height:1.35}
+.run h2 a{color:var(--d-ink);text-decoration:none}
+.run h2 a:hover{text-decoration:underline;text-decoration-thickness:2px}
+.dia :focus-visible{outline-color:var(--d-ok)}
+/* 線：目盛り0〜8分。--m は分 */
+.track{position:relative;height:150px;margin:28px 12px 0 8px;background:repeating-linear-gradient(90deg,var(--d-grid) 0 1px,transparent 1px 12.5%) 0 40px/calc(100% + 1px) 48px no-repeat}
+.track ol{list-style:none;margin:0;padding:0}
+.bar{position:absolute;left:0;top:61px;height:6px;width:calc(var(--m) / 8 * 100%);background:var(--c);border-radius:3px;transform-origin:left}
+.stop{position:absolute;left:calc(var(--m) / 8 * 100%);top:0;height:100%}
+.stop::before{content:"";position:absolute;left:-10px;top:54px;width:20px;height:20px;border-radius:50%;background:var(--d-bg);border:3px solid var(--c);box-sizing:border-box}
+.stop .lb{position:absolute;translate:-50% 0;white-space:nowrap;text-align:center;font-size:13px;line-height:1.35;color:var(--d-sub)}
+.stop .lb b{display:block;font-size:16px;color:var(--d-ink);font-variant-numeric:tabular-nums}
+.stop.up .lb{bottom:calc(100% - 50px)} .stop.dn .lb{top:80px}
+.stop.first .lb{translate:-10px 0;text-align:left} .stop.last .lb{translate:calc(-100% + 10px) 0;text-align:right}
+.ticks li{position:absolute;left:calc(var(--m) / 8 * 100%);top:134px;translate:-50% 0;white-space:nowrap;font-size:12px;color:var(--d-sub);line-height:1}
+.ticks li:last-child::after{content:"分"}
+.missing{list-style:none;margin:6px 0 0;padding:10px 14px;border:1.5px dashed var(--d-sub);border-radius:6px;font-size:14px;color:var(--d-sub);display:flex;flex-wrap:wrap;gap:4px 24px}
+.missing b{color:var(--d-ink)}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 24px;margin:24px 0 0}
+.facts dt{font-size:13px;color:var(--d-sub);line-height:1.5}
+.facts dd{margin:0;font-size:24px;font-weight:700;line-height:1.3;font-variant-numeric:tabular-nums}
+.facts dd.na{font-size:16px;font-weight:400;color:var(--d-sub)}
+.run .go{margin:22px 0 0}
+.dia .btn{background:var(--c);color:#15191C;border-color:var(--c)}
+@media (max-width:760px){
+  .dia{padding:24px 16px 4px;border-radius:10px;margin-left:-4px;margin-right:-4px}
+  .run{padding:24px 0 28px}
+  .run-head{gap:14px;align-items:flex-start}
+  .thumb{width:112px}
+  .run h2{font-size:20px;margin-bottom:8px}
+  .track{margin:24px 8px 0 6px}
+  .stop .lb{font-size:12px} .stop .lb b{font-size:14px}
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}
+  .facts dt{font-size:12px;word-break:keep-all;overflow-wrap:anywhere}
+  .facts dd{font-size:20px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .thumb{transition:translate .25s cubic-bezier(.16,1,.3,1),box-shadow .2s}
+  .thumb:hover{translate:0 -3px;box-shadow:0 0 0 2px var(--c)}
+  .bar.wait{scale:0 1}
+  .bar.grow{animation:dia-grow .9s cubic-bezier(.16,1,.3,1) both}
+}
+@keyframes dia-grow{from{scale:0 1}}
+.run h2 .nw{white-space:nowrap;display:inline-block}
