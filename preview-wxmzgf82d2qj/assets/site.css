@@ -299,3 +299,4 @@ main{display:block}
 .credit-sec p{margin:0;max-width:52em;font-size:14px;line-height:1.8;color:var(--ink)}
 .team-sec.human{padding-bottom:40px}
 .tabs-handle b::before{content:attr(data-n)}.tabs-handle .hl::before{content:"目次"}
+.tabs-handle b::before{content:attr(data-n)}.tabs-handle .hl::before{content:"目次"}

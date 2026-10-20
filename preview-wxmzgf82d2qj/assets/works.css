@@ -1,5 +1,5 @@
 /* 作ったもの：案A「運行ダイヤ」。暗い地はこの帯の中だけ。色は今のサイトの墨・紙と、ロゴB1の dark のライム */
-.dia{--d-bg:#15191C;--d-ink:#F5F6F4;--d-sub:#B9C0C5;--d-grid:#3A4248;--d-ok:#C6F432;--d-fix:#F2B300;--d-end:#9AA3A9;
+.dia{--d-bg:#15191C;--d-ink:#F5F6F4;--d-sub:#B9C0C5;--d-grid:#3A4248;--d-ok:#9BCB00;--d-fix:#F2B300;--d-end:#9AA3A9;
   background:var(--d-bg);color:var(--d-ink);border-radius:12px;padding:36px 40px 12px;margin:0 0 40px}
 .dia-h{margin:0 0 8px;font-size:15px;font-weight:700;line-height:1.5}
 .dia-h span{display:block;font-weight:400;color:var(--d-sub);font-size:13px}
@@ -56,3 +56,18 @@
 .run h2 .nw{white-space:nowrap;display:inline-block}
 .dia-note{margin:0 0 16px;font-size:13px;color:var(--d-sub)}
 .facts dd small{display:block;font-size:13px;font-weight:400;color:var(--d-sub);line-height:1.4}
+/* 社長決定 2026-10-20 17:08：ライムはロゴの #9BCB00、見出しは帯の外、帯の頭に作品の数と店名・画面写真、凡例の「直し中」は橙、スマホでは凡例を帯の下に */
+.dia-title{margin:0 0 14px;font-size:20px;font-weight:700;line-height:1.5;color:var(--ink)}
+.dia-title span{display:block;font-weight:400;color:var(--ink-2);font-size:13px}
+.dia-top{display:flex;flex-wrap:wrap;align-items:center;gap:12px 28px;margin:0 0 14px}
+.dia-count{margin:0;font-size:22px;font-weight:700;color:var(--d-ok)}
+.dia-shops{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 24px}
+.dia-shops a{display:flex;align-items:center;gap:10px;color:var(--d-ink);font-size:14px;font-weight:700;text-decoration:none}
+.dia-shops a:hover{text-decoration:underline}
+.dia-shops img{width:64px;height:auto;border-radius:4px;box-shadow:0 0 0 1.5px var(--d-sub)}
+.legend .sign.fix{border-color:#F2B300;background:color-mix(in oklab,#F2B300 22%,#fff)}
+.leg-sp{display:none}
+@media (max-width:760px){
+  .leg-pc{display:none} .leg-sp{display:block;margin:-24px 0 40px}
+  .dia-count{font-size:20px} .dia-shops{flex-direction:column} .dia-shops img{width:56px}
+}
