@@ -1,0 +1,286 @@
+{
+  "statuses": [
+    {
+      "id": "running",
+      "name": "動いている",
+      "mark": "✓",
+      "desc": "公開中で、見られる状態"
+    },
+    {
+      "id": "fixing",
+      "name": "直し中",
+      "mark": "△",
+      "desc": "公開中だが、直している途中"
+    },
+    {
+      "id": "ended",
+      "name": "終了",
+      "mark": "−",
+      "desc": "公開をやめた"
+    }
+  ],
+  "works": [
+    {
+      "id": "zukan",
+      "no": 3,
+      "name": "Webデザイン用語の絵図鑑",
+      "fictional": false,
+      "made": "人とAI",
+      "label": "小さなWebツール",
+      "kind": "お店のページの見本図で、部分の名前を引ける図鑑",
+      "tagline": "その場所、なんて呼ぶ?",
+      "date": "2026-10-21",
+      "status": "running",
+      "url": "/lab/web-term-zukan/",
+      "image": {
+        "src": "/assets/v2/img/zukan-1280.webp",
+        "srcSmall": "/assets/v2/img/zukan-640.webp",
+        "alt": "Webデザイン用語の絵図鑑のトップ画面。「その場所、なんて呼ぶ?」の見出しと、スマホのページの見本図に部分の名前が付いた図"
+      },
+      "timeline": [
+        {
+          "event": "題材を決める(社長)",
+          "time": "10.20"
+        },
+        {
+          "event": "作る・確かめる(AI)",
+          "time": "10.20"
+        },
+        {
+          "event": "合格の判断(社長)",
+          "time": "10.20"
+        },
+        {
+          "event": "公開",
+          "time": "10.21"
+        }
+      ],
+      "timelineNote": "日付の記録です(時刻は残していません)。",
+      "highlights": [
+        {
+          "label": "載っている言葉",
+          "value": "16語"
+        },
+        {
+          "label": "作った体制",
+          "value": "人とAI"
+        }
+      ],
+      "numbers": [
+        {
+          "value": "16",
+          "unit": "語",
+          "label": "載っている言葉"
+        },
+        {
+          "value": "Claude",
+          "unit": "",
+          "label": "作ったAI"
+        }
+      ],
+      "who": [
+        {
+          "k": "題材",
+          "v": "社長(人)"
+        },
+        {
+          "k": "書体と配色",
+          "v": "社長(人)が候補から選択"
+        },
+        {
+          "k": "構成・文章・図・コード",
+          "v": "AI(Claude)"
+        },
+        {
+          "k": "合格の判断",
+          "v": "社長(人)"
+        }
+      ],
+      "credit": "もとはTEASHIラボ(株主の個人ノート)に置いていたものです。新体制でテアシ商会の作ったものに入れました。"
+    },
+    {
+      "id": "cafe",
+      "no": 2,
+      "name": "喫茶 ろじのね",
+      "kind": "架空の喫茶店のサンプルサイト",
+      "tagline": "路地の奥で、一杯ずつ。",
+      "date": "2026-10-19",
+      "status": "running",
+      "url": "/samples/cafe/",
+      "image": {
+        "src": "/assets/v2/img/cafe-1280.webp",
+        "srcSmall": "/assets/v2/img/cafe-640.webp",
+        "alt": "喫茶 ろじのね のトップ画面。店名と「路地の奥で、一杯ずつ。」の一文、路地の奥の店とコーヒーとケーキのイラスト"
+      },
+      "timeline": [
+        {
+          "event": "着手",
+          "time": "10:16"
+        },
+        {
+          "event": "編集へ提出",
+          "time": "10:20"
+        },
+        {
+          "event": "編集の確認に合格",
+          "time": "10:22"
+        },
+        {
+          "event": "社長の承認",
+          "time": "10:23"
+        },
+        {
+          "event": "公開",
+          "time": "10:24"
+        }
+      ],
+      "numbers": [
+        {
+          "value": "約8",
+          "unit": "分",
+          "label": "着手から公開まで(確認待ちを含む)"
+        },
+        {
+          "value": "7",
+          "unit": "分",
+          "label": "着手から社長の承認まで"
+        },
+        {
+          "value": "0",
+          "unit": "回",
+          "label": "制作の作業で、人の手が入った回数"
+        },
+        {
+          "value": "0",
+          "unit": "回",
+          "label": "編集の差し戻し"
+        }
+      ],
+      "who": [
+        {
+          "k": "制作",
+          "v": "AI社員(Web制作)"
+        },
+        {
+          "k": "確認",
+          "v": "AI社員(編集)"
+        },
+        {
+          "k": "承認",
+          "v": "AI社長"
+        },
+        {
+          "k": "公開",
+          "v": "一部を株主(人)が担当"
+        }
+      ],
+      "credit": "画像はコードで描いたイラスト(SVG)です。",
+      "fictional": true,
+      "made": "第1期・AIだけ",
+      "label": "サンプルサイト",
+      "highlights": [
+        {
+          "label": "着手から公開まで",
+          "value": "約8分"
+        },
+        {
+          "label": "制作の作業で人の手",
+          "value": "0回"
+        }
+      ],
+      "timelineNote": "日本時間。{date}の記録です。"
+    },
+    {
+      "id": "bakery",
+      "no": 1,
+      "name": "麦ともくれん",
+      "kind": "架空のパン屋のサンプルサイト",
+      "tagline": "朝いちばんの焼きたてを、いつもの道で。",
+      "date": "2026-10-17",
+      "status": "fixing",
+      "url": "/samples/bakery/",
+      "image": {
+        "src": "/assets/v2/img/bakery-1280.webp",
+        "srcSmall": "/assets/v2/img/bakery-640.webp",
+        "alt": "麦ともくれん のトップ画面。店名と「朝いちばんの焼きたてを、いつもの道で。」の一文、パン屋の建物のイラスト"
+      },
+      "timeline": [
+        {
+          "event": "着手",
+          "time": "10:49"
+        },
+        {
+          "event": "編集へ提出",
+          "time": null
+        },
+        {
+          "event": "編集の確認",
+          "time": null
+        },
+        {
+          "event": "社長の承認",
+          "time": "10:54"
+        },
+        {
+          "event": "公開",
+          "time": "10:56"
+        }
+      ],
+      "numbers": [
+        {
+          "value": "約7",
+          "unit": "分",
+          "label": "着手から公開まで(確認待ちを含む)"
+        },
+        {
+          "value": "5",
+          "unit": "分",
+          "label": "着手から社長の承認まで"
+        },
+        {
+          "value": "0",
+          "unit": "回",
+          "label": "制作の作業で、人の手が入った回数"
+        },
+        {
+          "value": "0",
+          "unit": "回",
+          "label": "編集の差し戻し"
+        }
+      ],
+      "who": [
+        {
+          "k": "制作",
+          "v": "AI社員(Web制作)"
+        },
+        {
+          "k": "確認",
+          "v": "記録なし"
+        },
+        {
+          "k": "承認",
+          "v": "AI社長"
+        },
+        {
+          "k": "公開",
+          "v": "記録なし"
+        }
+      ],
+      "credit": "画像はJPGで、作り方の記録は残っていません。",
+      "fictional": true,
+      "made": "第1期・AIだけ",
+      "label": "サンプルサイト",
+      "highlights": [
+        {
+          "label": "着手から公開まで",
+          "value": "約7分"
+        },
+        {
+          "label": "制作の作業で人の手",
+          "value": "0回"
+        }
+      ],
+      "timelineNote": "日本時間。{date}の記録です。"
+    }
+  ]
+}
