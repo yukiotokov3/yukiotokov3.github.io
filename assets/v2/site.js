@@ -120,7 +120,9 @@
     home: function () {
       var el = document.getElementById("latest");
       loadWorks().then(function (data) {
-        el.innerHTML = data.works.map(function (w, i) { return workRow(data, w, i); }).join("");
+        el.innerHTML = data.works.slice(0, 3).map(function (w, i) { return workRow(data, w, i); }).join("");
+        var allEl = document.getElementById("latest-all");
+        if (allEl) allEl.textContent = "作ったものをすべて見る(" + data.works.length + "件)";
         reveal(el);
       }).catch(function () { showLoadError(el); });
     },
