@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="14の質問に答えると、ホームページ制作会社に渡す発注メモのたたき台ができる道具。入力は送信も保存もしません。テアシ商会(人とAIで制作)。">
+<link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="icon" href="/favicon-96.png" sizes="96x96" type="image/png">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>サイト発注メモ メーカー</title>
+<style id="lab-band-css">
+@font-face{font-family:"Lab Band Sans";src:url("/assets/fonts/TeashiSansJP-400.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Lab Band Sans";src:url("/assets/fonts/TeashiSansJP-700.woff2") format("woff2");font-weight:700;font-display:swap}
+.lab-band{all:initial;display:block;box-sizing:border-box;background-color:#EEF1EC;background-image:linear-gradient(#C9D3CF 1px,transparent 1px),linear-gradient(90deg,#C9D3CF 1px,transparent 1px);background-size:8px 8px;border-bottom:1.5px solid #15191C;border-left:6px double #6A3FB5;color:#15191C;font:400 14px/1.7 "Lab Band Sans","Hiragino Sans","Yu Gothic",system-ui,sans-serif;padding:8px 16px}
+.lab-band *{box-sizing:border-box}
+.lab-band .lab-band-in{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;max-width:1180px;margin:0 auto}
+.lab-band .lab-band-tag{display:inline-block;margin:0;padding:1px 10px;background:#FFF4D6;color:#15191C;border:1.5px dashed #6A3FB5;font-weight:700;font-size:13px;letter-spacing:.06em}
+.lab-band .lab-band-role{margin:0;flex:1 1 20em;min-width:0;background:#EEF1EC;overflow-wrap:anywhere}
+.lab-band .lab-band-link{color:#6A3FB5;font-weight:700;text-decoration:underline;text-underline-offset:.22em;background:#EEF1EC}
+.lab-band .lab-band-link:focus-visible{outline:3px solid #6A3FB5;outline-offset:2px}
+</style>
+
+<style>body{margin:0}.lab-band{margin:-20px calc(-1 * max(16px,env(safe-area-inset-left,0px))) 20px calc(-1 * max(16px,env(safe-area-inset-left,0px)))}@media (max-width:760px){.lab-band{margin-top:-12px}}</style>
+</head>
+<body>
+<aside class="lab-band" aria-label="テアシ商会の作ったもの #4"><div class="lab-band-in"><p class="lab-band-tag">テアシ商会 #4・人とAI</p><p class="lab-band-role">人（社長）：題材の選択、デザインの方向の選択、実機での確認と指摘、合格の判断／AI（Claude）：質問の設計、文章、デザイン、コード</p><a class="lab-band-link" href="/samples/detail/#memo">作った記録へ</a></div></aside>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=BIZ+UDPGothic:wght@400;700&family=M+PLUS+1+Code:wght@400;600&display=swap">
+<style>
+/* 配置: PCは左に1問・右に伝票(地図入り)。スマホは伝票が上(地図は畳める)、質問が下。紙の伝票という一つの見た目に固定する */
+:root{
+  --desk:#E7E9EF; --slip:#FBFBF8; --carbon:#2F4C9E; --copy:#F4D6D8; --ink:#1A1D29; --tape:#E9C46A;
+  --sub:#4A5068; --rule:color-mix(in srgb,var(--carbon) 45%,var(--slip));
+  --f-q:"Dela Gothic One","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-body:"BIZ UDPGothic","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-mono:"M PLUS 1 Code",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{background:var(--desk);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.7;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--carbon);outline-offset:2px}
+.skip{position:absolute;left:-999px}
+.skip:focus{left:16px;top:16px;background:var(--slip);padding:8px 12px;z-index:5;border:2px solid var(--carbon)}
+.app{max-width:1100px;margin:0 auto;display:grid;gap:20px}
+.top{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px 16px}
+.top h1{margin:0;font-size:18px;letter-spacing:.12em;color:var(--carbon)}
+.top p{margin:0;font-size:12px;color:var(--sub)}
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:32px;align-items:start}
+
+/* 質問 */
+.ask{display:grid;gap:18px;align-content:start;padding-top:6px;min-width:0}
+.ask .no{font-family:var(--f-mono);color:var(--carbon);font-size:13px}
+.ask h2{margin:0;font-family:var(--f-q);font-weight:400;font-size:clamp(24px,3.4vw,36px);line-height:1.35;text-wrap:balance;word-break:auto-phrase}
+.ask h2:focus{outline:none}
+.ask .hint{margin:0;font-size:13px;color:var(--sub)}
+.opts{display:grid;gap:10px}
+.opts.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.opt{display:flex;align-items:center;gap:10px;text-align:left;min-height:52px;border:2px solid var(--ink);border-radius:6px;background:var(--slip);
+  font-weight:700;font-size:15px;box-shadow:0 4px 0 var(--ink);padding:6px 14px;cursor:pointer;transition:transform .08s,box-shadow .08s}
+.opt:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.opt[aria-pressed="true"]{background:var(--carbon);color:#fff;border-color:var(--carbon);box-shadow:0 1px 0 #1C2F66;transform:translateY(3px)}
+.opt .box{flex:none;width:18px;height:18px;border:2px solid currentColor;border-radius:3px;display:grid;place-items:center;font-size:13px;line-height:1}
+.opt[aria-pressed="true"] .box::after{content:"✓"}
+.opt.pressed{animation:press .4s ease-out}
+@keyframes press{40%{transform:translateY(5px) scale(.97)}}
+.field{display:grid;gap:6px}
+.field label{font-size:13px;color:var(--sub)}
+.field input,.field textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--slip);border:2px solid var(--ink);border-radius:6px;padding:10px 12px;width:100%}
+.field textarea{min-height:120px;resize:vertical}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px}
+.boxes{display:flex;gap:4px;flex-wrap:wrap}
+.boxes i{width:14px;height:14px;border:1.5px solid var(--carbon)}
+.boxes i.d{background:var(--carbon)}
+.boxes i.c{box-shadow:0 0 0 2px var(--tape)}
+.btns{display:flex;gap:8px}
+.btn{border:1.5px solid var(--ink);border-radius:4px;padding:6px 16px;background:var(--slip);cursor:pointer}
+.btn.go{background:var(--ink);color:#fff}
+.btn[disabled]{opacity:.4;cursor:default}
+
+/* 伝票 */
+.slipwrap{position:relative;min-width:0}
+.slipwrap::before{content:"";position:absolute;inset:7px -7px -7px 7px;background:var(--copy);border-radius:2px}
+.slip{position:relative;background:var(--slip);border:1.5px solid var(--carbon);border-radius:2px;padding:14px 16px 20px;display:grid;gap:12px}
+.slip::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:6px;background:radial-gradient(circle at 4px 6px,var(--desk) 2.2px,transparent 2.6px) 0 0/10px 6px repeat-x}
+.hd{display:flex;justify-content:space-between;align-items:baseline;gap:4px 10px;flex-wrap:wrap}
+.hd b{color:var(--carbon);letter-spacing:.2em;font-size:15px}
+.hd span{font-family:var(--f-mono);font-size:12px;color:var(--carbon);min-width:0;overflow-wrap:anywhere}
+.fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--rule)}
+.f{border:0;border-right:1px solid var(--rule);background:transparent;text-align:left;padding:4px 8px 6px;min-width:0;cursor:pointer}
+.f:last-child{border-right:0}
+.f:hover{background:color-mix(in srgb,var(--carbon) 7%,var(--slip))}
+.f small,.mapbox .lbl{display:block;font-size:10px;color:var(--carbon);letter-spacing:.06em}
+.f b{display:block;font-family:var(--f-mono);font-weight:600;font-size:14px;color:#24315F;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:1.6em}
+.f b.blank{color:color-mix(in srgb,var(--carbon) 40%,var(--slip))}
+.f b.ink{animation:carbon .6s ease-out}
+@keyframes carbon{from{filter:blur(3px);opacity:.2;letter-spacing:.3em}to{filter:none;opacity:1;letter-spacing:0}}
+.pal{display:flex;align-items:center;gap:8px;border:1px solid var(--rule);padding:4px 8px;font-size:12px;color:var(--carbon);cursor:pointer;background:transparent;text-align:left;width:100%}
+.pal small{font-size:10px;letter-spacing:.06em;flex:none}
+.pal .chips{display:flex;gap:4px}
+.pal .chips i{width:18px;height:18px;border:1px solid var(--ink);border-radius:2px}
+.pal span.m{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--f-mono)}
+.opt .sw{flex:none;width:22px;height:22px;border-radius:4px;border:1.5px solid var(--ink)}
+.opt[aria-pressed="true"] .sw{border-color:#fff}
+.mapbox{border:1px solid var(--rule);padding:6px 10px 14px;display:grid;gap:10px}
+.maptoggle{display:none}
+.maptoggle.flash{animation:flash .9s ease-out}
+@keyframes flash{0%{background:color-mix(in srgb,var(--tape) 70%,var(--slip))}100%{background:transparent}}
+.tree{display:grid;justify-items:start;padding-left:4px}
+.card{position:relative;background:#fff;border:1.5px solid var(--ink);border-radius:3px;padding:5px 12px;font-weight:700;font-size:14px;display:flex;gap:10px;align-items:baseline;max-width:100%}
+.card em{font-style:normal;font-weight:400;font-size:11px;color:var(--sub)}
+.card.root{background:var(--ink);color:#fff}
+.card.root em{color:#C9CEDF}
+.card.new{box-shadow:0 0 0 3px color-mix(in srgb,var(--tape) 60%,var(--slip))}
+.card.new::before{content:"";position:absolute;right:-8px;top:-7px;width:30px;height:12px;background:var(--tape);opacity:.9;transform:rotate(8deg)}
+.card.drop{animation:drop .55s cubic-bezier(.2,1.4,.5,1) both}
+@keyframes drop{from{transform:translateY(-24px) rotate(-4deg);opacity:0}to{transform:none;opacity:1}}
+.kids{position:relative;display:grid;gap:8px;margin-left:16px;padding:8px 0 0 22px}
+.kids::before{content:"";position:absolute;left:0;top:0;bottom:15px;width:1.5px;background:var(--ink)}
+.kids>div{position:relative;display:flex;min-width:0}
+.kids>div::before{content:"";position:absolute;left:-22px;top:50%;width:22px;height:1.5px;background:var(--ink)}
+.kids:empty{display:none}
+.empty{font-size:12px;color:var(--sub);margin:4px 0 0 4px}
+.count{font-family:var(--f-mono);font-size:12px;color:var(--carbon)}
+.stampmark{position:absolute;right:18px;bottom:-16px;background:var(--slip);border:3px solid var(--carbon);color:var(--carbon);border-radius:4px;padding:2px 10px;font-weight:700;letter-spacing:.3em;transform:rotate(-8deg);opacity:0;pointer-events:none}
+.done .stampmark{opacity:.85;animation:stamp .35s cubic-bezier(.3,1.6,.6,1) .9s both}
+@keyframes stamp{from{transform:rotate(-8deg) scale(1.8);opacity:0}to{transform:rotate(-8deg) scale(1);opacity:.85}}
+
+/* 控えをちぎる */
+.tearing .slipwrap::before{animation:tear 1s ease-in both}
+.tearing .main{pointer-events:none}
+.app{overflow-x:clip}
+.slipwrap::after{content:"お客様控え ✂";display:none;position:absolute;left:7px;right:-7px;top:calc(100% + 4px);height:48px;
+  align-items:center;justify-content:center;background:var(--copy);color:var(--carbon);font-weight:700;letter-spacing:.1em;font-size:14px;
+  border-top:2px dashed var(--carbon);transform-origin:0 0;z-index:3;box-shadow:0 6px 14px -8px rgba(26,29,41,.5)}
+.tearing .slipwrap::after{display:flex;animation:tearoff 1s ease-in both}
+@keyframes tearoff{0%{transform:none}10%{transform:rotate(-1.5deg)}20%{transform:rotate(1.5deg)}30%{transform:rotate(-1deg)}40%{transform:rotate(0)}100%{transform:translate(30px,220px) rotate(16deg);opacity:0}}
+@keyframes tear{0%{transform:none}12%{transform:translate(-3px,2px) rotate(-.8deg)}24%{transform:translate(3px,4px) rotate(.8deg)}36%{transform:translate(0,8px) rotate(0)}100%{transform:translate(24px,260px) rotate(12deg);opacity:0}}
+.done .slipwrap::before{opacity:0}
+
+/* 完成 */
+.result{display:grid;gap:14px;align-content:start;min-width:0}
+.result h2{margin:0;font-family:var(--f-q);font-weight:400;font-size:clamp(24px,3.2vw,34px);line-height:1.35}
+.result p{margin:0;font-size:13px;color:var(--sub)}
+.memo{position:relative;background:color-mix(in srgb,var(--copy) 55%,#fff);border:1.5px solid var(--carbon);border-radius:2px;padding:4px}
+.memo::before{content:"";position:absolute;left:0;right:0;top:-1px;height:6px;background:radial-gradient(circle at 4px 0,var(--desk) 2.2px,transparent 2.6px) 0 0/10px 6px repeat-x}
+.memo.land{animation:land .6s cubic-bezier(.2,1.3,.5,1) both}
+@keyframes land{from{transform:translateY(-70px) rotate(-4deg);opacity:.2}to{transform:none;opacity:1}}
+.memo textarea{display:block;width:100%;min-height:340px;border:0;background:transparent;resize:vertical;font-family:var(--f-mono);font-size:13px;line-height:1.7;color:var(--ink);padding:14px 12px}
+.memo textarea:focus-visible{outline-offset:-3px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.copy{border:2px solid var(--carbon);background:var(--carbon);color:#fff;border-radius:6px;padding:10px 20px;font-weight:700;box-shadow:0 4px 0 #1C2F66;cursor:pointer}
+.copy:active{transform:translateY(3px);box-shadow:0 1px 0 #1C2F66}
+.toast{font-size:13px;color:var(--carbon);font-weight:700;min-height:1.5em}
+.note{font-size:12px;color:var(--sub);max-width:60em}
+
+@media (max-width:760px){
+  body{padding-block:12px 40px}
+  .main{grid-template-columns:1fr;gap:20px}
+  .slipwrap{order:-1}
+  .slip{padding:12px 12px 18px;gap:10px}
+  .opts.two{grid-template-columns:1fr}
+  .maptoggle{display:flex;justify-content:space-between;align-items:center;width:100%;border:0;background:transparent;padding:0;cursor:pointer;color:var(--carbon);font-size:12px}
+  .maptoggle::after{content:"開く ▾";font-family:var(--f-mono)}
+  .mapbox.open .maptoggle::after{content:"畳む ▴"}
+  .mapbox .lbl{display:none}
+  .mapbox:not(.open) .tree,.mapbox:not(.open) .count{display:none}
+  .mapbox:not(.open){padding-bottom:6px}
+  .memo textarea{min-height:300px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+
+<a class="skip" href="#q">質問へ移動</a>
+<div class="app" id="app" lang="ja">
+  <header class="top">
+    <h1>サイト発注メモ メーカー</h1>
+    <p id="lead">14の質問に答えると、ホームページ制作会社に渡す発注メモのたたき台ができます。入力は送信も保存もしません。</p>
+  </header>
+  <div class="main">
+    <section class="ask" id="ask" aria-live="off"></section>
+    <aside class="slipwrap" aria-label="発注メモの伝票">
+      <div class="slip" id="slip">
+        <div class="hd"><b>ホームページ 発注メモ</b><span id="slipname"></span></div>
+        <div class="fields" id="fields"></div>
+        <button type="button" class="pal" id="pal" data-go="11"></button>
+        <div class="mapbox" id="mapbox">
+          <button class="maptoggle" type="button" id="maptoggle" aria-expanded="false" aria-controls="tree"><span id="toggletext">ページの地図</span></button>
+          <span class="lbl">ページの地図</span>
+          <div class="tree" id="tree"></div>
+          <div class="count" id="count"></div>
+        </div>
+        <div class="stampmark" aria-hidden="true">控</div>
+      </div>
+    </aside>
+  </div>
+  <p class="note">メモはたたき台です。質問はホームページをはじめて頼む人向けに作ったもので、制作会社によって必要な情報は変わります。足りないところは制作会社と相談しながら埋めてください。ページを閉じると入力は消えます。</p>
+  <div id="live" class="skip" aria-live="polite"></div>
+</div>
+
+<script>
+(function(){
+var PAGES=[
+  {k:'menu',t:'メニュー・サービス',d:'何ができるか'},
+  {k:'price',t:'料金',d:'表で見せる'},
+  {k:'about',t:'お店・会社の紹介',d:'想い・歴史'},
+  {k:'staff',t:'スタッフ紹介',d:'顔と人柄'},
+  {k:'access',t:'アクセス',d:'地図・行き方'},
+  {k:'works',t:'実績・事例',d:'これまでの仕事'},
+  {k:'faq',t:'よくある質問',d:'問い合わせを減らす'},
+  {k:'news',t:'お知らせ',d:'休業日・新着'},
+  {k:'recruit',t:'採用',d:'働きたい人へ'},
+  {k:'contact',t:'お問い合わせ',d:'フォーム'},
+  {k:'reserve',t:'予約',d:'ネットで受付'}
+];
+var MOODS=[
+  {t:'落ち着いた・上品',head:'明朝体(例: Noto Serif JP)',body:'ゴシック体(例: Noto Sans JP)',bg:'#FAF8F4',text:'#222222',accent:'#B08D57',r:'ほぼ四角(角の丸み 2px)',sp:'広め。1画面に載せる情報を絞る',mv:'ゆっくり浮かび上がる程度'},
+  {t:'明るく親しみやすい',head:'丸ゴシック(例: Zen Maru Gothic)',body:'丸ゴシックかゴシック体',bg:'#FFFDF7',text:'#333333',accent:'#F2A541',r:'丸め(12px)',sp:'ふつう',mv:'ボタンが少し弾む程度'},
+  {t:'清潔・安心感',head:'ゴシック体(例: Noto Sans JP)',body:'ゴシック体(例: Noto Sans JP)',bg:'#FFFFFF',text:'#1F2A37',accent:'#3BA99C',r:'少し丸め(6px)',sp:'広め',mv:'ほとんど動かさない'},
+  {t:'力強く元気',head:'太いゴシック体(例: Dela Gothic One)',body:'ゴシック体(例: Noto Sans JP)',bg:'#FFFFFF',text:'#111111',accent:'#E63946',r:'四角(0〜4px)',sp:'詰め気味。写真を大きく',mv:'見出しや写真が大きく動いてもよい'},
+  {t:'和風・伝統',head:'明朝体(例: Shippori Mincho)',body:'明朝体かゴシック体',bg:'#F7F3EA',text:'#2B2B2B',accent:'#A23B2A',r:'四角',sp:'広め。縦書きの見出しも検討',mv:'ほとんど動かさない'},
+  {t:'ナチュラル・やさしい',head:'丸ゴシックか細めの明朝体',body:'ゴシック体(例: Noto Sans JP)',bg:'#F6F4EE',text:'#3A3A35',accent:'#8AA36B',r:'丸め(10px)',sp:'広め',mv:'ゆっくり浮かび上がる程度'}
+];
+var COLORS=[
+  {t:'紺',c:'#1F3A6E'},{t:'青',c:'#236FAE'},{t:'緑',c:'#3E7D4F'},{t:'茶',c:'#7A5230'},
+  {t:'赤',c:'#C0392B'},{t:'オレンジ',c:'#B4570F'},{t:'ピンク',c:'#B04468'},{t:'黒・グレー',c:'#333333'}
+];
+var Q=[
+  {id:'name',type:'text',q:'お店や会社の名前を教えてください',hint:'空欄でも進めます。入力した内容はこの画面の中だけで使い、どこにも送りません。',ph:'例: みどり整骨院'},
+  {id:'kind',type:'one',q:'どんなお仕事ですか?',opts:['飲食店','美容室・サロン','医院・整骨院','士業・事務所','お店(小売)','教室・スクール','会社(企業向けの仕事)','その他'],two:true},
+  {id:'now',type:'one',q:'今、ホームページはありますか?',opts:['ない(はじめて作る)','あるが、作り直したい','あるが、一部を直したい']},
+  {id:'goal',type:'one',q:'ホームページを作る、いちばんの目的は何ですか?',hint:'ホームページができたあと、お店や会社にどんな変化がほしいかを、1つ選んでください。',short:['電話の予約','ネットの予約','来店','求人の応募','信頼','ネット販売'],
+    opts:['電話での予約や問い合わせを増やしたい','ネットからの予約や問い合わせを増やしたい','お店に来る人を増やしたい','求人への応募を増やしたい','会社として信頼されたい','ネットで商品を売りたい']},
+  {id:'who',type:'many',q:'いちばん見てほしいのは、どんな人ですか?',hint:'いくつでも選べます。',opts:['近所に住む人','遠くから来る人・観光客','取引先や会社の担当者','働きたい人','今のお客さん']},
+  {id:'pages',type:'many',q:'載せたいページを選んでください',hint:'いくつでも選べます。選ぶと伝票の地図に貼られます(スマホでは伝票の「開く」で見られます)。迷うページは選ばず、制作会社に相談しても大丈夫です。',pages:true},
+  {id:'contact',type:'one',q:'電話のほかに、ネットでも予約や問い合わせを受けたいですか?',hint:'選んだ答えによって、地図にページが増えます。',opts:['ネットで予約も受けたい','問い合わせフォームがほしい','予約と問い合わせフォームの両方ほしい','電話だけでいい','わからない(制作会社に相談したい)']},
+  {id:'material',type:'many',q:'写真や文章は、どうしますか?',hint:'いくつでも選べます。',opts:['写真は自分で用意できる','写真の撮影もお願いしたい','文章は自分で書ける','文章づくりも手伝ってほしい']},
+  {id:'update',type:'one',q:'公開したあと、お知らせなどを自分で更新したいですか?',opts:['自分で更新したい','たまになので、制作会社に頼みたい','わからない']},
+  {id:'due',type:'one',q:'いつまでに公開したいですか?',short:['1か月以内','3か月以内','半年以内','未定'],opts:['1か月以内','3か月以内','半年以内','特に決まっていない']},
+  {id:'budget',type:'one',q:'予算は、どのくらいですか?',hint:'ここでは作る費用を聞いています。公開後の月々の費用(サーバー代など)は別にかかることが多いので、メモで制作会社に確かめるようにしています。決まっていなければ「まだ決めていない」を選んでください。',short:['〜10万','10〜30万','30〜50万','50〜100万','100万〜','未定'],
+    opts:['10万円まで','10〜30万円','30〜50万円','50〜100万円','100万円より多い','まだ決めていない'],two:true},
+  {id:'mood',type:'one',q:'ホームページの雰囲気は、どれに近いですか?',hint:'選んだ雰囲気から、文字の形や角の丸み、余白の目安をメモに書きます。',opts:MOODS.map(function(m){return m.t}).concat(['お任せしたい']),two:true},
+  {id:'color',type:'one',q:'メインにしたい色はありますか?',hint:'ボタンや見出しに使う色です。ロゴや看板の色がある場合は、それに合わせるのがおすすめです。',opts:COLORS.map(function(c){return c.t}).concat(['ロゴや看板の色に合わせたい','お任せしたい']),swatch:true,two:true},
+  {id:'note',type:'text',multi:true,q:'ほかに伝えたいことはありますか?',hint:'参考にしたいサイト、使いたくない色、気になっていることなど。空欄でも大丈夫です。',ph:'例: 落ち着いた雰囲気にしたい。駐車場があることを目立たせたい。'}
+];
+var A={pages:[],who:[],material:[]}, step=0, shown={}, mapOpen=false, finished=false;
+var $=function(id){return document.getElementById(id)};
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+var today=new Date();
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+
+function derived(){
+  var d={};
+  if(A.contact===0||A.contact===2) d.reserve='質問7の答えから';
+  if(A.contact===1||A.contact===2) d.contact='質問7の答えから';
+  if(A.goal===3) d.recruit='質問4の答えから';
+  if(A.update===0) d.news='質問9の答えから';
+  return d;
+}
+function pageList(){
+  var d=derived();
+  return PAGES.filter(function(p){return A.pages.indexOf(p.k)>=0||d[p.k]}).map(function(p){return {k:p.k,t:p.t,d:p.d,from:A.pages.indexOf(p.k)<0?d[p.k]:''}});
+}
+function shortOf(id){
+  var q=Q.filter(function(x){return x.id===id})[0], v=A[id];
+  if(v===undefined) return '';
+  return (q.short||q.opts)[v];
+}
+
+function renderSlip(){
+  var nm=(A.name||'').trim();
+  $('slipname').textContent='No. '+String(today.getMonth()+1).padStart(2,'0')+String(today.getDate()).padStart(2,'0')+' ・ '+(nm||'お名前は未記入');
+  var F=[['goal','目的',3],['due','締め切り',9],['budget','予算',10]];
+  $('fields').innerHTML=F.map(function(f){
+    var v=shortOf(f[0]);
+    return '<button type="button" class="f" data-go="'+f[2]+'" aria-label="'+f[1]+': '+(v||'未記入')+'(質問'+(f[2]+1)+'へ)"><small>'+f[1]+'</small><b class="'+(v?'':'blank')+'" data-k="'+f[0]+'" data-v="'+esc(v)+'">'+(v?esc(v):'―')+'</b></button>';
+  }).join('');
+  var pv=palette(), pb=$('pal');
+  pb.innerHTML='<small>デザイン</small><span class="chips">'+(pv.chips.length?pv.chips.map(function(c){return '<i style="background:'+c+'"></i>'}).join(''):'')+'</span><span class="m">'+esc(pv.label)+'</span>';
+  pb.setAttribute('aria-label','デザイン: '+pv.label+'(質問12へ)');
+  var list=pageList();
+  var root='<div class="card root">トップ<em>'+(nm?esc(nm):'最初に開くページ')+'</em></div>';
+  var kids=list.map(function(p){
+    var isNew=!shown[p.k];
+    return '<div><div class="card'+(isNew&&!finished?' new drop':(p.from?' new':''))+'">'+esc(p.t)+'<em>'+(p.from?esc(p.from):esc(p.d))+'</em></div></div>';
+  }).join('');
+  $('tree').innerHTML=root+'<div class="kids">'+kids+'</div>'+(list.length?'':'<p class="empty">ページを選ぶと、ここに貼られていきます。</p>');
+  $('count').textContent=(list.length+1)+' ページ(トップを含む)';
+  $('toggletext').textContent='ページの地図('+(list.length+1)+'ページ)';
+  var added=list.filter(function(p){return !shown[p.k]});
+  if(added.length){var tg=$('maptoggle');tg.classList.remove('flash');void tg.offsetWidth;tg.classList.add('flash')}
+  if(added.length) $('live').textContent='地図に「'+added.map(function(p){return p.t}).join('」「')+'」のページが増えました';
+  shown={}; list.forEach(function(p){shown[p.k]=1});
+  setTimeout(function(){document.querySelectorAll('.card.drop').forEach(function(c){c.classList.remove('drop')})},700);
+}
+function hue(h){var r=parseInt(h.substr(1,2),16)/255,g=parseInt(h.substr(3,2),16)/255,b=parseInt(h.substr(5,2),16)/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;
+  if(d<0.08) return null; var x=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4; return (x*60+360)%360}
+function accentOf(m,c){
+  if(!m) return null; if(!c) return m.accent;
+  var a=hue(m.accent), b=hue(c.c); if(a===null||b===null) return m.accent;
+  var d=Math.abs(a-b); d=Math.min(d,360-d); return d<45?null:m.accent;
+}
+function palette(){
+  var m=A.mood!==undefined&&A.mood<MOODS.length?MOODS[A.mood]:null;
+  var c=A.color!==undefined&&A.color<COLORS.length?COLORS[A.color]:null;
+  var chips=[], parts=[];
+  if(m){parts.push(m.t)} else if(A.mood!==undefined) parts.push('雰囲気はお任せ');
+  if(c){parts.push(c.t)} else if(A.color===COLORS.length) parts.push('ロゴの色'); else if(A.color!==undefined) parts.push('色はお任せ');
+  if(c) chips.push(c.c);
+  if(m){var ac=accentOf(m,c); if(ac) chips.push(ac); chips.push(m.bg,m.text)}
+  return {chips:chips,label:parts.length?parts.join(' ・ '):'未記入(質問12・13)'};
+}
+function designText(){
+  var L=[], m=A.mood!==undefined&&A.mood<MOODS.length?MOODS[A.mood]:null;
+  var c=A.color!==undefined&&A.color<COLORS.length?COLORS[A.color]:null;
+  if(A.mood===undefined&&A.color===undefined) return ['  ※ デザインの希望は未回答です。相談して決めたいです。'];
+  L.push('  以下は、答えから自動で作ったデザインの希望のたたき台です(DESIGN.md は、見た目の決まりを制作会社やAIに伝えるための書き方の名前です)。色の番号・書体・大きさ・余白などはすべて目安なので、制作会社と相談して決めてください。');
+  L.push('  ----- DESIGN.md ここから -----');
+  L.push('  # DESIGN.md(たたき台)');
+  L.push('  ## 雰囲気');
+  L.push('  - '+(m?m.t:'お任せ(制作会社の提案を見て決めたい)'));
+  L.push('  ## 配色');
+  if(c) L.push('  - メインの色(ボタン・見出し): '+c.t+' '+c.c);
+  else if(A.color===COLORS.length) L.push('  - メインの色: ロゴや看板の色に合わせる(色の番号は、ロゴのデータを渡して決める)');
+  else L.push('  - メインの色: お任せ');
+  if(m){
+    var ac=accentOf(m,c);
+    L.push(ac?'  - 差し色(線や印など、目立たせたい所だけ。文字やボタンの地には使わない): '+ac:'  - 差し色: なし(雰囲気の差し色がメインの色と近いため。メインの色の濃さで強弱を付ける)');
+    L.push('  - 背景: '+m.bg);
+    L.push('  - 文字: '+m.text);
+  } else L.push('  - 差し色・背景・文字の色: お任せ');
+  L.push(m&&!accentOf(m,c)?'  - 使う色は、メイン・背景・文字の3色を中心にする':'  - 使う色は、メイン・差し色・背景・文字の4色までにする');
+  L.push('  ## 書体');
+  L.push('  - 見出し: '+(m?m.head:'お任せ'));
+  L.push('  - 本文: '+(m?m.body:'読みやすいゴシック体'));
+  L.push('  ## 文字の大きさ');
+  L.push('  - 本文はスマホで16px以上。年配のお客さんが多い場合は18px程度');
+  L.push('  - 見出しと本文の大きさの差をはっきり付ける');
+  L.push('  ## 余白');
+  L.push('  - '+(m?m.sp:'お任せ'));
+  L.push('  ## 部品');
+  L.push('  - ボタンの角: '+(m?m.r:'お任せ'));
+  L.push('  - 電話・予約などのボタンはメインの色で、スマホで押しやすい大きさにする');
+  L.push('  ## 動き');
+  L.push('  - '+(m?m.mv:'お任せ')+'。動きを減らす設定の端末では止める');
+  L.push('  ----- DESIGN.md ここまで -----');
+  return L;
+}
+function inkField(k){
+  var b=document.querySelector('.f b[data-k="'+k+'"]'); if(!b) return;
+  b.classList.remove('ink'); void b.offsetWidth; b.classList.add('ink');
+}
+function setMap(open){
+  mapOpen=open; $('mapbox').classList.toggle('open',open); $('maptoggle').setAttribute('aria-expanded',open?'true':'false');
+}
+
+function boxes(){
+  var h=''; for(var i=0;i<Q.length;i++){var a=A[Q[i].id];var d=(Array.isArray(a)?a.length>0:(a!==undefined&&a!==''));h+='<i class="'+(d?'d':'')+(i===step?' c':'')+'"></i>'}
+  var n=Q.filter(function(q){var a=A[q.id];return Array.isArray(a)?a.length>0:(a!==undefined&&a!=='')}).length;
+  return '<span class="boxes" role="img" aria-label="'+Q.length+'問中'+n+'問に回答">'+h+'</span>';
+}
+
+function renderAsk(focus){
+  var q=Q[step], h='';
+  h+='<span class="no">質問 '+(step+1)+' / '+Q.length+'</span>';
+  h+='<h2 id="q" tabindex="-1">'+esc(q.q)+'</h2>';
+  if(q.hint) h+='<p class="hint">'+esc(q.hint)+'</p>';
+  if(q.type==='text'){
+    var v=A[q.id]||'';
+    h+='<div class="field"><label for="in-'+q.id+'">'+(q.multi?'自由に書いてください(任意)':'名前(任意)')+'</label>'+
+      (q.multi?'<textarea id="in-'+q.id+'" placeholder="'+esc(q.ph)+'">'+esc(v)+'</textarea>':'<input id="in-'+q.id+'" type="text" autocomplete="off" placeholder="'+esc(q.ph)+'" value="'+esc(v)+'">')+'</div>';
+  } else {
+    var opts=q.pages?PAGES.map(function(p){return p.t}):q.opts;
+    h+='<div class="opts'+(q.two||q.pages?' two':'')+'" role="group" aria-labelledby="q">';
+    opts.forEach(function(o,i){
+      var on=q.type==='one'?A[q.id]===i:(q.pages?A.pages.indexOf(PAGES[i].k)>=0:A[q.id].indexOf(i)>=0);
+      h+='<button type="button" class="opt" data-i="'+i+'" aria-pressed="'+on+'">'+(q.type==='many'?'<span class="box" aria-hidden="true"></span>':'')+(q.swatch&&COLORS[i]?'<span class="sw" aria-hidden="true" style="background:'+COLORS[i].c+'"></span>':'')+esc(o)+'</button>';
+    });
+    h+='</div>';
+  }
+  var last=step===Q.length-1;
+  var canNext=q.type!=='one'||A[q.id]!==undefined;
+  h+='<div class="foot">'+boxes()+'<span class="btns"><button type="button" class="btn" id="back"'+(step===0?' disabled':'')+'>もどる</button>'+
+     '<button type="button" class="btn go" id="next"'+(canNext?'':' disabled')+'>'+(last?'メモを仕上げる':(q.type==='one'?'次へ':(isEmpty(q)?'とばす':'次へ')))+'</button></span></div>';
+  $('ask').innerHTML=h;
+  if(focus) $('q').focus({preventScroll:false});
+  if(Q[step].pages&&!mapOpen&&!isNarrow()) setMap(true);
+}
+function isNarrow(){return !!(window.matchMedia&&matchMedia('(max-width:760px)').matches)}
+function isEmpty(q){var a=A[q.id];return Array.isArray(a)?a.length===0:!a}
+
+function saveText(){
+  var q=Q[step]; if(q.type!=='text') return;
+  var el=$('in-'+q.id); if(el) A[q.id]=el.value;
+}
+function go(n){
+  if($('app').classList.contains('tearing')) return;
+  saveText();
+  if(n>=Q.length){finish();return}
+  step=Math.max(0,n); renderSlip(); renderAsk(true);
+}
+
+$('ask').addEventListener('click',function(e){
+  var o=e.target.closest('.opt'), q=Q[step];
+  if(o){
+    var i=+o.dataset.i;
+    if(q.type==='one'){
+      A[q.id]=i;
+      o.classList.add('pressed');
+      document.querySelectorAll('.opt').forEach(function(b){b.setAttribute('aria-pressed',b===o?'true':'false')});
+      renderSlip(); inkField(q.id);
+      setTimeout(function(){go(step+1)},reduce?120:420);
+    } else if(q.pages){
+      var k=PAGES[i].k, at=A.pages.indexOf(k);
+      if(at>=0) A.pages.splice(at,1); else A.pages.push(k);
+      o.setAttribute('aria-pressed',at<0?'true':'false');
+      renderSlip(); renderFoot();
+    } else {
+      var arr=A[q.id], j=arr.indexOf(i);
+      if(j>=0) arr.splice(j,1); else arr.push(i);
+      o.setAttribute('aria-pressed',j<0?'true':'false');
+      renderFoot();
+    }
+    return;
+  }
+  if(e.target.id==='next') go(step+1);
+  if(e.target.id==='back') go(step-1);
+});
+$('ask').addEventListener('input',function(e){
+  if(e.target.id==='in-name'){A.name=e.target.value;renderSlip();renderFoot()}
+  if(e.target.id==='in-note'){A.note=e.target.value;renderFoot()}
+});
+$('ask').addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&e.target.id==='in-name'){e.preventDefault();go(step+1)}
+});
+function renderFoot(){
+  var q=Q[step], f=document.querySelector('.foot'); if(!f) return;
+  f.querySelector('.boxes').outerHTML=boxes();
+  var n=$('next'); if(n&&step<Q.length-1&&q.type!=='one') n.textContent=isEmpty(q)?'とばす':'次へ';
+}
+$('fields').addEventListener('click',function(e){
+  var f=e.target.closest('.f'); if(!f) return;
+  if(finished) unfinish();
+  go(+f.dataset.go);
+});
+$('pal').addEventListener('click',function(){if(finished) unfinish();go(11)});
+$('maptoggle').addEventListener('click',function(){setMap(!mapOpen)});
+
+function memoText(){
+  var L=[], nm=(A.name||'').trim();
+  var pick=function(id,none){var q=Q.filter(function(x){return x.id===id})[0];var v=A[id];return v===undefined?(none||'未回答'):q.opts[v]};
+  var many=function(id){var q=Q.filter(function(x){return x.id===id})[0];return A[id].length?A[id].slice().sort().map(function(i){return q.opts[i]}).join('、'):'未回答'};
+  var d=today.getFullYear()+'年'+(today.getMonth()+1)+'月'+today.getDate()+'日';
+  L.push('【ホームページ制作のご相談メモ】');
+  L.push('作成日: '+d);
+  L.push('');
+  L.push('■ 依頼者: '+(nm||'(未記入)'));
+  L.push('■ 仕事の種類: '+pick('kind'));
+  L.push('■ 今のホームページ: '+pick('now')+((A.now===1||A.now===2)?'\n  今のアドレス: (ここに書いてください)':''));
+  L.push('■ いちばんの目的: '+pick('goal'));
+  L.push('■ 見てほしい人: '+many('who'));
+  var pl=pageList();
+  L.push('■ ほしいページ('+(pl.length+1)+'ページ。トップを含む):');
+  L.push('  ・トップ');
+  var WHY={reserve:'ネットで予約を受けたいため',contact:'問い合わせフォームがほしいため',recruit:'求人の応募を増やしたいため',news:'自分でお知らせを更新したいため'};
+  pl.forEach(function(p){L.push('  ・'+p.t+(p.from?'('+WHY[p.k]+')':''))});
+  if(!pl.length) L.push('  ※ ページ構成は相談して決めたい');
+  L.push('■ 予約・問い合わせ: '+pick('contact'));
+  L.push('■ 写真・文章: '+many('material'));
+  L.push('■ 公開後の更新: '+pick('update'));
+  L.push('■ 公開の希望時期: '+pick('due'));
+  L.push('■ 予算感(制作費): '+(A.budget===5?'まだ決めていない(相談したい)':pick('budget')));
+  L.push('  ※ 公開後の月々の費用(サーバー代・保守など)も、あわせて教えてください。');
+  L.push('■ デザインの希望:');
+  designText().forEach(function(x){L.push(x)});
+  var note=(A.note||'').trim();
+  L.push('■ そのほか: '+(note||'特になし'));
+  L.push('');
+  L.push('※ このメモは、質問に答えて作ったたたき台です。足りない点は、ご相談させてください。');
+  return L.join('\n');
+}
+
+function finish(){
+  finished=true; resetArmed=false;
+  var app=$('app');
+  renderSlip(); setMap(!(window.matchMedia&&matchMedia('(max-width:760px)').matches));
+  var show=function(){
+    app.classList.remove('tearing'); app.classList.add('done');
+    $('ask').innerHTML='<div class="result"><span class="no" style="font-family:var(--f-mono);color:var(--carbon);font-size:13px">お客様控え</span>'+
+      '<h2 id="q" tabindex="-1">発注メモができました</h2>'+
+      '<p>「コピーする」を押して、制作会社へのメールや問い合わせフォームに貼り付けてください。下の文章は、ここで直接書き直せます。</p>'+
+      '<div class="memo"><textarea id="memo" aria-label="発注メモの文章">'+esc(memoText())+'</textarea></div>'+
+      '<div class="actions"><button type="button" class="copy" id="copy">コピーする</button><button type="button" class="btn" id="edit">答えを直す</button><button type="button" class="btn" id="reset">最初からやり直す</button></div>'+
+      '<div class="toast" id="toast" role="status"></div></div>';
+    $('memo').parentNode.classList.add('land');
+    $('q').focus({preventScroll:true});
+    var r=document.querySelector('.result');
+    if(narrow) setTimeout(function(){r.scrollIntoView({block:'start',behavior:reduce?'auto':'smooth'})},reduce?0:350);
+    else r.scrollIntoView({block:'nearest'});
+  };
+  var narrow=isNarrow();
+  if(reduce){show();return}
+  var tear=function(){app.classList.add('tearing');setTimeout(show,1050)};
+  if(narrow){
+    document.querySelector('.slipwrap').scrollIntoView({block:'start',behavior:'smooth'});
+    setTimeout(tear,500);
+  } else tear();
+}
+function unfinish(){finished=false;$('app').classList.remove('done','tearing')}
+var resetArmed=false;
+$('ask').addEventListener('click',function(e){
+  if(e.target.id==='copy'){
+    var t=$('memo'), txt=t.value;
+    var ok=function(){$('toast').textContent='コピーしました。メールなどに貼り付けてください。'};
+    var ng=function(){t.focus();t.select();$('toast').textContent='自動でコピーできませんでした。文章を選んだので、長押しまたは Ctrl+C(Macは ⌘+C)でコピーしてください。'};
+    try{navigator.clipboard.writeText(txt).then(ok,ng)}catch(err){ng()}
+  }
+  if(e.target.id==='edit'){resetArmed=false;unfinish();go(0)}
+  if(e.target.id==='reset'){
+    if(!resetArmed){resetArmed=true;e.target.textContent='もう一度押すと、答えをすべて消します';return}
+    resetArmed=false;A={pages:[],who:[],material:[]};shown={};unfinish();setMap(false);go(0);
+  }
+});
+
+renderSlip(); renderAsk(false);
+if(window.matchMedia&&!matchMedia('(max-width:760px)').matches) setMap(true);
+})();
+</script>
+
+
+
+</body>
+</html>
