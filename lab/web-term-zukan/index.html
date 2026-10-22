@@ -773,7 +773,10 @@ function pageTop(){
     st.querySelectorAll("[data-part],.lab,.fbtn[data-id],.chips button").forEach(el=>el.addEventListener("click",()=>{state.sel=el.dataset.part||el.dataset.id;save();draw();
       /* スマホでは説明が工程表の下に隠れるので、見える所まで送る */
       if(NARROW.matches){const pk=document.getElementById("pick");if(pk)pk.scrollIntoView({block:"nearest"});}}));
-    st.querySelectorAll(".to-fig,.back").forEach(b=>b.addEventListener("click",()=>{state.fig=b.dataset.fig;save();draw();}));
+    st.querySelectorAll(".to-fig,.back").forEach(b=>b.addEventListener("click",()=>{state.fig=b.dataset.fig;save();draw();
+      /* 見本図と工程表を切り替えたら、切り替えた図の頭から見せる(上に固定のヘッダーの分だけ下げる) */
+      const fb=document.querySelector(".figure-box"),hd=document.querySelector(".site-head");
+      if(fb)window.scrollTo({top:Math.max(0,fb.getBoundingClientRect().top+scrollY-(hd?hd.offsetHeight:0)-8),behavior:RM.matches?"auto":"smooth"});}));
     document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.fig===state.fig));
     HOOK.after();zen(view);};
   document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{state.fig=b.dataset.fig;save();draw();}));
