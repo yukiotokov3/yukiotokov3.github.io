@@ -1,0 +1,1190 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1280, viewport-fit=cover">
+<meta name="description" content="サイトを頼むときに出てくる31語を見本図と図解で引き、選んだ言葉をツリーに集めて、AIへの指示文を作れる図鑑。テアシ商会(人とAIで制作)。">
+<link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="icon" href="/favicon-96.png" sizes="96x96" type="image/png">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>Webデザイン用語の絵図鑑 AIへの頼み方付き</title>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700&family=Zen+Maru+Gothic:wght@900&display=swap">
+<style>
+/* 合本「サイトができるまで」。1巻目の指さし図鑑と同じ配色・書体: 見本図(場所)と図解(しくみ)の2つの絵で用語を引く。深緑の線と珊瑚の「指した所」(2026-10-20 社長が配色を選択)。図鑑の紙の見え方に固定するため明るい配色のみ(意図して1テーマ) */
+:root{
+  --bg:#EDF3F0; --paper:#FFFFFF; --ink:#1F3A33; --sub:#506660; --hi:#FF8A7A; --hi-text:#A63A2C; --pale:#D6E3DD; --hi-line:#E5604F; --on-hi:#1F3A33;
+  --f-display:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.8;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+.gutter{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.inner{max-width:1120px;margin:0 auto}
+h1,h2,h3{text-wrap:balance;line-height:1.3;margin:0;font-weight:400}
+p{margin:0}
+a{color:var(--ink)}
+a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--hi-line);outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:8px;background:var(--paper);padding:8px 12px;border:2px solid var(--ink);z-index:20;font:inherit}
+.skip:focus{left:max(16px,env(safe-area-inset-left,0px))}
+
+/* ヘッダー */
+.site-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:2px solid var(--ink)}
+.site-head .inner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:10px}
+.brand{font-family:var(--f-display);font-weight:900;font-size:20px;text-decoration:none;display:flex;align-items:center;gap:10px}
+.brand i{width:14px;height:14px;border-radius:50%;background:var(--hi);display:inline-block;box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--ink)}
+.gnav{display:flex;gap:4px;flex-wrap:wrap}
+.gnav a{text-decoration:none;font-weight:700;font-size:15px;padding:6px 12px;border-radius:999px}
+.gnav a[aria-current="page"]{background:var(--ink);color:var(--paper)}
+.gnav a:not([aria-current="page"]):hover{background:var(--pale)}
+
+main{padding-block:32px 72px;display:block}
+main:focus,main:focus-visible{outline:none}
+.stack{display:grid;gap:40px}
+.eyebrow{font-size:14px;font-weight:700;color:var(--sub);letter-spacing:.06em}
+.h-xl{font-family:var(--f-display);font-weight:900;font-size:clamp(32px,6vw,52px);line-height:1.2}
+.h-l{font-family:var(--f-display);font-weight:900;font-size:clamp(26px,4vw,34px)}
+.h-m{font-family:var(--f-display);font-weight:900;font-size:22px}
+.lead{font-size:17px;max-width:40em}
+.muted{color:var(--sub)}
+.small{font-size:14px}
+
+/* 見本図 */
+.stage{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:28px;align-items:start}
+.figure-box{background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:16px;display:grid;gap:12px;min-width:0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button,.chips button{font:inherit;font-weight:700;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:4px 14px;cursor:pointer;font-size:15px}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button[aria-pressed="true"]{background:var(--hi);border-color:var(--hi);color:var(--on-hi)}
+svg{display:block;width:100%;height:auto}
+.lab{cursor:pointer}
+[data-part]{cursor:pointer}
+.pick{background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:20px;display:grid;gap:10px}
+.pick .nm{font-family:var(--f-display);font-weight:900;font-size:26px;line-height:1.3}
+.go{display:inline-flex;align-items:center;gap:8px;justify-self:start;font-weight:700;text-decoration:none;border-bottom:3px solid var(--hi-line);padding-bottom:2px}
+
+/* 一覧 */
+.chapter{display:grid;gap:16px}
+.chapter-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:8px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.tile{display:grid;grid-template-rows:auto 1fr;text-decoration:none;background:var(--paper);border:2px solid var(--ink);border-radius:8px;overflow:hidden}
+.tile:hover{box-shadow:4px 4px 0 var(--hi)}
+.tile .pic{background:var(--bg);border-bottom:2px solid var(--ink);padding:10px}
+.tile .txt{padding:12px 14px;display:grid;gap:2px;align-content:start}
+.tile .nm{font-family:var(--f-display);font-weight:900;font-size:18px;line-height:1.35}
+
+/* 用語のページ */
+.term-top{display:grid;gap:8px}
+.term-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px;align-items:start}
+.zukai{background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:16px;display:grid;gap:8px;min-width:0}
+.zukai .cap{font-size:14px;font-weight:700;color:var(--sub);letter-spacing:.06em}
+.side{display:grid;gap:16px;min-width:0}
+.box{background:var(--paper);border-radius:8px;padding:16px 18px;display:grid;gap:8px}
+.box h3{font-size:14px;font-weight:700;color:var(--sub);letter-spacing:.06em}
+.order{font-size:17px;font-weight:700;border-left:4px solid var(--hi-line);padding-left:12px}
+.who{font-size:13px;font-weight:700;color:var(--sub);margin-top:4px}
+.order.ai{font-size:16px;font-weight:400;border-left-color:var(--ink)}
+.rel{display:flex;flex-wrap:wrap;gap:8px}
+.rel a{font-weight:700;font-size:15px;text-decoration:none;border:2px solid var(--ink);border-radius:999px;padding:3px 12px;background:var(--paper)}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:2px solid var(--ink);padding-top:16px}
+.pager a{font-weight:700;text-decoration:none}
+
+/* 使い方 */
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:16px;counter-reset:s;max-width:760px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:52px minmax(0,1fr);gap:16px;background:var(--paper);border-radius:8px;padding:18px}
+.steps li::before{content:attr(data-n);font-family:var(--f-display);font-weight:900;font-size:28px;width:52px;height:52px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;line-height:1}
+.steps h3{font-family:var(--f-display);font-weight:900;font-size:19px;margin-bottom:4px}
+
+.site-foot{border-top:2px solid var(--ink);background:var(--paper)}
+.site-foot .inner{padding-block:24px;display:grid;gap:6px;font-size:13px;color:var(--sub)}
+
+@container page (max-width:800px){
+  .stage,.term-grid{grid-template-columns:1fr}
+  .lab text,.lab path{display:none}
+}
+@media (prefers-reduced-motion:no-preference){
+  [data-part],.lab{transition:opacity .25s}
+}
+
+/* ---------- 合本で足した部分 ---------- */
+.h-s{font-family:var(--f-display);font-weight:900;font-size:19px}
+.stage.wide{grid-template-columns:1fr}
+.pick-row{display:grid;gap:18px;align-items:start}
+/* 工程表 */
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}
+.step{position:relative;display:grid;grid-template-rows:auto 1fr;gap:10px;background:var(--bg);border:2px solid var(--ink);border-radius:8px;padding:12px;min-width:0}
+.step.on{background:var(--pale)}
+.step:not(:last-child)::after{content:"";position:absolute;right:-15px;top:24px;border:7px solid transparent;border-left:10px solid var(--hi-line)}
+.step-head{display:flex;gap:8px;align-items:flex-start}
+.step-head b{display:block;font-family:var(--f-display);font-weight:900;font-size:17px;line-height:1.3}
+.step-head small{display:block;font-size:12px;color:var(--sub);line-height:1.5}
+.num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:16px;line-height:1}
+.fbtns{display:grid;gap:6px;align-content:start}
+.fbtn{font:inherit;font-weight:700;font-size:14px;line-height:1.4;text-align:left;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:6px 10px;cursor:pointer;overflow-wrap:anywhere}
+.fbtn:hover{box-shadow:3px 3px 0 var(--hi)}
+.fbtn[aria-pressed="true"]{background:var(--hi);border-color:var(--hi-line);color:var(--on-hi)}
+.fbtn.to-fig{border-style:dashed}
+.back{font:inherit;font-weight:700;justify-self:start;background:none;border:0;border-bottom:3px solid var(--hi-line);padding:0 0 2px;color:var(--ink);cursor:pointer}
+/* 用語ページの小さな工程表 */
+.mini{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.mini li{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--sub);padding:4px 8px;border-radius:6px}
+.mini li span{width:22px;height:22px;border-radius:50%;border:2px solid var(--sub);display:grid;place-items:center;font-size:12px;line-height:1}
+.mini li.on{background:var(--hi);color:var(--on-hi)}
+.mini li.on span{border-color:var(--ink);background:var(--paper)}
+/* 一覧の工程見出し */
+.step-title{display:flex;align-items:center;gap:12px}
+.step-title .num{width:40px;height:40px;font-size:20px}
+/* 道具の表 */
+.tbl-wrap{overflow-x:auto;background:var(--paper);border:2px solid var(--ink);border-radius:8px}
+.tbl{border-collapse:collapse;width:100%;min-width:720px;font-size:15px;line-height:1.6}
+.tbl th,.tbl td{padding:10px 12px;border-bottom:1px solid var(--pale);text-align:left;vertical-align:top}
+.tbl thead th{font-size:13px;color:var(--sub);letter-spacing:.04em;border-bottom:2px solid var(--ink)}
+.tbl tbody th{font-weight:700;white-space:nowrap}
+.tbl tbody tr:last-child>*{border-bottom:0}
+.nowrap{white-space:nowrap;text-align:center}
+@container page (max-width:1000px){
+  .flow{grid-template-columns:1fr;gap:16px}
+  .step{grid-template-rows:auto}
+  .step:not(:last-child)::after{right:auto;left:22px;top:auto;bottom:-17px;border:7px solid transparent;border-top:10px solid var(--hi-line)}
+  .fbtns{display:flex;flex-wrap:wrap}
+  .fbtn{border-radius:999px;padding:4px 12px}
+}
+@container page (max-width:700px){
+  /* スマホでは表を1件ずつのカードにする */
+  .tbl-wrap{overflow:visible;background:none;border:0}
+  .tbl{min-width:0;display:block}
+  .tbl thead{display:none}
+  .tbl tbody{display:grid;gap:12px}
+  .tbl tr{display:grid;gap:6px;background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:12px 14px}
+  .tbl th,.tbl td{display:block;padding:0;border:0}
+  .tbl tbody th{white-space:normal;font-family:var(--f-display);font-weight:900;font-size:18px}
+  .tbl td::before{content:attr(data-l);display:block;font-size:12px;font-weight:700;color:var(--sub)}
+  .nowrap{text-align:left}
+}
+/* ---------- ブラッシュアップ(2026-10-22) ---------- */
+/* 名前: 吹き出しの「なんて呼ぶ？」+ Web図鑑 */
+.brand{gap:6px;align-items:center}
+.brand .bubble{position:relative;font-family:var(--f-display);font-weight:900;font-size:15px;line-height:1;background:var(--hi);color:var(--on-hi);border:2px solid var(--ink);border-radius:999px;padding:6px 12px 7px;margin-bottom:4px}
+.brand .bubble::after{content:"";position:absolute;left:16px;bottom:-9px;width:10px;height:10px;background:var(--hi);border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:skewX(30deg) rotate(45deg);transform-origin:center}
+.brand .bname{font-family:var(--f-display);font-weight:900;font-size:21px}
+/* スマホで読み進めるときはヘッダーを隠す */
+.site-head{transition:transform .25s ease}
+.site-head.tuck{transform:translateY(calc(-100% - env(safe-area-inset-top,0px)))}
+@media (prefers-reduced-motion:reduce){.site-head{transition:none}}
+.tile .try{justify-self:start;font-size:12px;font-weight:700;color:var(--hi-text);border:1.5px solid var(--hi-line);border-radius:999px;padding:0 8px;margin-top:4px}
+/* さわって試す */
+.demo{border:2px solid var(--hi-line);display:grid;gap:10px}
+.demo h3{font-family:var(--f-display);font-weight:900;font-size:19px;color:var(--ink);letter-spacing:0}
+.dm{display:grid;justify-items:center;background:var(--bg);border-radius:8px;padding:16px;min-width:0;overflow:hidden}
+.dm button{font:inherit;color:var(--ink);cursor:pointer}
+.dm-ph{display:block;background:var(--pale);border-radius:6px;aspect-ratio:4/3;position:relative;overflow:hidden}
+.dm-ph::after{content:"";position:absolute;inset:auto 0 0 0;height:55%;background:linear-gradient(135deg,transparent 30%,rgba(31,58,51,.22) 30% 60%,transparent 60%)}
+.dm-ph.c0{background:#F7C9C1}.dm-ph.c1{background:var(--pale)}.dm-ph.c2{background:#E9DCC4}
+.dm-phone{position:relative;width:240px;max-width:100%;height:340px;background:var(--paper);border:2.5px solid var(--ink);border-radius:22px;overflow:hidden}
+.dm-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--pale);border-bottom:2px solid var(--ink)}
+.dm-logo{font-weight:700}
+.dm-burger{display:grid;gap:4px;background:var(--hi);border:2px solid var(--ink);border-radius:6px;padding:7px 8px}
+.dm-burger i{display:block;width:18px;height:2.5px;background:var(--ink);border-radius:2px}
+.dm-body{padding:12px;display:grid;gap:8px}
+.dm-line{height:8px;border-radius:4px;background:var(--pale)}.dm-line.s{width:60%}
+.dm-menu{position:absolute;top:0;right:0;bottom:0;width:72%;background:var(--paper);border-left:3px solid var(--hi-line);padding:44px 16px 16px;display:grid;align-content:start;gap:4px}
+.dm-menu a{font-weight:700;text-decoration:none;padding:8px 4px;border-bottom:1px solid var(--pale)}
+.dm-close{position:absolute;top:6px;right:8px;font-size:22px!important;line-height:1;background:none;border:0;padding:4px 8px}
+.dm-page{width:100%;max-width:420px;background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:14px;display:grid;gap:10px;position:relative;overflow:hidden}
+.dm-ttl{font-weight:700}
+.dm-thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.dm-thumb{display:grid;gap:4px;font-size:13px;font-weight:700;background:none;border:0;padding:0;text-align:center}
+.dm-thumb:hover .dm-ph{outline:3px solid var(--hi-line)}
+.dm-overlay{position:absolute;inset:0;background:rgba(31,58,51,.55);display:grid;place-items:center;padding:16px}
+.dm-overlay[hidden]{display:none}
+.dm-win{position:relative;background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:34px 12px 10px;width:85%;display:grid;gap:6px}
+.dm-cap{font-size:13px;font-weight:700}
+.dm-acc{border:2px solid var(--ink);border-radius:8px;overflow:hidden}
+.dm-acc button{width:100%;display:flex;justify-content:space-between;gap:8px;font-weight:700;text-align:left;background:var(--paper);border:0;padding:10px 12px}
+.dm-acc button[aria-expanded="true"]{background:var(--hi)}
+.dm-ans{padding:10px 12px;background:var(--bg);border-top:2px solid var(--ink);font-size:14px}
+.dm-slider{position:relative;overflow:hidden;border-radius:8px;border:2px solid var(--ink)}
+.dm-track{display:flex;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+@media (prefers-reduced-motion:reduce){.dm-track{transition:none}}
+.dm-slide{flex:0 0 100%;position:relative}
+.dm-slide .dm-ph{border-radius:0;aspect-ratio:16/9}
+.dm-slide .dm-cap{position:absolute;left:10px;bottom:8px;background:var(--paper);padding:2px 8px;border-radius:4px}
+.dm-arrow{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:var(--paper);border:2px solid var(--ink);font-size:20px!important;line-height:1;padding:0}
+.dm-arrow.prev{left:8px}.dm-arrow.next{right:8px}
+.dm-dots{display:flex;justify-content:center;gap:8px}
+.dm-dots button{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);padding:0}
+.dm-dots button[aria-current="true"]{background:var(--ink)}
+.dm-resp{width:100%;display:grid;gap:8px}
+.dm-resp input{width:100%;accent-color:var(--hi-line)}
+.dm-frame{background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:10px;max-width:100%;transition:width .1s}
+.dm-cards{display:grid;gap:8px}
+.dm-card{display:grid;gap:4px;font-size:13px;font-weight:700;border:2px solid var(--ink);border-radius:6px;padding:6px;background:var(--paper)}
+@container page (max-width:800px){.brand .bname{font-size:18px}.brand .bubble{font-size:13px}}
+.dm-menu[hidden],.dm-ans[hidden],.dm-overlay[hidden]{display:none}
+.dm-page:has(.dm-overlay){min-height:250px}
+.dm-win{width:72%}
+.dm-win .dm-ph{aspect-ratio:16/9}
+.dm-card .dm-ph{aspect-ratio:auto;height:44px}
+/* ---------- ツリー版 ---------- */
+.pick-row{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.tree-box{background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:16px;display:grid;gap:10px;min-width:0}
+.tree-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+/* 木: 縦の幹と横の枝を線で描く */
+.tree .root{display:inline-block;margin:0;font-family:var(--f-display);font-weight:900;font-size:16px;background:var(--ink);color:var(--paper);padding:2px 14px;border-radius:999px}
+.tree ul{list-style:none;margin:0;padding:0 0 0 14px}
+.tree>ul{margin-top:2px}
+.tree li{position:relative;padding:6px 0 0 18px}
+.tree li::before{content:"";position:absolute;left:0;top:0;bottom:0;border-left:2px solid var(--ink)}
+.tree li:last-child::before{bottom:auto;height:20px}
+.tree li::after{content:"";position:absolute;left:0;top:20px;width:13px;border-top:2px solid var(--ink)}
+.tree .node{display:inline-flex;align-items:center;gap:2px;font-weight:700;font-size:15px}
+.tree .node.pg{background:var(--pale);padding:0 4px 0 10px;border-radius:6px}
+.tree .leaf a{display:inline-block;font-size:14px;font-weight:700;text-decoration:none;border:2px solid var(--ink);border-radius:999px;padding:0 10px;background:var(--paper)}
+.tree .leaf.none{font-size:13px;color:var(--sub)}
+.tree .leaf.fresh a{background:var(--hi);border-color:var(--hi-line)}
+@media (prefers-reduced-motion:no-preference){.tree .leaf.fresh a{animation:grow .5s ease-out}}
+@keyframes grow{from{transform:scale(.8);opacity:.3}to{transform:none;opacity:1}}
+.x{font:inherit;font-weight:700;font-size:15px;line-height:1;border:0;background:none;color:var(--sub);cursor:pointer;padding:4px 6px}
+.x:hover{color:var(--hi-text)}
+/* 「ツリーに入れる」 */
+.tctl{display:grid;gap:8px;padding-top:12px;border-top:2px dashed var(--pale)}
+.side .tctl{background:var(--paper);border:2px solid var(--hi-line);border-radius:8px;padding:16px 18px}
+.trow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tbtn{font:inherit;font-weight:700;font-size:15px;background:var(--ink);color:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:6px 16px;cursor:pointer}
+.tbtn.on{background:var(--hi);border-color:var(--hi-line);color:var(--on-hi)}
+.tbtn.sub{background:var(--paper);color:var(--ink)}
+.tbtn.warn{background:var(--hi-text);border-color:var(--hi-text);color:var(--paper)}
+.tbtn:disabled{opacity:.4;cursor:default}
+.chipx{font:inherit;font-size:13px;font-weight:700;border:2px solid var(--hi-line);background:var(--hi);color:var(--on-hi);border-radius:999px;padding:0 10px;cursor:pointer}
+select,input[type="text"],textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:6px;padding:6px 10px;max-width:100%}
+.fbtn.in::after{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--hi-line);margin-left:8px;vertical-align:middle}
+/* ツリーと指示文のページ */
+.build{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+.out{position:sticky;top:80px;display:grid;gap:12px;min-width:0;border:2px solid var(--ink)}
+#out{width:100%;font-family:ui-monospace,Menlo,monospace;font-size:14px;line-height:1.7;resize:vertical;background:var(--bg)}
+.fld{display:grid;gap:4px}
+.fld label,.fld .lab{font-size:14px;font-weight:700;color:var(--sub)}
+.fld input,.fld textarea{width:100%}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opts button{font:inherit;font-size:14px;font-weight:700;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:3px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.opts button[aria-pressed="true"]{background:var(--hi);border-color:var(--hi-line);color:var(--on-hi)}
+.sw{width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid var(--ink)}
+.gnav .cnt:not(:empty){margin-left:6px;background:var(--hi);color:var(--on-hi);border-radius:999px;padding:0 7px;font-size:12px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-weight:700;font-size:14px;z-index:30;max-width:calc(100% - 32px)}
+@container page (max-width:800px){
+  .pick-row,.build{grid-template-columns:1fr}
+  .out{position:static}
+}
+.warn-t{color:var(--hi-text);font-weight:700}
+
+/* 指示文ができたあとの案内 */
+.guide{display:grid;gap:12px;margin-top:24px}
+.gsteps{margin:0;padding:0;list-style:none;counter-reset:g;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.gsteps>li{counter-increment:g;display:grid;gap:6px;align-content:start;background:var(--bg);border-radius:8px;padding:14px}
+.gsteps>li>b{font-family:var(--f-display);font-weight:900;font-size:18px;display:flex;align-items:center;gap:8px}
+.gsteps>li>b::before{content:counter(g);width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:15px}
+.gsteps ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:700}
+.chk input{width:18px;height:18px;accent-color:var(--hi-line)}
+@container page (max-width:1000px){.gsteps{grid-template-columns:1fr}}
+.guide .ib{display:inline-block}
+.brand .bsub{font-weight:700;font-size:13px;color:var(--sub);align-self:flex-end;margin:0 0 4px 4px;white-space:nowrap}
+.brand.zk{gap:10px}.brand.zk i{width:14px;height:14px;border-radius:50%;background:var(--hi);display:inline-block;flex:none;box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--ink)}
+.brand.zk .bname{font-size:20px}
+@container page (max-width:800px){.brand.zk{flex-wrap:wrap;row-gap:0;column-gap:8px}.brand.zk .bname{font-size:17px;white-space:nowrap}.brand.zk .bsub{flex-basis:100%;margin:0 0 0 22px}}
+
+</style>
+
+<script>(function(){const W=1280,r=document.documentElement;let pc=true;
+  try{pc=localStorage.getItem("zukan-view")!=="sp"}catch(e){}
+  /* 本番(普通のブラウザ)では viewport の指定を切り替え、Claudeの画面の中(iframe)では zoom で縮める */
+  const vp=()=>{const m=document.querySelector('meta[name="viewport"]');if(m)m.content=pc?"width=1280, viewport-fit=cover":"width=device-width, initial-scale=1, viewport-fit=cover";};
+  const fit=()=>{vp();r.classList.toggle("pc",pc);r.style.zoom="";const w=r.clientWidth||innerWidth;const z=pc&&w<W?w/W:1;r.style.zoom=z<1?String(z):"";
+    const e=z*Math.min(1,(screen.width||w)/w);
+    const b=document.getElementById("viewsw");if(b){b.hidden=pc&&e>=1;b.style.zoom=e<1?String(0.85/e):"";b.textContent=pc?"スマホ表示にする":"PC表示にする";}};
+  window.setViewMode=v=>{pc=v;try{localStorage.setItem("zukan-view",v?"pc":"sp")}catch(e){}fit();dispatchEvent(new Event("viewmode"));};
+  fit();addEventListener("resize",fit);document.addEventListener("DOMContentLoaded",fit);
+  document.addEventListener("click",e=>{if(e.target.id==="viewsw")setViewMode(!r.classList.contains("pc"));});})();</script>
+<style>html{-webkit-text-size-adjust:100%;text-size-adjust:100%}body{container:page/inline-size}html.pc{min-width:1280px}
+#viewsw{position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:40;font:inherit;font-weight:700;font-size:14px;color:var(--paper);background:var(--ink);border:2px solid var(--paper);border-radius:999px;padding:8px 14px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+#viewsw[hidden]{display:none}</style>
+<button type="button" id="viewsw" hidden></button>
+<button class="skip" type="button" id="skip">本文へ移動</button>
+<header class="site-head gutter">
+  <div class="inner">
+    <a class="brand zk" href="#top" aria-label="Webデザイン用語の絵図鑑 AIへの頼み方付き トップへ"><i aria-hidden="true"></i><span class="bname">Webデザイン用語の絵図鑑</span><span class="bsub">AIへの頼み方付き</span></a>
+    <nav class="gnav" aria-label="サイトのページ">
+      <a href="#top" data-nav="top">工程表</a>
+      <a href="#list" data-nav="list">用語一覧</a>
+      <a href="#tools" data-nav="tools">道具の名前</a>
+      <a href="#howto" data-nav="howto">使い方</a>
+      <a href="#tree" data-nav="tree">ツリーと指示文<span class="cnt"></span></a>
+    </nav>
+  </div>
+</header>
+<main id="main" class="gutter" tabindex="-1"><div class="inner" id="view"></div></main>
+<div id="toast" role="status" hidden></div>
+<footer class="site-foot gutter">
+  <div class="inner">
+    <p>「Webデザイン用語の絵図鑑」の31語を引きながら、ほしいページや部品をツリーに集めて、AIへの指示文を作るページです。テアシ商会(人とAIで制作)。</p>
+    <p>できる指示文と発注メモは下書きです。AIが作ったものや制作会社の見積もりは、必ずご自身で確かめてください。ツリーに入れた内容は、この端末のブラウザの中にだけ残り、どこにも送られません。</p>
+    <p>見本図に出てくるお店のページ、URL(cafe-sample.example)、見積書、人物、質問の文などは、説明のために作った架空のものです。費用や規約は会社やサービスごとに違い、変わることもあります。</p>
+    <p>絵はすべてこのページの中で描いた図(SVG)です。書体は Zen Maru Gothic(見出し)・Zen Kaku Gothic New(本文)。どちらも Google Fonts、SIL Open Font License。</p>
+  </div>
+</footer>
+
+<script>
+const NARROW={get matches(){return !document.documentElement.classList.contains("pc")&&innerWidth<=800},addEventListener(t,f){addEventListener("viewmode",f);matchMedia("(max-width:800px)").addEventListener(t,f)}};
+/* 配色(深緑×珊瑚)。hiL は線・矢印・枠、hi は塗り、hiT は文字 */
+const C={bg:"#EDF3F0",w:"#FFFFFF",ink:"#1F3A33",sub:"#506660",hi:"#FF8A7A",hiT:"#A63A2C",hiL:"#E5604F",pale:"#D6E3DD"};
+const FONT="'Zen Kaku Gothic New',sans-serif";
+
+/* ---------- 1巻目の16語 ---------- */
+const V1=[
+ {id:"header",ch:"sp",nm:"ヘッダー",alias:"",
+  desc:"ページのいちばん上の帯です。ロゴやメニューが入り、多くのサイトでは全ページ共通の形にします。",
+  ai:"ヘッダーを作ってください。左にロゴ、右に電話番号を置き、全ページで同じ形にしてください。",
+  order:"ヘッダーに、ロゴと電話番号を入れてください。",cap:"どのページでも、同じ帯がいちばん上に出る",rel:["gnav","burger","footer"]},
+ {id:"burger",ch:"sp",nm:"ハンバーガーメニュー",alias:"",
+  desc:"押すとメニューが開くボタンです。三本の線がハンバーガーに見えるため、こう呼ばれると言われます。画面の狭いスマホでよく使います。",
+  ai:"画面の幅が狭いときは、グローバルナビをハンバーガーメニューにまとめてください。押すとメニューが開き、×で閉じる形にしてください。",
+  order:"スマホでは、メニューをハンバーガーメニューにまとめてください。",cap:"押すと、隠れていたメニューが開く",rel:["gnav","header","modal"]},
+ {id:"crumb",ch:"sp",nm:"パンくずリスト",alias:"",
+  desc:"「ホーム ＞ メニュー ＞ 季節のパフェ」のように、今いるページまでの道すじを示す小さな案内です。名前は、童話「ヘンゼルとグレーテル」で帰り道の目印にパンくずを落とした話から来ていると言われます。",
+  ai:"各ページの見出しの上に、パンくずリスト(ホーム ＞ 一覧 ＞ 今のページ)を入れてください。今のページ以外はリンクにしてください。",
+  order:"下の階層のページには、パンくずリストを付けてください。",cap:"たどってきた道すじを、ページの上に小さく出す",rel:["gnav","header"]},
+ {id:"fv",ch:"sp",nm:"ファーストビュー",alias:"そこに置く大きな画像は「メインビジュアル」",
+  desc:"ページを開いて、スクロールせずに最初に見える範囲です。広さは画面の大きさで変わります。ここに置く大きな画像はメインビジュアルと呼びます。",
+  ai:"ファーストビューに店内の写真を大きく1枚置き、お店の名前と予約ボタンを重ねてください。スマホでもスクロールせずに予約ボタンが見えるようにしてください。",
+  order:"ファーストビューに、店内の写真と予約ボタンを入れてください。",cap:"スクロールせずに見える範囲だけがファーストビュー",rel:["cta","slider","responsive"]},
+ {id:"cta",ch:"sp",nm:"CTAボタン",alias:"Call To Action(行動を呼びかける)の略",
+  desc:"見た人にしてほしいこと(予約・問い合わせ・購入など)へ案内するボタンです。目立つ色や大きさにすることが多いです。",
+  ai:"CTAボタンを2つ作ってください。「電話で予約」と「ネットで予約」で、ほかのボタンより大きく、目立つ色にしてください。",
+  order:"CTAボタンは「電話で予約」と「ネットで予約」の2つにしてください。",cap:"押すと、してほしい行動(ここでは予約)へ進む",rel:["fv","modal"]},
+ {id:"footer",ch:"sp",nm:"フッター",alias:"",
+  desc:"ページのいちばん下の帯です。住所、連絡先、ほかのページへのリンク、著作権の表示などを入れます。",
+  ai:"フッターに、住所・営業時間・電話番号・地図へのリンク・著作権の表示を入れてください。",
+  order:"フッターに、住所と営業時間、地図へのリンクを入れてください。",cap:"ページのいちばん下に、お店の基本の情報をまとめる",rel:["header","pagetop"]},
+ {id:"gnav",ch:"pc",nm:"グローバルナビゲーション",alias:"略して「グローバルナビ」「グロナビ」",
+  desc:"サイトの主なページへのリンクを並べたものです。多くはヘッダーの中に置き、どのページからでも同じものが使えるようにします。",
+  ai:"グローバルナビを作り、「メニュー・お店・予約・アクセス」の4つのページへのリンクを、ヘッダーの右側に並べてください。",
+  order:"グローバルナビは「メニュー・お店・予約・アクセス」の4つにしてください。",cap:"主なページへの入り口を、いつも同じ場所に並べる",rel:["header","burger","crumb"]},
+ {id:"sidebar",ch:"pc",nm:"サイドバー",alias:"",
+  desc:"本文の横に置く細い列です。新着記事やカテゴリなどを入れます。スマホでは本文の下に回すことが多いです。",
+  ai:"ブログのページだけ、本文の右にサイドバーを付けてください。中身は新着記事5件とカテゴリの一覧です。スマホでは本文の下に回してください。",
+  order:"ブログのページだけ、右にサイドバーを付けてください。",cap:"PCでは本文の横。スマホでは下に回ることが多い",rel:["card","responsive"]},
+ {id:"card",ch:"pc",nm:"カード",alias:"並べた形は「カード型レイアウト」",
+  desc:"写真・見出し・短い説明を1つの箱にまとめたものです。同じ形の箱を並べて、商品やお知らせの一覧を作ります。",
+  ai:"メニューをカード型レイアウトで並べてください。1枚に写真・料理名・値段を入れ、PCは3列、スマホは1列にしてください。",
+  order:"メニューはカードで並べて、1枚に写真と値段を入れてください。",cap:"同じ形の箱を並べて一覧にする。この例では1枚に写真・見出し・説明",rel:["sidebar","responsive"]},
+ {id:"pagetop",ch:"pc",nm:"ページトップボタン",alias:"「トップへ戻る」ボタン",
+  desc:"押すとページのいちばん上に戻るボタンです。長いページの右下によく置きます。",
+  ai:"ページを下へスクロールしたら、右下にページトップボタンを出してください。押すといちばん上に戻るようにしてください。",
+  order:"長いページには、右下にページトップボタンを付けてください。",cap:"押すと、ページのいちばん上へ戻る",rel:["footer","header"]},
+ {id:"modal",ch:"move",nm:"モーダルウィンドウ",alias:"略して「モーダル」。ポップアップと呼ぶ人もいます",
+  desc:"ページの上に重ねて出る小さな窓です。開いている間は後ろのページを操作できず、閉じると元に戻ります。",
+  ai:"料理の写真を押したら、大きな写真をモーダルウィンドウで見せてください。×か、後ろの暗い所を押すと閉じるようにしてください。",
+  order:"お知らせはモーダルではなく、ページの中に載せてください。",cap:"ページの上に重なって出る窓。×で閉じると元に戻る",rel:["cta","accordion"]},
+ {id:"accordion",ch:"move",nm:"アコーディオン",alias:"",
+  desc:"見出しを押すと中身が開き、もう一度押すと閉じる部品です。楽器のアコーディオンのように伸び縮みするため、こう呼ばれると言われます。よくある質問によく使います。",
+  ai:"よくある質問をアコーディオンにしてください。質問を押すと答えが開き、もう一度押すと閉じます。最初はすべて閉じておいてください。",
+  order:"よくある質問は、アコーディオンにしてください。",cap:"見出しを押すと開き、もう一度押すと閉じる",rel:["modal","slider"]},
+ {id:"slider",ch:"move",nm:"スライダー",alias:"カルーセルとも呼びます。つまみを左右に動かす入力部品を、同じ名前で呼ぶこともあります",
+  desc:"何枚かの画像を横に並べ、順に切り替えて見せる部品です。自動で切り替わるものと、矢印で動かすものがあります。",
+  ai:"トップにスライダーを置き、写真3枚を矢印と点で切り替えられるようにしてください。自動では切り替えないでください。",
+  order:"トップのスライダーは写真3枚で、自動では切り替えないでください。",cap:"枠の中に1枚ずつ見せ、矢印や点で切り替える",rel:["fv","card"]},
+ {id:"responsive",ch:"none",nm:"レスポンシブ",alias:"レスポンシブデザイン",
+  desc:"1つのページが、画面の幅に合わせて並び方を変える作り方です。PCで3列のものが、スマホでは1列になる、といった形です。",
+  ai:"レスポンシブで作ってください。PCでは3列、幅が狭くなったら2列、スマホでは1列にしてください。",
+  order:"スマホとPCの両方で見やすいよう、レスポンシブで作ってください。",cap:"同じページが、画面の幅に合わせて並び方を変える",rel:["sidebar","card","fv"]},
+ {id:"seo",ch:"none",nm:"SEO",alias:"検索エンジン最適化(Search Engine Optimization)",
+  desc:"検索したときに見つけてもらいやすくするための工夫です。ページの題名や文章の書き方などを整えます。何位に出るかを保証できるものではありません。",
+  ai:"SEOを考えて、各ページに題名(titleタグ)と短い説明文(meta description)を付けてください。お店のある地域の名前を入れてください。",
+  order:"「駅前 カフェ」で探す人に見つかるよう、SEOも考えてください。",cap:"検索結果で見つけてもらいやすくする。順位の保証はない",rel:["domain","responsive"]},
+ {id:"domain",ch:"none",nm:"ドメイン",alias:"",
+  desc:"サイトの住所にあたる部分です。取ったら終わりではなく、使い続けるには更新の料金がかかるのがふつうです。",
+  ai:"ドメインはまだ決まっていません。仮のURLで作り、あとで差し替えやすくしてください。",
+  order:"ドメインはお店の名前で取りたいです。更新の手続きを誰がするかも決めてください。",cap:"URLのうち、サイトの住所にあたる部分",rel:["seo"]}
+];
+
+/* ---------- 工程と章(合本) ---------- */
+/* 工程表(5つ)。4は1巻目の見本図につながる */
+const STEPS=[
+  {n:1,id:"s1",nm:"頼む",note:"話して決める"},
+  {n:2,id:"s2",nm:"決める",note:"誰向けに何を置くか"},
+  {n:3,id:"s3",nm:"作る",note:"組み立てる"},
+  {n:4,id:"s4",nm:"画面に部品を置く",note:"1巻目の見本図"},
+  {n:5,id:"s5",nm:"公開・確認",note:"ネットに出す"}
+];
+const CH=[
+  {id:"s1",st:1,nm:"頼む",note:"制作会社に頼むとき、最初に出てくる言葉"},
+  {id:"s2",st:2,nm:"決める",note:"作り始める前に、決めておくこと"},
+  {id:"s3",st:3,nm:"作る",note:"ページを組み立てるときの言葉"},
+  {id:"sp",st:4,nm:"スマホのページの部品",note:"見本図「スマホのページ」に場所があります"},
+  {id:"pc",st:4,nm:"PCのページの部品",note:"見本図「PCのページ」に場所があります"},
+  {id:"move",st:4,nm:"動く部品",note:"押すと開く・切り替わるもの"},
+  {id:"s5",st:5,nm:"公開・確認",note:"ネットに出すときと、出したあとの言葉"}
+];
+/* 新しく足した15語。1巻目の16語(V1)と同じ形 */
+const NEW=[
+ {id:"hearing",ch:"s1",nm:"ヒアリング",alias:"",
+  desc:"作り始める前に、制作会社がお店のことや作りたいサイトについて聞き取る打ち合わせです。目的、見てほしい人、載せたい内容、予算、締め切り、参考にしたいサイトなどを話します。",
+  ai:"作る前に、私にヒアリングしてください。目的・見てほしい人・載せたい内容・参考にしたいサイトを、1つずつ質問してください。",
+  order:"ヒアリングの前に、参考にしたいサイトを3つ送ります。",cap:"作る前に聞き取ったことを、1枚にまとめる",rel:["estimate","persona","sitemap"]},
+ {id:"estimate",ch:"s1",nm:"見積もり",alias:"書類にしたものは「見積書」",
+  desc:"作るのにかかる費用を、前もって出したものです。作る費用(初期費用)のほかに、公開したあとの更新や管理の費用(保守費)、ドメインや公開先の料金が別にかかることがあります。金額は会社や中身でかなり変わります。",
+  ai:"このサイトを公開して続けるのに、毎月・毎年かかる費用を項目ごとに書き出してください。無料でできるものは、その条件も書いてください。",
+  order:"見積もりは、初期費用と毎月かかる費用を分けて出してください。",cap:"作る費用と、続ける費用は別にかかる",rel:["revision","hosting","domain"]},
+ {id:"revision",ch:"s1",nm:"修正回数",alias:"",
+  desc:"見積もりの金額の中で、追加の費用なしで直してもらえる回数です。決めた回数を超えると、追加の費用がかかることが多いです。何を「1回」と数えるかも会社ごとに違うので、先に確かめます。",
+  ai:"直してほしい所を3つまとめて伝えます。全部直したら、どこをどう直したかを一覧で教えてください。",
+  order:"修正は何回まで見積もりに入っていますか。1回の数え方も教えてください。",cap:"決めた回数を超えると、追加の費用がかかることが多い",rel:["estimate","comp","testup"]},
+ {id:"persona",ch:"s2",nm:"ペルソナ",alias:"似た言葉に「ターゲット」(見てほしい人たち)",
+  desc:"サイトを見てほしい人を、1人の人物のように具体的に決めたものです。年齢や暮らし、サイトに来る目的まで書きます。決めておくと、何を先に見せるかが決めやすくなります。",
+  ai:"見てほしい人は、駅前で働く30代で、昼休みにスマホで予約したい人です。この人が初めて開いて30秒で予約ボタンに辿り着けるように、ページの順番を決めてください。",
+  order:"ペルソナは「駅前で働く30代、昼休みに予約したい人」で考えてください。",cap:"見てほしい人を、1人の人物として決める",rel:["hearing","sitemap","cta"]},
+ {id:"sitemap",ch:"s2",nm:"サイトマップ",alias:"検索エンジン向けの同じ名前のファイル(sitemap.xml)もあります",
+  desc:"サイトにどんなページがあり、どうつながるかを、木の形で描いた地図です。作る前に、ページの数と中身を決めるのに使います。",
+  ai:"まずサイトマップを作ってください。トップの下にメニュー・お店・予約・アクセスを置き、各ページに載せる内容を箇条書きにしてください。",
+  order:"ページは、トップの下にメニュー・お店・予約・アクセスの4つでお願いします。",cap:"ページのつながりを、木の形の地図にする",rel:["wireframe","gnav","crumb"]},
+ {id:"wireframe",ch:"s2",nm:"ワイヤーフレーム",alias:"略して「ワイヤー」。手描きの下書きは「ラフ」と呼ぶこともあります",
+  desc:"1ページの中に何をどこに置くかを、線と四角だけで描いた骨組みの図です。色や写真はまだ入れず、並び方だけを決めます。",
+  ai:"デザインの前に、トップページのワイヤーフレームを作ってください。色や写真は使わず、灰色の四角と線だけで、置く物の名前を書いてください。",
+  order:"色を決める前に、ワイヤーフレームで並び方を確認させてください。",cap:"色も写真もない、線と四角の骨組み",rel:["sitemap","comp","fv"]},
+ {id:"comp",ch:"s2",nm:"デザインカンプ",alias:"略して「カンプ」",
+  desc:"できあがりとほぼ同じ見た目で作った、完成見本です。色・文字・写真まで入れて、これを見て「この見た目で作る」と決めます。動きはまだ付いていないことが多いです。",
+  ai:"いきなり全ページを作らず、トップページだけを完成に近い見た目で作ってください。見た目が決まってから、ほかのページに広げてください。",
+  order:"作り込む前に、トップページのデザインカンプを見せてください。",cap:"骨組みに色・文字・写真を入れた、完成見本",rel:["wireframe","revision","html"]},
+ {id:"html",ch:"s3",nm:"HTML・CSS・JavaScript",short:"HTML・CSS・JS",alias:"Webページを作る、3つの言葉(言語)",
+  desc:"Webページは主にこの3つで作ります。HTMLは中身と並び(見出し・文章・写真)、CSSは見た目(色・文字・並び方・スマホでの形)、JavaScriptは動き(押すと開くなど)を受け持ちます。お店のサイトの多くは、HTMLとCSSが中心で作れます。",
+  ai:"HTMLとCSSで作ってください。JavaScriptは、ハンバーガーメニューを開く所だけに使ってください。",
+  order:"動きは少なくていいので、軽い作りにしてください。",cap:"同じページに、HTML → CSS → JavaScript の順で足していく",rel:["responsive","font","accordion"]},
+ {id:"font",ch:"s3",nm:"Webフォント",alias:"Google Fonts は、無料で使えるWebフォントの集まり",
+  desc:"見る人のスマホやパソコンに入っていない書体を、ネットから読み込んで表示するしくみです。どの端末でも同じ書体で見せられます。日本語の書体はデータが大きく、表示が少し遅くなることがあります。",
+  ai:"見出しだけGoogle Fontsの「Zen Maru Gothic」にしてください。本文は端末に入っている書体のままにしてください。",
+  order:"見出しだけ、丸みのある書体にしてください。",cap:"端末に入っていない書体も、読み込んで同じに見せる",rel:["html","speed","comp"]},
+ {id:"cms",ch:"s3",nm:"CMS",alias:"コンテンツ管理システム(Content Management System)の略。WordPressが有名",
+  desc:"専門の知識がなくても、管理画面からお知らせやメニューを書き換えられるしくみです。公開したあとに自分で更新したいときに入れます。そのぶん、作る費用や管理の手間が増えることがあります。",
+  ai:"お知らせは、1つのファイル(一覧)に書き足すだけでページに出るようにしてください。書き足し方の手順も書いてください。",
+  order:"お知らせとメニューだけ、自分で更新できるようにしてください。",cap:"管理画面で書き換えると、サイトに出る",rel:["estimate","hosting","testup"]},
+ {id:"testup",ch:"s3",nm:"テストアップ",alias:"置く場所は「テスト環境」「ステージング」とも呼びます",
+  desc:"本番の公開の前に、限られた人だけが見られる場所にサイトを置いて確かめることです。スマホやPCで実際に見て、直す所を探します。",
+  ai:"公開する前に、確認用のページで見せてください。スマホとPCの両方の画面の画像も付けてください。",
+  order:"公開の前にテストアップして、スマホで確認させてください。",cap:"本番の前に、関係者だけが見られる所で確かめる",rel:["hosting","revision","responsive"]},
+ {id:"hosting",ch:"s5",nm:"公開先",alias:"「サーバー」「ホスティング」とも。GitHub Pages・Netlify・Vercel などのサービスもあります",
+  desc:"作ったサイトのファイルを置いて、ネットで見られるようにする場所です。月ごとに料金を払う貸しサーバーのほか、無料で使えるサービスもあります。無料の枠には、お店や会社のサイト(商用)には使えないものや、条件付きのものがあるので、規約を確かめます。",
+  ai:"無料で公開できる方法を3つ挙げてください。それぞれ、お店のサイトに使ってよいかの条件と、費用がかかる場合の金額の目安も書いてください。",
+  order:"公開先とドメインの契約は、私(お店)の名前でお願いします。",cap:"ファイルを置いて、ネットで見られるようにする場所",rel:["domain","ssl","estimate"]},
+ {id:"ssl",ch:"s5",nm:"SSL",alias:"いまの正しい名前は「TLS」。URLが「https」で始まるのが目印",
+  desc:"サイトと見る人の間の通信を暗号にして、途中で盗み見られないようにするしくみです。入っていないと、ブラウザに「保護されていない通信」などと出ます。いまは無料で付けられる公開先が多いです。",
+  ai:"公開するときは、httpsで見られる設定にしてください。予約フォームがあるので、必ずお願いします。",
+  order:"SSLを付けて、httpsで見られるようにしてください。",cap:"通信に鍵をかける。URLが https で始まる",rel:["hosting","domain"]},
+ {id:"speed",ch:"s5",nm:"表示速度",alias:"Googleが決めた目安は「Core Web Vitals(コアウェブバイタル)」",
+  desc:"ページを開いてから中身が出るまでの速さです。遅いと、見る前に閉じられやすくなります。大きな写真や、動きを付けるための読み込みが多いと遅くなります。",
+  ai:"表示速度を優先してください。写真は軽い形式で縮小し、使わない部品やスクリプトは読み込まないでください。",
+  order:"写真は軽くして、スマホでもすぐ開くようにしてください。",cap:"遅いと、中身が出る前に閉じられやすい",rel:["font","hosting","seo"]},
+ {id:"a11y",ch:"s5",nm:"アクセシビリティ",alias:"国際的な目安は「WCAG(ダブリューシーエージー)」",
+  desc:"目や耳、手が不自由な人や、お年寄りも含めて、誰でも使えるようにすることです。文字と背景の色の差を十分にとる、写真に説明の文を付ける、キーボードだけでも操作できるようにする、などがあります。",
+  ai:"アクセシビリティに気をつけてください。文字と背景のコントラストを十分にとり、写真には代替テキストを付け、キーボードだけでも操作できるようにしてください。",
+  order:"文字は背景との色の差をはっきりさせて、写真には説明の文を付けてください。",cap:"色の差・説明の文・キーボード。誰でも使えるように",rel:["comp","html","cta"]}
+];
+/* 1巻目の言葉の章を、工程に合わせて付け替える */
+const MOVE_CH={responsive:"s3",seo:"s5",domain:"s5"};
+V1.forEach(x=>{if(MOVE_CH[x.id])x.ch=MOVE_CH[x.id];});
+/* 並び(前後の言葉の順) */
+const ORDER=["hearing","estimate","revision","persona","sitemap","wireframe","comp","html","font","cms","responsive","testup",
+  "header","burger","crumb","fv","cta","footer","gnav","sidebar","card","pagetop","modal","accordion","slider",
+  "hosting","domain","ssl","seo","speed","a11y"];
+const ALL=Object.fromEntries([...V1,...NEW].map(x=>[x.id,x]));
+const TERMS=ORDER.map(id=>ALL[id]);
+const T=Object.fromEntries(TERMS.map(t=>[t.id,t]));
+const NEWIDS=new Set(NEW.map(x=>x.id));
+const stepOf=id=>CH.find(c=>c.id===T[id].ch).st;
+/* 工程表に並べる言葉。4は見本図への入り口と、見本図に描けない動く部品 */
+const FLOW={1:["hearing","estimate","revision"],2:["persona","sitemap","wireframe","comp"],3:["html","font","cms","responsive","testup"],
+  4:["@sp","@pc","modal","accordion","slider"],5:["hosting","domain","ssl","seo","speed","a11y"]};
+
+/* ---------- 描く道具 ---------- */
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const r=(x,y,w,h,o={})=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${o.rx??4}" fill="${o.f??C.w}" stroke="${o.s??C.ink}" stroke-width="${o.sw??2}"${o.dash?' stroke-dasharray="6 5"':""}${o.op!=null?` opacity="${o.op}"`:""}/>`;
+let TS=1;
+const t=(x,y,s,o={})=>`<text x="${x}" y="${y}" font-size="${((o.z??14)*TS).toFixed(1)}" text-anchor="${o.a??"start"}" fill="${o.c??C.ink}" font-weight="${o.b?700:400}" font-family="${o.ff??FONT}"${o.tl?` textLength="${o.tl}" lengthAdjust="spacingAndGlyphs"`:""}>${esc(s)}</text>`;
+const ln=(d,o={})=>`<path d="${d}" fill="none" stroke="${o.s??C.ink}" stroke-width="${o.sw??2}" stroke-linecap="round" stroke-linejoin="round"${o.dash?' stroke-dasharray="6 5"':""}/>`;
+function arr(x1,y1,x2,y2,o={}){const a=Math.atan2(y2-y1,x2-x1),k=10,c=o.s??C.ink;
+  const p1=[x2-k*Math.cos(a-0.45),y2-k*Math.sin(a-0.45)],p2=[x2-k*Math.cos(a+0.45),y2-k*Math.sin(a+0.45)];
+  return ln(`M${x1} ${y1}L${x2} ${y2}`,{s:c,sw:o.sw??2.5,dash:o.dash})+`<path d="M${x2} ${y2}L${p1[0]} ${p1[1]}L${p2[0]} ${p2[1]}Z" fill="${c}"/>`;}
+const bars=(x,y,w,n,o={})=>Array.from({length:n},(_,i)=>`<rect x="${x}" y="${y+i*(o.g??12)}" width="${i%3==2?w*.65:w}" height="${o.h??6}" rx="3" fill="${o.f??C.pale}"/>`).join("");
+const phone=(x,y,w,h,o={})=>r(x,y,w,h,{rx:14,sw:2.5,f:o.f});
+const burgerIcon=(x,y,o={})=>ln(`M${x} ${y}H${x+16}M${x} ${y+6}H${x+16}M${x} ${y+12}H${x+16}`,{sw:o.sw??2.5,s:o.s});
+const imgPh=(x,y,w,h,o={})=>r(x,y,w,h,{f:o.f??C.pale,rx:4,sw:o.sw??2,s:o.s})+`<path d="M${x+w*.1} ${y+h*.85}L${x+w*.38} ${y+h*.4}L${x+w*.55} ${y+h*.65}L${x+w*.68} ${y+h*.5}L${x+w*.9} ${y+h*.85}Z" fill="${C.ink}" opacity=".25"/>`;
+const svg=(vb,body,label)=>`<svg viewBox="${vb}" role="img" aria-label="${esc(label)}">${body}</svg>`;
+
+/* ---------- 見本図 ---------- */
+const FIG={
+ sp:{vb:"0 0 640 540",ox:170,oy:10,parts:["header","burger","crumb","fv","cta","footer"],
+   label:"スマホのページの見本と、各部分の名前",
+   labels:[["header",8,42,120,28,"start"],["burger",632,40,241,28,"end"],["crumb",8,96,110,72,"start"],["fv",632,182,250,170,"end"],["cta",8,312,60,294,"start"],["footer",632,492,250,480,"end"]],
+   draw(hi,dim){
+    const op=id=>(hi&&dim&&hi!==id)?.25:1, f=(id,b)=>hi===id?C.hi:b, g=(id,b)=>`<g data-part="${id}" opacity="${op(id)}">${b}</g>`;
+    return `<rect x="0" y="0" width="300" height="520" rx="22" fill="${C.w}" stroke="${C.ink}" stroke-width="2.5"/>
+    ${g("header",`<path d="M22 0H278Q300 0 300 22V56H0V22Q0 0 22 0Z" fill="${f("header",C.pale)}" stroke="${C.ink}" stroke-width="2"/><rect x="16" y="20" width="72" height="16" rx="3" fill="${C.ink}"/>`)}
+    ${g("burger",`<rect x="244" y="12" width="40" height="32" rx="6" fill="${f("burger",C.pale)}" stroke="${hi==="burger"?C.ink:"none"}" stroke-width="2"/>${burgerIcon(256,21)}`)}
+    ${g("crumb",`<rect x="12" y="63" width="196" height="18" rx="3" fill="${f("crumb",C.w)}"/>${t(18,76,"ホーム ＞ メニュー ＞ 季節の",{z:10})}`)}
+    ${g("fv",`<rect x="16" y="90" width="268" height="168" rx="10" fill="${f("fv",C.pale)}" stroke="${C.ink}" stroke-width="2"/><path d="M40 230L100 160L140 205L170 175L262 230Z" fill="${C.ink}" opacity=".3"/><circle cx="230" cy="130" r="14" fill="${C.ink}" opacity=".3"/>`)}
+    ${g("cta",`<rect x="40" y="272" width="220" height="44" rx="22" fill="${f("cta",C.ink)}" stroke="${C.ink}" stroke-width="2"/>${t(150,299,"予約はこちら",{z:14,a:"middle",b:1,c:hi==="cta"?C.ink:C.w})}`)}
+    <g opacity="${hi&&dim?.25:1}">${bars(16,334,268,6,{g:16,h:8})}</g>
+    ${g("footer",`<path d="M0 440H300V498Q300 520 278 520H22Q0 520 0 498Z" fill="${f("footer",C.pale)}" stroke="${C.ink}" stroke-width="2"/>${bars(16,458,170,3,{g:16,h:7,f:C.sub})}`)}`;}},
+ pc:{vb:"0 0 960 440",ox:130,oy:10,lz:20,parts:["header","gnav","card","sidebar","pagetop","footer"],
+   label:"PCのページの見本と、各部分の名前",
+   labels:[["header",8,44,200,49,"start"],["gnav",952,46,621,49,"end","グローバルナビ"],["card",8,210,110,200,"start"],["sidebar",952,170,560,170,"end"],["pagetop",952,318,583,318,"end"],["footer",952,392,520,392,"end"]],
+   draw(hi,dim){
+    const op=id=>(hi&&dim&&hi!==id)?.25:1, f=(id,b)=>hi===id?C.hi:b, g=(id,b)=>`<g data-part="${id}" opacity="${op(id)}">${b}</g>`;
+    const cards=[[20,90],[215,90],[20,210],[215,210]].map(([x,y])=>`${r(x,y,180,108,{f:f("card",C.w),rx:6})}${imgPh(x+10,y+10,160,50,{s:"none",sw:0})}<rect x="${x+10}" y="${y+70}" width="110" height="8" rx="4" fill="${C.ink}"/><rect x="${x+10}" y="${y+86}" width="150" height="6" rx="3" fill="${C.pale}"/>`).join("");
+    return `<rect x="0" y="0" width="640" height="420" rx="10" fill="${C.w}" stroke="${C.ink}" stroke-width="2.5"/>
+    <path d="M0 24H640" stroke="${C.ink}" stroke-width="2"/><circle cx="16" cy="12" r="4" fill="${C.pale}"/><circle cx="30" cy="12" r="4" fill="${C.pale}"/><circle cx="44" cy="12" r="4" fill="${C.pale}"/>
+    ${g("header",`<rect x="0" y="24" width="640" height="50" fill="${f("header",C.pale)}" stroke="${C.ink}" stroke-width="2"/><rect x="20" y="41" width="84" height="16" rx="3" fill="${C.ink}"/>`)}
+    ${g("gnav",`<rect x="300" y="34" width="326" height="30" rx="6" fill="${f("gnav",C.pale)}" stroke="${hi==="gnav"?C.ink:"none"}" stroke-width="2"/>${["メニュー","お店","予約","アクセス"].map((s,i)=>t(340+i*80,54,s,{z:13,a:"middle",b:1})).join("")}`)}
+    ${g("card",cards)}
+    ${g("sidebar",`${r(430,90,190,228,{f:f("sidebar",C.bg),rx:6})}${t(446,114,"新着",{z:12,b:1})}${bars(446,124,150,4,{g:14,h:6,f:C.pale})}${t(446,200,"カテゴリ",{z:12,b:1})}${bars(446,210,120,4,{g:14,h:6,f:C.pale})}`)}
+    ${g("footer",`<path d="M0 340H640V410Q640 420 630 420H10Q0 420 0 410Z" fill="${f("footer",C.pale)}" stroke="${C.ink}" stroke-width="2"/>${bars(20,356,200,3,{g:16,h:7,f:C.sub})}`)}
+    ${g("pagetop",`<circle cx="604" cy="318" r="18" fill="${f("pagetop",C.ink)}" stroke="${C.ink}" stroke-width="2"/>${ln("M597 322L604 314L611 322",{s:hi==="pagetop"?C.ink:C.w,sw:3})}`)}`;}}
+};
+function bigFigure(key,sel){
+  const F=FIG[key];
+  const lab=F.labels.map(([id,x,y,tx,ty,an,short])=>{
+    const on=sel===id, c=on?C.hiL:C.ink, tc=on?C.hiT:C.ink;
+    const lz=F.lz||14, name=short||T[id].nm, w=[...name].length*lz+8, lx=an==="start"?x+w:x-w;
+    return `<g class="lab" data-id="${id}"><path opacity="${on?1:.5}" d="M${lx} ${y-5}L${tx+F.ox} ${ty+F.oy}" stroke="${c}" stroke-width="${on?2.5:1.5}" fill="none"/>
+      <circle cx="${tx+F.ox}" cy="${ty+F.oy}" r="${on?8:6}" fill="${on?C.w:C.ink}" stroke="${on?C.ink:C.w}" stroke-width="${on?3:2}"/>${t(x,y+(lz-14)/3,name,{z:lz,b:1,a:an,c:tc})}</g>`;}).join("");
+  const vb=NARROW.matches?(key==="sp"?"160 0 320 540":"120 0 660 440"):F.vb;
+  return svg(vb,`<g transform="translate(${F.ox} ${F.oy})">${F.draw(sel,true)}</g>${lab}`,F.label);
+}
+function smallFigure(key,sel){const F=FIG[key];const [a,b,w,h]=key==="sp"?[-4,-4,308,528]:[-4,-4,648,428];
+  return svg(`${a} ${b} ${w} ${h}`,F.draw(sel,true),`${T[sel].nm}の場所`);}
+
+/* ---------- 図解(用語ごと。viewBox 560x300) ---------- */
+const Z={
+ header(){return phone(70,40,140,220)+`<path d="M84 40H196Q210 40 210 54V76H70V54Q70 40 84 40Z" fill="${C.hi}" stroke="${C.ink}" stroke-width="2"/><rect x="82" y="52" width="44" height="12" rx="2" fill="${C.ink}"/>`+burgerIcon(184,52,{sw:2})+imgPh(84,88,112,70)+bars(84,170,112,5,{g:14})+t(140,285,"トップページ",{a:"middle",z:13,b:1})
+   +phone(350,40,140,220)+`<path d="M364 40H476Q490 40 490 54V76H350V54Q350 40 364 40Z" fill="${C.hi}" stroke="${C.ink}" stroke-width="2"/><rect x="362" y="52" width="44" height="12" rx="2" fill="${C.ink}"/>`+burgerIcon(464,52,{sw:2})+t(364,104,"メニュー",{z:14,b:1})+bars(364,118,112,8,{g:15})+t(420,285,"メニューのページ",{a:"middle",z:13,b:1})
+   +t(280,26,"同じ帯",{a:"middle",z:15,b:1,c:C.hiT})+arr(250,30,214,52,{s:C.hiL})+arr(310,30,346,52,{s:C.hiL});},
+ burger(){return phone(70,30,140,230)+`<rect x="70" y="30" width="140" height="34" rx="14" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/><rect x="82" y="41" width="44" height="12" rx="2" fill="${C.ink}"/>`+r(170,36,32,24,{f:C.hi,rx:5})+burgerIcon(178,42,{sw:2})+imgPh(84,76,112,70)+bars(84,160,112,5,{g:14})+t(140,285,"閉じている",{a:"middle",z:13,b:1})
+   +arr(226,140,326,140,{s:C.hiL})+t(276,128,"押す",{a:"middle",z:15,b:1,c:C.hiT})
+   +phone(350,30,140,230)+`<rect x="350" y="30" width="140" height="34" rx="14" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/>`+imgPh(364,76,112,70,{f:C.bg})+bars(364,160,112,5,{g:14,f:C.bg})
+   +`<path d="M380 64H490V246Q490 260 476 260H380Z" fill="${C.w}" stroke="${C.hiL}" stroke-width="3"/>`+ln("M464 76L476 88M476 76L464 88",{sw:2.5})+["メニュー","お店について","予約","アクセス"].map((s,i)=>t(388,112+i*30,s,{z:12,b:1})).join("")+t(420,285,"開いた",{a:"middle",z:13,b:1});},
+ crumb(){const box=(x,s,on)=>r(x,44,130,56,{f:on?C.hi:C.w,rx:6})+t(x+65,78,s,{a:"middle",z:14,b:1});
+   return box(30,"ホーム")+arr(162,72,206,72)+box(214,"メニュー")+arr(346,72,390,72)+box(398,"季節のパフェ",1)+t(463,124,"今いるページ",{a:"middle",z:13,c:C.hiT,b:1})
+   +r(30,170,500,90,{rx:10})+`<rect x="30" y="170" width="500" height="26" rx="10" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/>`
+   +r(44,206,380,28,{f:C.w,s:C.hiL,sw:3})+t(56,225,"ホーム ＞ メニュー ＞ 季節のパフェ",{z:14})+bars(44,244,460,1,{h:6})
+   +arr(250,128,200,202,{s:C.hiL,dash:1});},
+ fv(){return `<rect x="220" y="20" width="140" height="270" rx="10" fill="${C.w}" stroke="${C.ink}" stroke-width="2" stroke-dasharray="6 5" opacity=".6"/>`
+   +imgPh(232,40,116,74,{f:C.hi})+`<rect x="232" y="122" width="90" height="10" rx="4" fill="${C.ink}"/>`+bars(232,170,116,8,{g:14,f:C.pale})
+   +`<rect x="208" y="16" width="164" height="136" rx="14" fill="none" stroke="${C.hiL}" stroke-width="4"/>`+ln("M150 152H430",{s:C.sub,dash:1})
+   +t(150,90,"ファーストビュー",{a:"end",z:15,b:1,c:C.hiT})+t(150,110,"(開いてすぐ見える)",{a:"end",z:12,c:C.sub})+arr(156,96,204,96,{s:C.hiL})
+   +t(420,76,"メインビジュアル",{z:12,b:1})+arr(416,82,352,82)
+   +t(392,172,"ここから下は",{z:12,c:C.sub})+t(392,190,"スクロール",{z:12,c:C.sub})+t(392,208,"しないと見えない",{z:12,c:C.sub});},
+ cta(){return phone(70,30,140,230)+imgPh(84,46,112,80)+bars(84,140,112,2,{g:14})+`<rect x="88" y="176" width="104" height="34" rx="17" fill="${C.hi}" stroke="${C.ink}" stroke-width="2"/>`+t(140,198,"予約はこちら",{a:"middle",z:12,b:1})+bars(84,224,112,2,{g:12})
+   +arr(226,193,326,150,{s:C.hiL})+t(276,150,"押す",{a:"middle",z:15,b:1,c:C.hiT})
+   +phone(350,30,140,230)+t(364,62,"予約フォーム",{z:14,b:1})+["日にち","時間","人数"].map((s,i)=>t(364,92+i*44,s,{z:12,c:C.sub})+r(364,98+i*44,112,20,{rx:3})).join("")+`<rect x="364" y="226" width="112" height="22" rx="11" fill="${C.ink}"/>`+t(420,241,"送る",{a:"middle",z:12,b:1,c:C.w})
+   +t(280,285,"してほしい行動(予約)へ、まっすぐ案内する",{a:"middle",z:13,b:1});},
+ footer(){const items=["住所・地図","電話番号","ほかのページへのリンク","著作権の表示(©)"];
+   return phone(80,14,130,272)+`<rect x="80" y="14" width="130" height="30" rx="14" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/>`+imgPh(94,54,102,56)+bars(94,122,102,7,{g:14})
+   +`<path d="M80 226H210V272Q210 286 196 286H94Q80 286 80 272Z" fill="${C.hi}" stroke="${C.ink}" stroke-width="2"/>`+bars(92,240,80,3,{g:12,f:C.ink,h:5})
+   +r(300,70,230,180,{rx:8,s:C.hiL,sw:3})+items.map((s,i)=>`<circle cx="322" cy="${106+i*38}" r="5" fill="${C.ink}"/>`+t(336,111+i*38,s,{z:13,b:1})).join("")
+   +arr(214,256,294,220,{s:C.hiL});},
+ gnav(){const pages=["メニュー","お店","予約","アクセス"];
+   return r(40,20,480,120,{rx:8})+`<rect x="40" y="20" width="480" height="44" rx="8" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/><rect x="56" y="35" width="70" height="14" rx="2" fill="${C.ink}"/>`
+   +r(196,28,312,28,{f:C.hi,rx:5})+pages.map((s,i)=>t(235+i*78,47,s,{a:"middle",z:13,b:1})).join("")+bars(56,80,440,3,{g:16})
+   +pages.map((s,i)=>arr(235+i*78,60,80+i*130,188,{s:C.ink,sw:2})+r(30+i*130,192,110,70,{rx:6})+t(85+i*130,232,s,{a:"middle",z:13,b:1})).join("")
+   +t(280,290,"どのページからでも、主なページへ1回で行ける",{a:"middle",z:13,b:1});},
+ sidebar(){return r(30,40,290,190,{rx:8})+`<rect x="30" y="40" width="290" height="30" rx="8" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/>`+bars(46,86,170,9,{g:14})+r(232,82,74,134,{f:C.hi,rx:5})+bars(242,96,54,6,{g:18,f:C.w})+t(175,258,"PC",{a:"middle",z:13,b:1})
+   +arr(334,135,384,135)+phone(400,24,110,250)+`<rect x="400" y="24" width="110" height="26" rx="14" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/>`+bars(412,62,86,8,{g:14})+r(412,182,86,76,{f:C.hi,rx:5})+bars(422,194,66,4,{g:14,f:C.w})+t(455,292,"スマホ",{a:"middle",z:13,b:1});},
+ card(){const sm=[];for(let i=0;i<6;i++){const x=30+(i%3)*84,y=50+Math.floor(i/3)*100,on=i===1;sm.push(r(x,y,72,88,{rx:5,s:on?C.hiL:C.ink,sw:on?3:2})+imgPh(x+6,y+6,60,36,{s:"none",sw:0})+`<rect x="${x+6}" y="${y+50}" width="44" height="6" rx="3" fill="${C.ink}"/><rect x="${x+6}" y="${y+62}" width="58" height="5" rx="2" fill="${C.pale}"/><rect x="${x+6}" y="${y+72}" width="40" height="5" rx="2" fill="${C.pale}"/>`);}
+   return sm.join("")+arr(200,90,300,90,{s:C.hiL,dash:1})
+   +r(310,40,170,230,{rx:8,s:C.hiL,sw:3})+imgPh(324,54,142,92)+`<rect x="324" y="160" width="110" height="12" rx="4" fill="${C.ink}"/>`+bars(324,186,142,3,{g:14,h:7})
+   +[["写真",100],["見出し",166],["短い説明",200]].map(([s,y])=>ln(`M470 ${y}H484`,{s:C.sub})+t(488,y+5,s,{z:12,b:1})).join("");},
+ pagetop(){return phone(220,10,130,280)+`<rect x="220" y="10" width="130" height="28" rx="14" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/>`+bars(234,52,102,14,{g:14})
+   +`<circle cx="322" cy="258" r="16" fill="${C.hi}" stroke="${C.ink}" stroke-width="2"/>`+ln("M315 262L322 254L329 262",{sw:3})
+   +`<path d="M346 252C420 230 420 60 356 28" fill="none" stroke="${C.hiL}" stroke-width="3" stroke-dasharray="7 6"/><path d="M356 28L370 30L362 40Z" fill="${C.hiL}"/>`
+   +t(420,150,"押すと",{z:14,b:1,c:C.hiT})+t(420,170,"いちばん上へ",{z:14,b:1,c:C.hiT})+t(206,258,"長いページの右下",{a:"end",z:13,c:C.sub});},
+ modal(){return r(60,20,440,250,{rx:8})+`<rect x="60" y="20" width="440" height="36" rx="8" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/>`+bars(80,72,400,10,{g:16})
+   +`<rect x="61" y="57" width="438" height="212" fill="${C.ink}" opacity=".45"/>`
+   +r(160,80,240,150,{rx:8,s:C.hiL,sw:3})+`<rect x="160" y="80" width="240" height="34" rx="8" fill="${C.bg}" stroke="${C.hiL}" stroke-width="3"/>`+t(176,103,"お知らせ",{z:14,b:1})+ln("M372 90L386 104M386 90L372 104",{sw:2.5})+bars(176,130,208,4,{g:16,h:7})
+   +t(280,292,"開いている間、後ろのページは押せない",{a:"middle",z:13,b:1});},
+ accordion(){const q=["駐車場はありますか","予約は必要ですか","持ち帰りはできますか"];let y=26,out="";
+   q.forEach((s,i)=>{const open=i===1;out+=r(90,y,380,40,{rx:6,f:open?C.hi:C.w})+t(108,y+26,"Q  "+s,{z:14,b:1})+ln(open?`M440 ${y+20}H454`:`M440 ${y+20}H454M447 ${y+13}V${y+27}`,{sw:2.5});y+=40;
+     if(open){out+=r(90,y,380,74,{rx:0,f:C.bg})+bars(108,y+16,330,3,{g:16,h:7,f:C.sub});y+=74;}y+=10;});
+   return out+t(70,92,"押すと",{a:"end",z:13,b:1,c:C.hiT})+t(70,110,"開く",{a:"end",z:13,b:1,c:C.hiT})+arr(74,100,88,100,{s:C.hiL})+t(280,280,"もう一度押すと閉じる",{a:"middle",z:13,c:C.sub});},
+ slider(){return imgPh(30,60,110,140,{f:C.bg})+imgPh(420,60,110,140,{f:C.bg})+`<rect x="150" y="50" width="260" height="160" rx="8" fill="${C.w}" stroke="${C.hiL}" stroke-width="4"/>`+imgPh(162,62,236,136)
+   +`<circle cx="150" cy="130" r="16" fill="${C.w}" stroke="${C.ink}" stroke-width="2"/>`+ln("M154 122L146 130L154 138",{sw:2.5})+`<circle cx="410" cy="130" r="16" fill="${C.w}" stroke="${C.ink}" stroke-width="2"/>`+ln("M406 122L414 130L406 138",{sw:2.5})
+   +[260,280,300].map((x,i)=>`<circle cx="${x}" cy="232" r="6" fill="${i===1?C.ink:C.pale}" stroke="${C.ink}" stroke-width="1.5"/>`).join("")
+   +t(85,226,"前の写真",{a:"middle",z:12,c:C.sub})+t(475,226,"次の写真",{a:"middle",z:12,c:C.sub})+t(280,36,"枠の中に見えるのは1枚",{a:"middle",z:13,b:1,c:C.hiT})+t(280,272,"点は「今、何枚目か」",{a:"middle",z:13,c:C.sub});},
+ responsive(){const col=(x,y,w,n,rows)=>{let o="";const cw=(w-(n+1)*8)/n;for(let rI=0;rI<rows;rI++)for(let c=0;c<n;c++)o+=`<rect x="${x+8+c*(cw+8)}" y="${y+rI*44}" width="${cw}" height="36" rx="3" fill="${C.hi}" opacity="${.55+.15*((c+rI)%3)}"/>`;return o;};
+   return r(20,40,250,170,{rx:8})+`<rect x="20" y="40" width="250" height="24" rx="8" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/>`+col(20,76,250,3,3)+t(145,240,"PC 3列",{a:"middle",z:13,b:1})
+   +r(300,40,140,190,{rx:10})+`<rect x="300" y="40" width="140" height="22" rx="10" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/>`+col(300,72,140,2,3)+t(370,256,"タブレット 2列",{a:"middle",z:13,b:1})
+   +phone(462,30,82,220)+`<rect x="462" y="30" width="82" height="22" rx="12" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/>`+col(462,62,82,1,4)+t(503,276,"スマホ 1列",{a:"middle",z:13,b:1});},
+ seo(){const res=["駅前のカフェ5選 | まちの情報","あなたのお店(例)","カフェの地図 | 地図サイト","駅前ランチ特集 | 雑誌"];
+   return r(60,24,440,40,{rx:20})+`<circle cx="88" cy="44" r="8" fill="none" stroke="${C.ink}" stroke-width="2.5"/>`+ln("M94 50L100 56",{sw:2.5})+t(110,50,"駅前 カフェ",{z:15,b:1})
+   +res.map((s,i)=>{const y=86+i*48,on=i===1;return r(60,y,440,40,{rx:6,f:on?C.hi:C.w})+t(76,y+25,s,{z:14,b:on?1:0})+`<rect x="330" y="${y+16}" width="150" height="8" rx="4" fill="${on?C.w:C.pale}"/>`;}).join("")
+   +t(280,290,"見つけてもらいやすくする工夫。順位は保証できない",{a:"middle",z:13,b:1});},
+ domain(){return r(30,80,500,48,{rx:24})+`<rect x="132" y="88" width="230" height="32" rx="6" fill="${C.hi}"/>`
+   +t(52,110,"https://",{z:16,ff:"ui-monospace,Menlo,monospace",tl:74})+t(138,110,"www.cafe-sample.example",{z:16,b:1,ff:"ui-monospace,Menlo,monospace",tl:218})+t(368,110,"/menu/",{z:16,ff:"ui-monospace,Menlo,monospace",tl:58})
+   +ln("M247 134V170",{s:C.hiL,sw:2.5})+t(247,192,"ドメイン",{a:"middle",z:16,b:1,c:C.hiT})+t(247,212,"(サイトの住所)",{a:"middle",z:13,c:C.sub})
+   +ln("M397 134V160",{s:C.sub})+t(397,180,"ページの場所",{a:"middle",z:13,c:C.sub})
+   +t(280,52,"URLの中で、サイトの住所にあたる部分",{a:"middle",z:14,b:1})+t(280,262,"cafe-sample.example は説明用の架空の住所です",{a:"middle",z:12,c:C.sub});}
+};
+const zukai=(id)=>{TS=NARROW.matches?1.3:1;const o=svg("0 0 560 300",Z[id](),`${T[id].nm}の図解: ${T[id].cap}`);TS=1;return o;};
+
+/* ---------- 図解(合本で足した15語。viewBox 560x300) ---------- */
+const pp=(x,y,f=C.pale)=>`<circle cx="${x}" cy="${y}" r="15" fill="${f}" stroke="${C.ink}" stroke-width="2"/><path d="M${x-26} ${y+58}Q${x-26} ${y+22} ${x} ${y+22}Q${x+26} ${y+22} ${x+26} ${y+58}Z" fill="${f}" stroke="${C.ink}" stroke-width="2"/>`;
+const check=(x,y,on=1)=>r(x,y,16,16,{rx:3,f:C.w})+(on?ln(`M${x+3} ${y+8}L${x+7} ${y+12}L${x+13} ${y+4}`,{s:C.hiL,sw:2.5}):"");
+const lock=(x,y,s=C.ink)=>`<path d="M${x+4} ${y+10}V${y+6}A6 6 0 0 1 ${x+16} ${y+6}V${y+10}" fill="none" stroke="${s}" stroke-width="2.5"/><rect x="${x}" y="${y+10}" width="20" height="15" rx="3" fill="${s}"/>`;
+const DISP="'Zen Maru Gothic',sans-serif";
+Object.assign(Z,{
+ hearing(){return `<rect x="40" y="30" width="200" height="44" rx="10" fill="${C.w}" stroke="${C.ink}" stroke-width="2"/>`+t(140,58,"どんな人に来てほしい？",{a:"middle",z:13,b:1})+`<path d="M190 74L200 92L206 74" fill="${C.w}" stroke="${C.ink}" stroke-width="2"/>`
+   +pp(80,120,C.hi)+pp(200,120)+t(80,214,"お店の人",{a:"middle",z:13,b:1})+t(200,214,"制作会社",{a:"middle",z:13,b:1})
+   +arr(248,150,306,150,{s:C.hiL})
+   +r(320,28,210,244,{rx:8})+t(336,56,"聞き取ったこと",{z:14,b:1})+ln("M336 66H514",{s:C.pale,sw:2})
+   +["目的","見てほしい人","載せたい内容","予算と締め切り","参考にしたいサイト"].map((s,i)=>check(336,82+i*36)+t(362,95+i*36,s,{z:13})).join("");},
+ estimate(){const rows=[["初期費用(作る)",1],["保守費(毎月)",0],["公開先(毎月)",0],["ドメイン(毎年)",0]];
+   return r(30,26,290,250,{rx:8})+t(48,56,"見積書(例)",{z:15,b:1})+ln("M48 68H302",{sw:2})
+   +rows.map(([s,on],i)=>{const y=86+i*44;return r(44,y,262,34,{rx:4,f:on?C.hi:C.w,s:on?C.ink:C.pale})+t(56,y+22,s,{z:13,b:on})+`<rect x="236" y="${y+13}" width="56" height="8" rx="4" fill="${on?C.w:C.pale}"/>`;}).join("")
+   +ln("M330 86H340V120H330",{s:C.hiL,sw:2.5})+t(350,108,"最初に1回",{z:14,b:1,c:C.hiT})
+   +ln("M330 130H340V252H330",{s:C.ink,sw:2.5})+t(350,186,"続けてかかる",{z:14,b:1})+t(350,206,"(毎月・毎年)",{z:12,c:C.sub});},
+ revision(){const box=(x,n,inc)=>r(x,70,112,110,{rx:8,f:inc?C.w:C.hi,dash:!inc})+t(x+56,104,`${n}回目`,{a:"middle",z:15,b:1})
+     +(inc?ln(`M${x+40} 138L${x+52} 150L${x+74} 126`,{s:C.hiL,sw:4}):t(x+56,146,"＋費用",{a:"middle",z:16,b:1,c:C.ink}));
+   return box(24,1,1)+box(156,2,1)+box(288,3,1)+box(424,4,0)
+   +ln("M24 56V46H400V56",{sw:2})+t(212,36,"見積もりに入っている(例:3回まで)",{a:"middle",z:13,b:1})
+   +t(480,56,"超えたら",{a:"middle",z:13,b:1,c:C.hiT})
+   +t(280,230,"何を「1回」と数えるかは、会社ごとに違う",{a:"middle",z:13,b:1})+t(280,254,"先に確かめておく",{a:"middle",z:12,c:C.sub});},
+ persona(){return r(24,36,250,224,{rx:10})+t(40,64,"ペルソナ(例)",{z:14,b:1,c:C.sub})+pp(74,88,C.hi)
+   +t(112,100,"30代・駅前で働く",{z:12,b:1})+t(112,122,"昼休みにスマホで",{z:12})+t(112,144,"お店を探す",{z:12})
+   +ln("M40 172H258",{s:C.pale})+t(40,198,"来る目的",{z:12,c:C.sub})+t(40,222,"すぐ予約したい",{z:15,b:1,c:C.hiT})
+   +arr(284,150,344,150,{s:C.hiL})
+   +phone(360,30,140,236)+imgPh(374,48,112,60)+`<rect x="384" y="118" width="92" height="30" rx="15" fill="${C.hi}" stroke="${C.ink}" stroke-width="2"/>`+t(430,138,"予約",{a:"middle",z:13,b:1})
+   +bars(374,164,112,6,{g:14})+t(430,290,"予約ボタンを上のほうに",{a:"middle",z:13,b:1});},
+ sitemap(){const kids=["メニュー","お店","予約","アクセス"],xs=[20,155,290,425];
+   return r(210,24,140,46,{rx:8,f:C.hi})+t(280,53,"トップ",{a:"middle",z:15,b:1})
+   +kids.map((s,i)=>ln(`M280 70V104H${xs[i]+57}V136`,{s:C.hiL,sw:2.5})+r(xs[i],136,114,44,{rx:8})+t(xs[i]+57,164,s,{a:"middle",z:14,b:1})).join("")
+   +ln("M77 180V214",{s:C.hiL,sw:2.5})+r(20,214,114,44,{rx:8,f:C.bg})+t(77,241,"季節のパフェ",{a:"middle",z:12,b:1})
+   +t(360,236,"ページのつながりを",{z:13,c:C.sub})+t(360,256,"木の形にした地図",{z:13,c:C.sub});},
+ wireframe(){const xb=(x,y,w,h)=>r(x,y,w,h,{rx:3,f:C.w,s:C.sub})+ln(`M${x} ${y}L${x+w} ${y+h}M${x+w} ${y}L${x} ${y+h}`,{s:C.sub,sw:1.5});
+   const lab=(y,ty,s)=>ln(`M214 ${y}H252`,{s:C.hiL,sw:2})+t(260,ty,s,{z:13,b:1});
+   return phone(64,20,150,262)+`<rect x="64" y="20" width="150" height="34" rx="14" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/>`
+   +xb(78,66,122,88)+`<rect x="78" y="166" width="90" height="10" rx="3" fill="${C.sub}"/>`+r(92,188,94,28,{rx:14,f:C.w,s:C.sub,dash:1})+bars(78,232,122,3,{g:13,f:C.pale})
+   +lab(37,42,"ヘッダー")+lab(110,106,"写真が入る場所")+t(260,124,"(まだ入れない)",{z:12,c:C.sub})+lab(171,176,"見出し")+lab(202,207,"予約ボタン")+lab(244,249,"文章")
+   +t(420,140,"色も写真もなし",{a:"middle",z:14,b:1,c:C.hiT})+t(420,162,"並び方だけを決める",{a:"middle",z:13,c:C.sub});},
+ comp(){const wf=(x)=>phone(x,30,130,230)+`<rect x="${x}" y="30" width="130" height="30" rx="14" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/>`+r(x+12,72,106,70,{rx:3,f:C.w,s:C.sub})+ln(`M${x+12} 72L${x+118} 142M${x+118} 72L${x+12} 142`,{s:C.sub,sw:1.5})+r(x+26,154,78,24,{rx:12,f:C.w,s:C.sub,dash:1})+bars(x+12,192,106,4,{g:13,f:C.pale});
+   return wf(50)+t(115,288,"ワイヤーフレーム",{a:"middle",z:13,b:1})
+   +arr(196,145,354,145,{s:C.hiL})+t(275,122,"色・文字・写真",{a:"middle",z:14,b:1,c:C.hiT})+t(275,176,"を入れる",{a:"middle",z:13,c:C.sub})
+   +phone(380,30,130,230)+`<path d="M394 30H496Q510 30 510 44V60H380V44Q380 30 394 30Z" fill="${C.ink}"/>`+`<rect x="392" y="40" width="40" height="10" rx="2" fill="${C.w}"/>`
+   +imgPh(392,72,106,70,{f:C.hi,s:C.ink})+`<rect x="406" y="154" width="78" height="24" rx="12" fill="${C.ink}"/>`+t(445,171,"予約",{a:"middle",z:12,b:1,c:C.w})
+   +t(392,204,"季節のパフェ",{z:13,b:1,ff:DISP})+bars(392,214,106,3,{g:12})+t(445,288,"デザインカンプ",{a:"middle",z:13,b:1});},
+ html(){const fr=(x)=>r(x,30,160,200,{rx:8});
+   const s1=fr(16)+t(30,58,"カフェ",{z:14,b:1})+t(30,84,"メニュー お店 予約",{z:11,c:C.sub})+t(30,112,"季節のパフェ",{z:13,b:1})+bars(30,122,130,3,{g:12,f:C.pale})+t(30,180,"よくある質問",{z:13,b:1})+t(30,204,"予約はできますか",{z:11});
+   const deco=(x)=>`<rect x="${x}" y="30" width="160" height="30" rx="8" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/><rect x="${x+12}" y="40" width="50" height="10" rx="2" fill="${C.ink}"/>`
+     +imgPh(x+12,70,136,48)+`<rect x="${x+30}" y="128" width="100" height="22" rx="11" fill="${C.hi}" stroke="${C.ink}" stroke-width="2"/>`;
+   const s2=fr(200)+deco(200)+r(212,162,136,26,{rx:5,f:C.bg})+t(222,180,"予約はできますか",{z:11,b:1})+r(212,196,136,26,{rx:5,f:C.bg})+t(222,214,"駐車場はありますか",{z:11,b:1});
+   const s3=fr(384)+deco(384)+r(396,162,136,58,{rx:5,f:C.bg,s:C.hiL,sw:3})+t(406,180,"予約はできますか",{z:11,b:1})+bars(406,192,116,2,{g:11,h:5,f:C.w})
+     +`<path d="M500 196l0 22 6-6 5 10 4-2-5-10 8 0z" fill="${C.w}" stroke="${C.ink}" stroke-width="1.5"/>`;
+   const lab=(x,a,b)=>t(x+80,256,a,{a:"middle",z:15,b:1})+t(x+80,278,b,{a:"middle",z:12,c:C.sub});
+   return s1+s2+s3+arr(178,130,196,130,{s:C.hiL})+arr(362,130,380,130,{s:C.hiL})
+   +lab(16,"HTML","中身と並び")+lab(200,"＋CSS","見た目")+lab(384,"＋JavaScript","押すと開く動き");},
+ font(){const a=(x,y,z)=>t(x,y,"あ",{a:"middle",z,b:1,ff:DISP});
+   return r(30,80,150,120,{rx:12,f:C.hi})+a(105,160,56)+t(105,226,"書体のデータ",{a:"middle",z:13,b:1})+t(105,246,"(ネットの上)",{a:"middle",z:12,c:C.sub})
+   +arr(190,120,286,84,{s:C.hiL})+arr(190,160,286,190,{s:C.hiL})
+   +phone(300,24,90,140)+a(345,112,40)+t(345,186,"スマホ",{a:"middle",z:12,b:1})
+   +r(410,40,130,92,{rx:6})+`<path d="M410 56H540" stroke="${C.ink}" stroke-width="2"/>`+a(475,112,40)+t(475,156,"PC",{a:"middle",z:12,b:1})
+   +t(420,214,"どちらも",{z:13,c:C.sub})+t(420,236,"同じ書体で見える",{z:13,b:1,c:C.hiT})+t(30,288,"日本語の書体はデータが大きく、少し遅くなることがある",{z:12,c:C.sub});},
+ cms(){return r(20,30,250,240,{rx:8})+`<rect x="20" y="30" width="250" height="28" rx="8" fill="${C.pale}" stroke="${C.ink}" stroke-width="2"/>`+t(34,50,"管理画面",{z:13,b:1})
+   +t(36,84,"題名",{z:12,c:C.sub})+r(36,92,218,28,{rx:4})+t(46,111,"秋のメニュー",{z:13})
+   +t(36,142,"本文",{z:12,c:C.sub})+r(36,150,218,62,{rx:4})+bars(46,162,190,3,{g:14,h:6})
+   +`<rect x="150" y="224" width="104" height="32" rx="16" fill="${C.hi}" stroke="${C.ink}" stroke-width="2"/>`+t(202,245,"公開する",{a:"middle",z:13,b:1})
+   +arr(282,150,346,150,{s:C.hiL})+t(314,132,"押すと",{a:"middle",z:12,b:1,c:C.hiT})
+   +phone(360,30,150,240)+t(376,66,"お知らせ",{z:14,b:1})+r(374,80,122,34,{rx:5,f:C.hi})+t(384,102,"秋のメニュー",{z:12,b:1})+t(490,102,"新",{z:11,b:1,a:"end"})
+   +[0,1,2].map(i=>r(374,124+i*42,122,34,{rx:5,f:C.w,s:C.pale})+`<rect x="384" y="${138+i*42}" width="80" height="7" rx="3" fill="${C.pale}"/>`).join("");},
+ testup(){const pc=(x,y,f)=>`<circle cx="${x}" cy="${y}" r="9" fill="${f}" stroke="${C.ink}" stroke-width="2"/>`;
+   return r(24,56,220,176,{rx:10,f:C.bg,dash:1})+lock(40,72)+t(70,92,"テスト用の場所",{z:14,b:1})+r(44,112,180,70,{rx:6})+bars(56,124,150,3,{g:14,h:7})
+   +pc(80,206,C.hi)+pc(106,206,C.hi)+t(124,211,"関係者だけ",{z:12,b:1})
+   +arr(254,144,306,144,{s:C.hiL})+t(280,124,"確かめて",{a:"middle",z:12,b:1,c:C.hiT})+t(280,174,"直したら",{a:"middle",z:12,b:1,c:C.hiT})
+   +r(316,56,220,176,{rx:10})+t(334,92,"本番(公開)",{z:14,b:1})+r(336,112,180,70,{rx:6})+bars(348,124,150,3,{g:14,h:7})
+   +[0,1,2,3,4,5,6].map(i=>pc(346+i*26,206,C.pale)).join("")+t(426,256,"だれでも見られる",{a:"middle",z:12,c:C.sub})
+   +t(134,256,"URLを知っている人だけ",{a:"middle",z:12,c:C.sub});},
+ hosting(){const doc=(x,y,s)=>`<path d="M${x} ${y}H${x+38}L${x+52} ${y+14}V${y+62}H${x}Z" fill="${C.w}" stroke="${C.ink}" stroke-width="2"/>`+t(x+26,y+42,s,{a:"middle",z:11,b:1});
+   return doc(20,40,"HTML")+doc(40,100,"CSS")+doc(20,160,"写真")+t(60,256,"作ったファイル",{a:"middle",z:13,b:1})
+   +arr(108,140,176,140,{s:C.hiL})
+   +r(190,40,120,190,{rx:8,f:C.hi})+[0,1,2,3].map(i=>`<rect x="206" y="${60+i*40}" width="88" height="26" rx="4" fill="${C.w}" stroke="${C.ink}" stroke-width="2"/><circle cx="282" cy="${73+i*40}" r="4" fill="${C.ink}"/>`).join("")
+   +t(250,256,"公開先",{a:"middle",z:14,b:1,c:C.hiT})
+   +arr(322,140,384,110,{s:C.hiL})+arr(322,140,384,190,{s:C.hiL})
+   +phone(396,50,60,110)+r(470,150,80,58,{rx:5})+t(472,240,"ネットで見られる",{a:"middle",z:13,b:1})
+   +t(280,290,"無料の公開先には、お店・会社のサイトに使えないものもある",{a:"middle",z:12,c:C.sub});},
+ ssl(){const M="ui-monospace,Menlo,monospace";
+   return r(40,20,480,44,{rx:22})+lock(62,28,C.ink)+`<rect x="94" y="30" width="62" height="24" rx="5" fill="${C.hi}"/>`+t(100,48,"https",{z:15,b:1,ff:M,tl:50})+t(158,48,"://www.cafe-sample.example",{z:15,ff:M,tl:250})
+   +phone(40,96,90,160)+imgPh(52,116,66,44)+bars(52,172,66,4,{g:13})+t(85,280,"見る人",{a:"middle",z:13,b:1})
+   +r(430,96,90,160,{rx:8})+[0,1,2].map(i=>`<rect x="442" y="${112+i*40}" width="66" height="26" rx="4" fill="${C.pale}"/>`).join("")+t(475,280,"サイト",{a:"middle",z:13,b:1})
+   +r(146,150,268,48,{rx:24,f:C.hi})+lock(268,160)+arr(160,174,256,174,{s:C.ink})+arr(400,174,300,174,{s:C.ink})
+   +t(280,136,"通信に鍵をかける",{a:"middle",z:14,b:1,c:C.hiT})+t(280,228,"鍵がないと「保護されていない通信」",{a:"middle",z:12,c:C.sub})+t(280,248,"と出ることがある",{a:"middle",z:12,c:C.sub});},
+ speed(){const ring=`<circle cx="405" cy="140" r="22" fill="none" stroke="${C.pale}" stroke-width="6"/><path d="M405 118A22 22 0 0 1 427 140" fill="none" stroke="${C.hiL}" stroke-width="6" stroke-linecap="round"/>`;
+   return t(140,24,"速い",{a:"middle",z:16,b:1,c:C.hiT})+phone(75,36,130,224)+imgPh(89,54,102,70)+`<rect x="99" y="134" width="82" height="26" rx="13" fill="${C.hi}" stroke="${C.ink}" stroke-width="2"/>`+bars(89,174,102,5,{g:14})
+   +t(140,288,"すぐ中身が出る",{a:"middle",z:13,b:1})
+   +t(405,24,"遅い",{a:"middle",z:16,b:1})+phone(340,36,130,224)+ring+t(405,196,"読み込み中…",{a:"middle",z:12,c:C.sub})
+   +arr(480,148,530,148,{s:C.hiL})+t(505,128,"閉じる",{a:"middle",z:13,b:1,c:C.hiT})+t(405,288,"中身が出る前に閉じられやすい",{a:"middle",z:13,b:1});},
+ a11y(){return t(30,34,"色の差",{z:14,b:1,c:C.hiT})
+   +r(30,46,230,46,{rx:6,f:C.bg,s:C.pale})+t(46,75,"読みにくい文字",{z:14,b:1,c:"#A3B9B1"})+t(266,75,"×",{z:16,b:1,c:C.sub})
+   +r(30,100,230,46,{rx:6,f:C.w})+t(46,129,"読みやすい文字",{z:14,b:1})+t(266,129,"◯",{z:16,b:1,c:C.hiT})
+   +t(30,186,"キーボードだけでも",{z:14,b:1,c:C.hiT})+r(30,200,74,40,{rx:6,f:C.w})+t(67,226,"Tab",{a:"middle",z:14,b:1})+arr(112,220,156,220,{s:C.hiL})
+   +`<rect x="166" y="202" width="100" height="36" rx="18" fill="${C.hi}" stroke="${C.ink}" stroke-width="2"/>`+`<rect x="161" y="197" width="110" height="46" rx="23" fill="none" stroke="${C.hiL}" stroke-width="3"/>`+t(216,225,"予約",{a:"middle",z:13,b:1})
+   +t(320,34,"写真に説明の文",{z:14,b:1,c:C.hiT})+imgPh(320,46,210,120)
+   +`<path d="M350 184H520Q530 184 530 194V236Q530 246 520 246H380L362 262L366 246H350Q340 246 340 236V194Q340 184 350 184Z" fill="${C.w}" stroke="${C.ink}" stroke-width="2"/>`
+   +t(356,210,"読み上げると",{z:12,c:C.sub})+t(356,232,"「窓ぎわの席の写真」",{z:13,b:1});}
+});
+
+/* ---------- さわって試す(動く部品は、本物を小さく動かして見せる) ---------- */
+const RM=matchMedia("(prefers-reduced-motion: reduce)");
+const DEMO={
+ burger:{hint:"右上の三本線を押すと、メニューが開きます。×で閉じます。",
+  html:()=>`<div class="dm-phone"><div class="dm-bar"><span class="dm-logo">カフェ</span><button type="button" class="dm-burger" aria-expanded="false" aria-controls="dm-menu" aria-label="メニューを開く"><i></i><i></i><i></i></button></div>
+   <div class="dm-body"><div class="dm-ph"></div><p class="dm-line"></p><p class="dm-line s"></p></div>
+   <nav class="dm-menu" id="dm-menu" hidden><button type="button" class="dm-close" aria-label="メニューを閉じる">×</button>${["メニュー","お店について","予約","アクセス"].map(s=>`<a href="#t-burger">${s}</a>`).join("")}</nav></div>`,
+  init(el){const b=el.querySelector(".dm-burger"),m=el.querySelector(".dm-menu"),c=el.querySelector(".dm-close");
+   const set=o=>{m.hidden=!o;b.setAttribute("aria-expanded",o);if(o){anim(m,[{transform:"translateX(100%)"},{transform:"none"}],250);c.focus();}else b.focus();};
+   b.addEventListener("click",()=>set(true));c.addEventListener("click",()=>set(false));m.querySelectorAll("a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();set(false);}));}},
+ modal:{hint:"写真を押すと、ページの上に窓が開きます。×か、後ろの暗い所を押すと閉じます。",
+  html:()=>`<div class="dm-page"><p class="dm-ttl">季節のメニュー</p><div class="dm-thumbs">${["パフェ","タルト","ラテ"].map((s,i)=>`<button type="button" class="dm-thumb" data-i="${i}"><span class="dm-ph c${i}"></span>${s}</button>`).join("")}</div>
+   <div class="dm-overlay" hidden><div class="dm-win" role="dialog" aria-modal="true" aria-label="大きな写真"><button type="button" class="dm-close" aria-label="閉じる">×</button><span class="dm-ph big"></span><p class="dm-cap"></p></div></div></div>`,
+  init(el){const ov=el.querySelector(".dm-overlay"),win=el.querySelector(".dm-win"),cap=el.querySelector(".dm-cap"),big=el.querySelector(".big");let from=null;
+   const close=()=>{ov.hidden=true;if(from)from.focus();};
+   el.querySelectorAll(".dm-thumb").forEach(t=>t.addEventListener("click",()=>{from=t;const i=+t.dataset.i;big.className="dm-ph big c"+i;cap.textContent=t.textContent.trim()+"(大きな写真)";ov.hidden=false;
+     anim(win,[{transform:"scale(.9)",opacity:0},{transform:"none",opacity:1}],200);win.querySelector(".dm-close").focus();}));
+   el.querySelector(".dm-close").addEventListener("click",close);ov.addEventListener("click",e=>{if(e.target===ov)close();});
+   el.addEventListener("keydown",e=>{if(e.key==="Escape"&&!ov.hidden)close();});}},
+ accordion:{hint:"質問を押すと答えが開き、もう一度押すと閉じます。",
+  html:()=>`<div class="dm-page"><p class="dm-ttl">よくある質問</p>${[["予約はできますか","はい。ネットか電話で、前日まで受け付けています。"],["駐車場はありますか","お店の裏に3台分あります。"],["子ども連れでも入れますか","はい。子ども用のいすもあります。"]].map(([q,a],i)=>`<div class="dm-acc"><button type="button" aria-expanded="false" aria-controls="dm-a${i}">${q}<span aria-hidden="true">＋</span></button><div class="dm-ans" id="dm-a${i}" hidden><p>${a}</p></div></div>`).join("")}</div>`,
+  init(el){el.querySelectorAll(".dm-acc button").forEach(b=>b.addEventListener("click",()=>{const a=document.getElementById(b.getAttribute("aria-controls")),o=a.hidden;
+   a.hidden=!o;b.setAttribute("aria-expanded",o);b.querySelector("span").textContent=o?"−":"＋";if(o)anim(a,[{opacity:0,transform:"translateY(-6px)"},{opacity:1,transform:"none"}],200);}));}},
+ slider:{hint:"矢印か点を押すと、写真が切り替わります。自動では動きません。",
+  html:()=>`<div class="dm-page"><div class="dm-slider" aria-roledescription="スライダー"><div class="dm-track">${["店内","季節のパフェ","テラス席"].map((s,i)=>`<div class="dm-slide" aria-label="${i+1}枚目 / 3枚"><span class="dm-ph c${i}"></span><span class="dm-cap">${s}</span></div>`).join("")}</div>
+   <button type="button" class="dm-arrow prev" aria-label="前の写真">‹</button><button type="button" class="dm-arrow next" aria-label="次の写真">›</button></div>
+   <div class="dm-dots">${[0,1,2].map(i=>`<button type="button" aria-label="${i+1}枚目" data-i="${i}"></button>`).join("")}</div></div>`,
+  init(el){const tr=el.querySelector(".dm-track"),dots=[...el.querySelectorAll(".dm-dots button")];let n=0;
+   const go=i=>{n=(i+3)%3;tr.style.transform=`translateX(${-100*n}%)`;dots.forEach((d,k)=>d.setAttribute("aria-current",k===n));};
+   el.querySelector(".prev").addEventListener("click",()=>go(n-1));el.querySelector(".next").addEventListener("click",()=>go(n+1));dots.forEach(d=>d.addEventListener("click",()=>go(+d.dataset.i)));go(0);}},
+ responsive:{hint:"つまみを左右に動かすと画面の幅が変わり、カードの並び方が変わります。スマホでは幅の変わり方が小さいので、PCで試すと違いがよく分かります。",
+  html:()=>`<div class="dm-resp"><label for="dm-w" class="small">画面の幅: <b id="dm-wv"></b></label><input type="range" id="dm-w" min="260" max="760" value="760" step="10">
+   <div class="dm-frame" id="dm-frame"><div class="dm-cards">${["パフェ","タルト","ラテ","ケーキ","スコーン","プリン"].map((s,i)=>`<div class="dm-card"><span class="dm-ph c${i%3}"></span>${s}</div>`).join("")}</div></div></div>`,
+  init(el){const r=el.querySelector("#dm-w"),f=el.querySelector("#dm-frame"),v=el.querySelector("#dm-wv"),g=el.querySelector(".dm-cards");
+   const set=()=>{const w=+r.value;f.style.width=w+"px";const c=w<400?1:w<600?2:3;g.style.gridTemplateColumns=`repeat(${c},1fr)`;
+     v.textContent=`${w}px くらい → ${c===1?"スマホ":c===2?"タブレット":"PC"}の並び(${c}列)`;zen(v);};
+   const fit=()=>{const mx=Math.max(260,Math.min(760,(el.clientWidth||760)-32));const full=+r.value>=+r.max;r.max=String(mx);if(full||+r.value>mx)r.value=String(mx);set();};
+   r.addEventListener("input",set);requestAnimationFrame(fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(el);}}
+};
+function anim(el,frames,ms){if(RM.matches||!el.animate)return;el.animate(frames,{duration:ms,easing:"cubic-bezier(.2,.7,.2,1)"});}
+const demoBox=id=>DEMO[id]?`<section class="box demo" aria-labelledby="demo-h"><h3 id="demo-h">さわって試す</h3><p class="small muted">${DEMO[id].hint}</p><div class="dm" id="dm">${DEMO[id].html()}</div><p class="small muted">お店や中身は説明用の架空のものです。</p></section>`:"";
+function initDemo(id){const el=document.getElementById("dm");if(el&&DEMO[id])DEMO[id].init(el);}
+
+/* 図解を出すときの動き: 絵の部品を少しずつ順に出す(0.6秒以内。動きを減らす設定では出さない) */
+function revealSVG(root){if(RM.matches)return;root.querySelectorAll(".zukai svg").forEach(s=>{const kids=[...s.children];const step=Math.min(30,400/Math.max(1,kids.length));
+  kids.forEach((k,i)=>{if(k.animate)k.animate([{opacity:0,transform:"translateY(6px)"},{opacity:1,transform:"none"}],{duration:200,delay:i*step,easing:"ease-out",fill:"backwards"});});});}
+/* 画面の切り替えで、中身を下からふわっと出す */
+function revealView(){if(RM.matches||!view.animate)return;[...view.querySelectorAll(".stack>*")].slice(0,4).forEach((el,i)=>el.animate([{opacity:0,transform:"translateY(10px)"},{opacity:1,transform:"none"}],{duration:300,delay:i*60,easing:"ease-out",fill:"backwards"}));}
+/* スマホでは2段になるヘッダーを、下へ読むときは隠し、上へ戻すと出す */
+(function(){let y=scrollY,hidden=false;const h=document.querySelector(".site-head");if(!h)return;
+  addEventListener("scroll",()=>{const ny=scrollY,down=ny>y+4,up=ny<y-4;y=ny;if(!NARROW.matches){if(hidden){h.classList.remove("tuck");hidden=false;}return;}
+    if(down&&ny>120&&!hidden){h.classList.add("tuck");hidden=true;}else if((up||ny<60)&&hidden){h.classList.remove("tuck");hidden=false;}},{passive:true});
+  h.addEventListener("focusin",()=>{h.classList.remove("tuck");hidden=false;});})();
+
+/* ---------- ツリー版: 選んだ言葉が木になり、指示文と発注メモになる ---------- */
+/* 枝: 進め方 / サイト全体の決まり / 全ページ共通 / ページごとの部品 */
+const BR={proc:"進め方",spec:"サイト全体の決まり",common:"全ページ共通",page:"ページごと"};
+const BRANCH={hearing:"proc",estimate:"proc",revision:"proc",persona:"proc",sitemap:"proc",wireframe:"proc",comp:"proc",testup:"proc",
+  html:"spec",font:"spec",cms:"spec",responsive:"spec",hosting:"spec",domain:"spec",ssl:"spec",seo:"spec",speed:"spec",a11y:"spec",
+  header:"common",gnav:"common",burger:"common",footer:"common",pagetop:"common",crumb:"common",
+  fv:"page",cta:"page",card:"page",sidebar:"page",modal:"page",accordion:"page",slider:"page"};
+const PAGES=[["top","トップ"],["menu","メニュー・商品"],["service","サービス・仕事内容"],["works","実績"],["about","お店・会社について"],["recruit","採用・募集要項"],["reserve","予約"],["access","アクセス"],["news","お知らせ"],["faq","よくある質問"],["contact","お問い合わせ"],["blog","ブログ"]];
+const PN=Object.fromEntries(PAGES);
+/* 雰囲気と色は「サイト発注メモ メーカー」の質問から引き継ぐ */
+const MOODS=[
+  {t:"落ち着いた・上品",head:"明朝体(例: Noto Serif JP)",r:"ほぼ四角",mv:"ゆっくり浮かび上がる程度"},
+  {t:"明るく親しみやすい",head:"丸ゴシック(例: Zen Maru Gothic)",r:"丸め",mv:"ボタンが少し弾む程度"},
+  {t:"清潔・安心感",head:"ゴシック体(例: Noto Sans JP)",r:"少し丸め",mv:"ほとんど動かさない"},
+  {t:"力強く元気",head:"太いゴシック体(例: Dela Gothic One)",r:"四角",mv:"見出しや写真が大きく動いてもよい"},
+  {t:"和風・伝統",head:"明朝体(例: Shippori Mincho)",r:"四角",mv:"ほとんど動かさない"},
+  {t:"ナチュラル・やさしい",head:"丸ゴシックか細めの明朝体",r:"丸め",mv:"ゆっくり浮かび上がる程度"}];
+/* サイトの種類: これで「トップを誰に向けるか」が決まる(会社のサイトなのに採用がトップに来る、を防ぐ) */
+const KINDS=[{t:"会社案内",p:"会社のホームページ"},{t:"お店",p:"お店のホームページ"},{t:"採用専用",p:"採用専用のサイト"},{t:"商品・サービス紹介",p:"商品・サービスの紹介サイト"}];
+const COLORS=[{t:"紺",c:"#1F3A6E"},{t:"青",c:"#236FAE"},{t:"緑",c:"#3E7D4F"},{t:"茶",c:"#7A5230"},{t:"赤",c:"#C0392B"},{t:"オレンジ",c:"#B4570F"},{t:"ピンク",c:"#B04468"},{t:"黒・グレー",c:"#333333"}];
+/* AIへの指示文(どのお店にも使える形)。{page}はページ名、{pages}はページの並び */
+const PR={
+ hearing:"作り始める前に、足りない情報を私に質問してください。",
+ estimate:"公開して続けるのに、毎月・毎年かかる費用を項目ごとに書き出してください。",
+ revision:"直した所は、毎回どこをどう直したか一覧にして教えてください。",
+ persona:"見てほしい人が迷わず目的を果たせる順番で、情報を並べてください。",
+ sitemap:"作る前に、ページ構成(サイトマップ)と各ページに載せる内容を箇条書きで見せてください。",
+ wireframe:"デザインの前に、トップページのワイヤーフレーム(灰色の四角と線だけ)を見せてください。",
+ comp:"いきなり全ページを作らず、まずトップページだけ完成に近い見た目で作ってください。見た目が決まってから、ほかのページに広げてください。",
+ testup:"公開する前に確認用のページで見せてください。スマホとPCの画面の画像も付けてください。",
+ html:"HTMLとCSSを中心に作り、JavaScriptは動きが必要な所だけに使ってください。",
+ font:"見出しだけWebフォント(Google Fonts)を使い、本文は端末に入っている書体にしてください。",
+ cms:"お知らせなど更新するものは、1つのファイルに書き足すだけでページに出るようにして、更新の手順も書いてください。",
+ responsive:"レスポンシブで作り、スマホでも崩れずに読めるようにしてください。",
+ hosting:"公開先の候補を挙げ、お店や会社のサイトに使ってよいかの条件と費用も書いてください。",
+ domain:"ドメインはまだ決まっていないので、あとで差し替えやすくしてください。",
+ ssl:"公開するときは、httpsで見られるようにしてください。",
+ seo:"各ページに題名(title)と短い説明文(meta description)を付け、所在地の地域の名前を入れてください。",
+ speed:"表示速度を優先してください。写真は縮小して軽い形式にし、使わない部品やスクリプトは読み込まないでください。",
+ a11y:"文字と背景の色の差を十分にとり、写真には代替テキストを付け、キーボードだけでも操作できるようにしてください。",
+ header:"全ページ共通のヘッダーを作り、左に名前(ロゴ)を置いてください。",
+ gnav:"ヘッダーの中にグローバルナビを置き、{pages}へのリンクを並べてください。",
+ burger:"スマホの幅では、グローバルナビをハンバーガーメニューにまとめてください。押すと開き、×で閉じる形にしてください。",
+ footer:"全ページ共通のフッターに、住所・連絡先・営業時間(受付時間)・主なページへのリンク・著作権の表示を入れてください。",
+ pagetop:"長いページでは、下へスクロールしたら右下にページトップボタンを出してください。",
+ crumb:"トップ以外のページには、見出しの上にパンくずリストを入れてください。",
+ fv:"{page}のファーストビューに写真を大きく置き、名前と一番押してほしいボタンを重ねてください。スマホでもスクロールせずにボタンが見えるようにしてください。",
+ cta:"{page}に、してほしい行動(予約・問い合わせなど)へ進むCTAボタンを、ほかのボタンより目立つように置いてください。",
+ card:"{page}の一覧は、写真・見出し・短い説明を1枚にまとめたカードで並べてください。PCは3列、スマホは1列にしてください。",
+ sidebar:"{page}だけ、本文の横にサイドバーを付けてください。スマホでは本文の下に回してください。",
+ modal:"{page}で写真を押したら、大きな写真をモーダルウィンドウで見せてください。×か、後ろの暗い所を押すと閉じるようにしてください。",
+ accordion:"{page}の質問と答えはアコーディオンにして、質問を押すと答えが開き、もう一度押すと閉じるようにしてください。",
+ slider:"{page}にスライダーを置き、写真を矢印と点で切り替えられるようにしてください。自動では切り替えないでください。"};
+/* 制作会社への発注メモの1行(進め方とサイト全体の決まり) */
+const MEMO={
+ hearing:"ヒアリングの場を設けてください。",estimate:"見積もりは、初期費用と毎月・毎年かかる費用を分けて出してください。",
+ revision:"修正は何回まで見積もりに入るか、1回の数え方とあわせて教えてください。",persona:"上の「見てほしい人」を前提に考えてください。",
+ sitemap:"最初にページ構成(サイトマップ)を確認させてください。",wireframe:"色を決める前に、ワイヤーフレームで並び方を確認させてください。",
+ comp:"作り込む前に、デザインカンプを見せてください。",testup:"公開の前にテストアップして、スマホで確認させてください。",
+ html:"動きは少なめの、軽い作りを希望します。",font:"見出しに、雰囲気に合う書体(Webフォント)を使いたいです。",
+ cms:"お知らせなどを自分で更新できるようにしたいです(CMS)。",responsive:"スマホでも見やすいよう、レスポンシブでお願いします。",
+ hosting:"公開先とドメインの契約は、こちら(お店・会社)の名義でお願いします。",domain:"ドメインはお店・会社の名前で取りたいです。更新の手続きを誰がするかも決めたいです。",
+ ssl:"SSL(https)をお願いします。",seo:"地域の名前で探す人に見つかるよう、SEOも考えてください。",
+ speed:"スマホでもすぐ開くよう、表示速度を重視してください。",a11y:"文字の読みやすさ(背景との色の差)と、写真の説明の文をお願いします。"};
+
+/* ---------- 木の中身(この端末にだけ保存) ---------- */
+const blank=()=>({pages:["top"],parts:{top:[]},common:[],spec:[],proc:[],ans:{kind:-1,name:"",biz:"",who:"",goal:"",who2:"",mood:-1,color:-1,content:""}});
+let TR=blank();
+try{const s=JSON.parse(localStorage.getItem("zukan-tree")||"null");if(s&&s.pages&&s.parts&&s.ans)TR=Object.assign(blank(),s);}catch(e){}
+const saveTR=()=>{try{localStorage.setItem("zukan-tree",JSON.stringify(TR))}catch(e){}};
+const has=(id,pg)=>BRANCH[id]==="page"?(TR.parts[pg]||[]).includes(id):TR[BRANCH[id]].includes(id);
+const pagesWith=id=>TR.pages.filter(p=>(TR.parts[p]||[]).includes(id));
+const count=()=>TR.common.length+TR.spec.length+TR.proc.length+TR.pages.reduce((n,p)=>n+(TR.parts[p]||[]).length,0);
+let lastAdded=null;
+function addPage(pg){if(!TR.pages.includes(pg)){TR.pages.push(pg);TR.pages.sort((a,b)=>PAGES.findIndex(x=>x[0]===a)-PAGES.findIndex(x=>x[0]===b));}if(!TR.parts[pg])TR.parts[pg]=[];}
+function add(id,pg){if(BRANCH[id]==="page"){addPage(pg);if(!TR.parts[pg].includes(id))TR.parts[pg].push(id);lastAdded=id+"@"+pg;}
+  else{const b=TR[BRANCH[id]];if(!b.includes(id))b.push(id);lastAdded=id;}saveTR();}
+function del(id,pg){if(BRANCH[id]==="page")TR.parts[pg]=(TR.parts[pg]||[]).filter(x=>x!==id);else TR[BRANCH[id]]=TR[BRANCH[id]].filter(x=>x!==id);saveTR();}
+function delPage(pg){if(pg==="top")return;TR.pages=TR.pages.filter(p=>p!==pg);delete TR.parts[pg];saveTR();}
+
+/* ---------- 木を描く ---------- */
+function treeHTML(o={}){
+  const leaf=(id,pg)=>{const key=pg?id+"@"+pg:id,fresh=lastAdded===key;
+    return `<li class="leaf${fresh?" fresh":""}"><a href="#t-${id}">${esc(nm(id))}</a>${o.edit?`<button type="button" class="x" data-del="${id}" ${pg?`data-pg="${pg}"`:""} aria-label="${esc(T[id].nm)}を外す">×</button>`:""}</li>`;};
+  const empty=`<li class="leaf none">まだありません</li>`;
+  const branch=(k,ids)=>`<li><span class="node">${BR[k]}</span><ul>${ids.length?ids.map(id=>leaf(id)).join(""):empty}</ul></li>`;
+  const pageNode=pg=>`<li><span class="node pg">${PN[pg]}${o.edit&&pg!=="top"?`<button type="button" class="x" data-delpage="${pg}" aria-label="${PN[pg]}のページを外す">×</button>`:""}</span><ul>${(TR.parts[pg]||[]).length?TR.parts[pg].map(id=>leaf(id,pg)).join(""):`<li class="leaf none">部品はまだありません</li>`}</ul></li>`;
+  const root=TR.ans.name?`${esc(TR.ans.name)}のサイト`:"あなたのサイト";
+  return `<div class="tree"><p class="root">${root}</p><ul>
+    ${branch("proc",TR.proc)}${branch("spec",TR.spec)}${branch("common",TR.common)}
+    <li><span class="node">ページ(${TR.pages.length})</span><ul>${TR.pages.map(pageNode).join("")}</ul></li></ul></div>`;
+}
+/* 言葉のそばに置く「ツリーに入れる」 */
+function ctlHTML(id){
+  const b=BRANCH[id];
+  if(b!=="page"){const on=has(id);
+    return `<div class="tctl" data-tid="${id}"><p class="small muted">ツリーの枝: ${BR[b]}</p><button type="button" class="tbtn${on?" on":""}" data-act="${on?"del":"add"}">${on?"✓ ツリーに入っています(外す)":"＋ ツリーに入れる"}</button></div>`;}
+  const inP=pagesWith(id);
+  const opts=PAGES.map(([k,v])=>`<option value="${k}"${k===(TR.lastPg||"top")?" selected":""}>${v}${(TR.parts[k]||[]).includes(id)?"(入っています)":""}</option>`).join("");
+  return `<div class="tctl" data-tid="${id}"><label class="small muted" for="pg-${id}">どのページに入れますか</label>
+    <div class="trow"><select id="pg-${id}">${opts}</select><button type="button" class="tbtn" data-act="addpg">＋ ツリーに入れる</button></div>
+    ${inP.length?`<p class="small">入っているページ: ${inP.map(p=>`<button type="button" class="chipx" data-act="delpg" data-pg="${p}">${PN[p]} ×</button>`).join(" ")}</p>`:""}</div>`;
+}
+function asideHTML(){return `<aside class="tree-box" aria-label="選んだもののツリー"><div class="tree-head"><h2 class="h-s">選んだもののツリー</h2><a class="go" href="#tree">指示文を作る →</a></div>${treeHTML()}</aside>`;}
+function badge(){const n=count();document.querySelectorAll('.gnav a[data-nav="tree"] .cnt').forEach(e=>e.textContent=n?String(n):"");}
+let toastT;
+function toast(msg){let el=document.getElementById("toast");if(!el)return;el.textContent=msg;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{el.hidden=true;},2200);}
+function mark(){document.querySelectorAll(".fbtn[data-id]").forEach(b=>{const id=b.dataset.id,on=BRANCH[id]==="page"?pagesWith(id).length>0:has(id);b.classList.toggle("in",on);});}
+function refresh(){
+  document.querySelectorAll(".tctl").forEach(c=>{c.outerHTML=ctlHTML(c.dataset.tid);});
+  document.querySelectorAll(".tree-box").forEach(a=>{a.outerHTML=asideHTML();});
+  bindCtl();badge();mark();zen(view);
+}
+function bindCtl(){
+  document.querySelectorAll(".tctl").forEach(c=>{const id=c.dataset.tid;
+    c.querySelectorAll("[data-act]").forEach(btn=>btn.addEventListener("click",()=>{
+      const a=btn.dataset.act;
+      if(a==="add"){add(id);toast(`「${T[id].nm}」を「${BR[BRANCH[id]]}」に入れました`);}
+      else if(a==="del"){del(id);lastAdded=null;toast(`「${T[id].nm}」を外しました`);}
+      else if(a==="addpg"){const pg=c.querySelector("select").value;TR.lastPg=pg;add(id,pg);toast(`「${T[id].nm}」を「${PN[pg]}」に入れました`);}
+      else if(a==="delpg"){del(id,btn.dataset.pg);lastAdded=null;toast(`「${T[id].nm}」を「${PN[btn.dataset.pg]}」から外しました`);}
+      refresh();}));});
+}
+
+/* ---------- 指示文と発注メモを組み立てる ---------- */
+function moodLine(){const m=MOODS[TR.ans.mood];return m?`${m.t}(見出しは${m.head}、角は${m.r}、動きは${m.mv})`:"";}
+function colorLine(){const c=COLORS[TR.ans.color];return c?`${c.t}(${c.c})`:TR.ans.color===-2?"ロゴや看板の色に合わせる":"";}
+function partsList(){return TR.pages.map(p=>`- ${PN[p]}${(TR.parts[p]||[]).length?": "+TR.parts[p].map(id=>T[id].nm).join("、"):""}`).join("\n");}
+function promptText(){
+  const A=TR.ans,L=[];
+  const K=KINDS[A.kind];
+  L.push(`次の内容で、${A.biz?A.biz+"の":""}${K?K.p:"Webサイト"}を作ってください。`,"");
+  L.push("## お店・会社",`- サイトの種類: ${K?K.t:"【未記入】作る前に、必ず私に質問してください"}`,`- 名前: ${A.name||"【未記入】"}`,`- 業種: ${A.biz||"【未記入】"}`,`- ${A.who2?"一番見てほしい人":"見てほしい人"}: ${A.who||"【未記入】"}`,`- 来た人にしてほしいこと: ${A.goal||"【未記入】作る前に、必ず私に質問してください"}`);
+  if(A.who2)L.push(`- ほかに見てほしい人と、してほしいこと: ${A.who2}`);
+  L.push("");
+  const mo=moodLine(),co=colorLine();
+  if(mo||co){L.push("## 見た目");if(mo)L.push(`- 雰囲気: ${mo}`);if(co)L.push(`- メインの色: ${co}`);L.push("");}
+  L.push("## ページ構成(サイトマップ)",partsList(),"");
+  if(TR.common.length)L.push("## 全ページ共通",`- ${TR.common.map(id=>T[id].nm).join("、")}`,"");
+  const ins=[];const pageNames=TR.pages.map(p=>`「${PN[p]}」`).join("");
+  TR.common.forEach(id=>{if(id==="burger"&&!TR.common.includes("gnav"))ins.push(PR.burger.replace("グローバルナビを","ページへのリンクを"));else ins.push(PR[id].replace("{pages}",pageNames));});
+  TR.pages.forEach(p=>(TR.parts[p]||[]).forEach(id=>ins.push(PR[id].replace("{page}",`「${PN[p]}」ページ`))));
+  TR.spec.forEach(id=>ins.push(PR[id]));
+  const hasCta=TR.pages.some(p=>(TR.parts[p]||[]).includes("cta"));
+  if(A.who2)ins.push("トップページは「一番見てほしい人」に向けて作ってください。ほかに見てほしい人には、トップに小さな入口(リンクやカード)を置き、中身は専用のページに分けてください。");
+  if(K&&K.t!=="採用専用"&&TR.pages.includes("recruit"))ins.push("採用情報は「採用・募集要項」ページにまとめ、トップでは小さな入口だけにしてください。");
+  if(K&&K.t==="採用専用")ins.push("採用専用のサイトなので、トップは働きたい人に向けて作ってください。");
+  if(A.goal&&!hasCta)ins.push(`来た人にしてほしいこと(${A.goal})へ進むボタンを、どのページからもすぐ押せる所に置いてください。`);
+  if(ins.length){L.push("## 細かい指示");ins.forEach((s,i)=>L.push(`${i+1}. ${s}`));L.push("");}
+  L.push("## 載せる中身");
+  L.push(A.content?A.content:"(まだ用意していません)");
+  L.push("- ここに書いていない事実(実績、数字、お客さまの声、受賞歴など)は作らないでください。");
+  L.push("- 文章や写真が足りない所は、仮のものを入れて【仮】と書いてください。","");
+  if(TR.proc.length){L.push("## 進め方");TR.proc.forEach((id,i)=>L.push(`${i+1}. ${PR[id]}`));L.push("");}
+  if(A.easy!==false)L.push("## 出し方","- 私はサイトを作るのが初めてです。すぐ画面で見られるように、全部のページを1つのHTMLファイルにまとめて出してください(ページの切り替えはリンクで)。","- 作ったあとに、私が次に確かめることと、直したい時の頼み方の例を、短く教えてください。");
+  return L.join("\n").trim();
+}
+function memoText(){
+  const A=TR.ans,L=[];
+  L.push("Webサイト制作のご相談","");
+  L.push("■ お店・会社",`${A.name||"(名前)"}/${A.biz||"(業種)"}/${KINDS[A.kind]?KINDS[A.kind].p:"(サイトの種類は未定)"}`,"");
+  L.push("■ 見てほしい人と、来た人にしてほしいこと",`${A.who||"(未記入)"}/${A.goal||"(未記入)"}`);
+  if(A.who2)L.push(`ほかに: ${A.who2}`);
+  L.push("");
+  const mo=moodLine(),co=colorLine();
+  if(mo||co)L.push("■ 雰囲気・色",[mo&&`雰囲気: ${MOODS[A.mood].t}`,co&&`メインの色: ${co}`].filter(Boolean).join("/"),"");
+  L.push("■ ページ構成と、ほしい部品",partsList(),"");
+  if(TR.common.length)L.push("■ 全ページ共通の部品",TR.common.map(id=>T[id].nm).join("、"),"");
+  if(TR.spec.length)L.push("■ サイト全体の希望",...TR.spec.map(id=>`・${MEMO[id]}`),"");
+  if(TR.proc.length)L.push("■ 進め方と、確認したいこと",...TR.proc.map(id=>`・${MEMO[id]}`),"");
+  L.push("■ 載せたい中身",A.content||"(これから用意します)");
+  return L.join("\n").trim();
+}
+
+/* ---------- 「ツリーと指示文」のページ ---------- */
+let outMode="ai";
+function pageTree(){
+  const A=TR.ans;
+  const fld=(k,lab,ph)=>`<div class="fld"><label for="q-${k}">${lab}</label><input id="q-${k}" data-k="${k}" type="text" value="${esc(A[k]||"")}" placeholder="${esc(ph)}"></div>`;
+  view.innerHTML=`<div class="stack"><div class="term-top"><p class="eyebrow">ツリーと指示文</p><h1 class="h-l">選んだものが、そのまま指示文になる</h1>
+    <p class="lead">図鑑で「ツリーに入れる」を押した言葉が、下の木に並びます。お店や会社のことを書き足すと、AIへの指示文と、制作会社への発注メモの両方ができます。入れたものは、この端末のこのブラウザにだけ残ります。</p></div>
+   <div class="build">
+    <div class="stack" style="gap:20px;min-width:0">
+     <section class="box tree-edit"><div class="tree-head"><h2 class="h-s">選んだもののツリー</h2><span class="small muted">${count()}こ</span></div>
+       ${treeHTML({edit:true})}
+       <div class="fld"><label for="addpage">ページを足す</label><div class="trow"><select id="addpage">${PAGES.filter(([k])=>!TR.pages.includes(k)).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select><button type="button" class="tbtn" id="addpage-btn">＋ 足す</button></div></div>
+       <p class="small muted">言葉は<a href="#top">工程表</a>や<a href="#list">用語一覧</a>から入れられます。</p>
+       <div class="trow"><button type="button" class="tbtn sub" id="sample">カフェの例を入れる</button><button type="button" class="tbtn sub reset">リセット(はじめから)</button></div></section>
+     <section class="box"><h2 class="h-s">お店・会社のこと</h2>
+       <div class="fld"><span class="lab" id="lab-kind">サイトの種類</span><div class="opts" role="group" aria-labelledby="lab-kind">${KINDS.map((m,i)=>`<button type="button" data-kind="${i}" aria-pressed="${A.kind===i}">${m.t}</button>`).join("")}</div><p class="small warn-t" id="kind-warn"${KINDS[A.kind]?" hidden":""}>選ぶと、トップページを誰に向けるかが決まります。</p></div>
+       ${fld("name","お店・会社の名前","例: カフェ・サンプル")}${fld("biz","業種","例: カフェ")}
+       ${fld("who","一番見てほしい人(ペルソナ)","例: 駅前で働く30代。昼休みにスマホで探す")}${fld("goal","来た人にしてほしいこと","例: ネットで席を予約してほしい/求人に応募してほしい")}<p class="small warn-t" id="goal-warn"${A.goal?" hidden":""}>ここが空だと、サイトの目的が決まりません。一番大事な欄です。</p>
+       ${fld("who2","ほかに見てほしい人と、してほしいこと(あれば)","例: 現場で働きたい人。求人に応募してほしい")}
+       <div class="fld"><span class="lab" id="lab-mood">雰囲気</span><div class="opts" role="group" aria-labelledby="lab-mood">${MOODS.map((m,i)=>`<button type="button" data-mood="${i}" aria-pressed="${A.mood===i}">${m.t}</button>`).join("")}</div></div>
+       <div class="fld"><span class="lab" id="lab-color">メインの色</span><div class="opts" role="group" aria-labelledby="lab-color">${COLORS.map((c,i)=>`<button type="button" data-color="${i}" aria-pressed="${A.color===i}"><span class="sw" style="background:${c.c}"></span>${c.t}</button>`).join("")}<button type="button" data-color="-2" aria-pressed="${A.color===-2}">ロゴや看板の色</button></div></div>
+       <div class="fld"><label for="q-content">載せたい中身(文章・写真・営業時間など)</label><textarea id="q-content" data-k="content" rows="4" placeholder="例: 営業時間 8時〜18時、定休日 水曜。季節のパフェの写真が3枚あります。">${esc(A.content)}</textarea></div></section>
+    </div>
+    <section class="box out" aria-label="できあがり">
+      <div class="tabs" role="tablist" aria-label="出力を切り替える"><button type="button" role="tab" data-out="ai" aria-selected="${outMode==="ai"}">AIへの指示文</button><button type="button" role="tab" data-out="memo" aria-selected="${outMode==="memo"}">制作会社への発注メモ</button></div>
+      <textarea id="out" readonly rows="22" aria-label="できあがった文"></textarea>
+      <div class="trow"><button type="button" class="tbtn" id="copy">コピーする</button><button type="button" class="tbtn sub reset">リセット(はじめから)</button><span class="small muted" id="copied" aria-live="polite"></span></div>
+      <label class="chk"><input type="checkbox" id="easy"${A.easy!==false?" checked":""}> 初めて作る(1つのファイルにまとめて出してもらう)</label>
+      <p class="small muted">指示文は、選んだ言葉の例文をつないだ下書きです。ぶつかる所や、お店に合わない所は書き換えてから使ってください。</p>
+    </section>
+   </div>
+   ${guideHTML()}</div>`;
+  const out=document.getElementById("out");
+  document.getElementById("easy").addEventListener("change",e=>{TR.ans.easy=e.target.checked;saveTR();write();});
+  const write=()=>{out.value=outMode==="ai"?promptText():memoText();};
+  write();
+  view.querySelectorAll("[data-k]").forEach(el=>el.addEventListener("input",()=>{TR.ans[el.dataset.k]=el.value;saveTR();write();
+    if(el.dataset.k==="goal")document.getElementById("goal-warn").hidden=!!el.value;
+    if(el.dataset.k==="name")view.querySelector(".tree .root").textContent=el.value?`${el.value}のサイト`:"あなたのサイト";}));
+  view.querySelectorAll("[data-kind]").forEach(b=>b.addEventListener("click",()=>{const v=+b.dataset.kind;TR.ans.kind=TR.ans.kind===v?-1:v;saveTR();pageTree();}));
+  view.querySelectorAll("[data-mood]").forEach(b=>b.addEventListener("click",()=>{const v=+b.dataset.mood;TR.ans.mood=TR.ans.mood===v?-1:v;saveTR();pageTree();}));
+  view.querySelectorAll("[data-color]").forEach(b=>b.addEventListener("click",()=>{const v=+b.dataset.color;TR.ans.color=TR.ans.color===v?-1:v;saveTR();pageTree();}));
+  view.querySelectorAll("[data-out]").forEach(b=>b.addEventListener("click",()=>{outMode=b.dataset.out;view.querySelectorAll("[data-out]").forEach(x=>x.setAttribute("aria-selected",x===b));write();}));
+  view.querySelectorAll("[data-del]").forEach(b=>b.addEventListener("click",()=>{del(b.dataset.del,b.dataset.pg);lastAdded=null;pageTree();}));
+  view.querySelectorAll("[data-delpage]").forEach(b=>b.addEventListener("click",()=>{delPage(b.dataset.delpage);pageTree();}));
+  const ap=document.getElementById("addpage-btn");ap.disabled=!document.getElementById("addpage").options.length;
+  ap.addEventListener("click",()=>{const v=document.getElementById("addpage").value;if(v){addPage(v);saveTR();pageTree();}});
+  document.getElementById("sample").addEventListener("click",()=>{TR=sampleTree();lastAdded=null;saveTR();pageTree();toast("カフェの例を入れました");});
+  /* リセット: ツリーも、お店・会社の欄も、全部はじめの状態にもどす(押し間違いを防ぐため2回押し) */
+  view.querySelectorAll(".reset").forEach(clr=>{let armed=false;const lab=clr.textContent;
+    clr.addEventListener("click",()=>{if(!armed){armed=true;clr.textContent="もう一度押すと全部消えます";clr.classList.add("warn");setTimeout(()=>{armed=false;clr.textContent=lab;clr.classList.remove("warn");},3000);return;}
+      TR=blank();lastAdded=null;saveTR();pageTree();scrollTo(0,0);toast("リセットしました");});});
+  document.getElementById("copy").addEventListener("click",()=>{const m=document.getElementById("copied");
+    const fall=()=>{out.focus();out.select();m.textContent="選んだ状態にしました。長押しかCtrl+Cでコピーしてください";};
+    try{navigator.clipboard.writeText(out.value).then(()=>{m.textContent="コピーしました";},fall);}catch(e){fall();}});
+  badge();
+}
+/* 指示文を手に入れたあと: 貼る → 見る → 直してもらう */
+function guideHTML(){return `<section class="box guide" aria-labelledby="guide-h">
+  <h2 class="h-s" id="guide-h"><span class="ib">指示文ができたら:</span> <span class="ib">貼る → 見る → 直してもらう</span></h2>
+  <ol class="gsteps">
+   <li><b>貼る</b><p>AIのチャット(Claude、ChatGPT など)で新しい会話を開き、「コピーする」で写した指示文を貼って送ります。AIから質問が返ってきたら、分かる範囲で答えます。分からない所は「おまかせで、【仮】にしておいて」と返して大丈夫です。</p></li>
+   <li><b>見る</b><p>AIによっては、返事の横や下にそのまま画面を出してくれます。出てこず、コードだけが返ってきた時は次の手順で開きます。</p>
+    <ul class="small"><li>コードを全部コピーして、メモ帳(Macはテキストエディットを「標準テキスト」にして)に貼る</li><li>名前を「site.html」にして保存する。文字コードを選ぶ欄があれば「<span class=\"nozen\">UTF-8</span>」にする</li><li>保存したファイルをダブルクリックすると、ブラウザで開きます</li></ul></li>
+   <li><b>直してもらう</b><p>同じ会話のまま、この図鑑の名前を使って頼みます。一度に頼むのは1〜2個にすると、ほかの所が崩れにくくなります。</p>
+    <ul class="small"><li>例:「<a href="#t-header">ヘッダー</a>の色を、もう少し濃くしてください」</li><li>例:「スマホで見た時は、<a href="#t-burger">ハンバーガーメニュー</a>にしてください」</li><li>例:「<a href="#t-fv">ファーストビュー</a>の写真を大きくして、文字を写真の上に重ねてください」</li></ul></li>
+  </ol>
+  <p class="small muted">ここまでは、自分のパソコンで見るだけです。ネットに出して誰でも見られるようにするには、別に<a href="#t-hosting">公開先(サーバー)</a>や<a href="#t-domain">ドメイン</a>の準備が要ります。本物の電話番号や住所は、出す直前に入れれば十分です。</p>
+ </section>`;}
+function sampleTree(){const t=blank();
+  t.pages=["top","menu","reserve","access","faq"];t.parts={top:["fv","cta","slider"],menu:["card","modal"],reserve:["cta"],access:[],faq:["accordion"]};
+  t.common=["header","gnav","burger","footer","pagetop"];t.spec=["html","responsive","ssl","speed","a11y"];t.proc=["sitemap","wireframe","comp","testup"];
+  t.ans={kind:1,who2:"",name:"カフェ・サンプル",biz:"カフェ",who:"駅前で働く30代。昼休みにスマホでお店を探す",goal:"ネットで席を予約してほしい",mood:1,color:3,content:""};return t;}
+
+window.HOOK={ctl:ctlHTML,aside:asideHTML,after:()=>{bindCtl();badge();mark();},page:pageTree};
+
+/* ---------- ページ(合本) ---------- */
+/* ツリー版(builder.js)が差し込む所。合本では何もしない */
+const HOOK=window.HOOK||{ctl:()=>"",aside:()=>"",after:()=>{},page:null};
+const view=document.getElementById("view");
+let state={fig:"flow",sel:"hearing"};
+try{const s=JSON.parse(localStorage.getItem("zukan-gappon")||"null");if(s&&(s.fig==="flow"||FIG[s.fig])&&T[s.sel])state=s;}catch(e){}
+const save=()=>{try{localStorage.setItem("zukan-gappon",JSON.stringify(state))}catch(e){}};
+const stepName=n=>`工程${n} ${STEPS[n-1].nm}`;
+const nm=id=>T[id].short||T[id].nm;
+
+/* 工程表(HTMLで組む見本図) */
+function flowHTML(sel){
+  const selCh=T[sel]?T[sel].ch:"";
+  return `<ol class="flow" aria-label="サイトができるまでの工程表">${STEPS.map(s=>`<li class="step${stepOf(sel)===s.n?" on":""}">
+    <div class="step-head"><span class="num" aria-hidden="true">${s.n}</span><span><b>${s.nm}</b><small>${s.note}</small></span></div>
+    <div class="fbtns">${FLOW[s.n].map(id=>id[0]==="@"
+      ?`<button type="button" class="fbtn to-fig" data-fig="${id.slice(1)}" aria-pressed="${selCh===id.slice(1)}">${id==="@sp"?"スマホの見本図":"PCの見本図"}<span aria-hidden="true"> →</span></button>`
+      :`<button type="button" class="fbtn" data-id="${id}" aria-pressed="${id===sel}">${esc(nm(id))}</button>`).join("")}</div></li>`).join("")}</ol>`;
+}
+function miniFlow(n){return `<ol class="mini" aria-label="工程表での場所">${STEPS.map(s=>`<li${s.n===n?' class="on" aria-current="step"':""}><span>${s.n}</span>${s.nm}</li>`).join("")}</ol>`;}
+
+function pageTop(){
+  view.innerHTML=`<div class="stack">
+   <div class="term-top"><p class="eyebrow">Webデザイン用語の絵図鑑 サイトができるまでの31語</p><h1 class="h-xl">いま、どの工程の話？</h1>
+     <p class="lead">サイトは「頼む → 決める → 作る → 画面に部品を置く → 公開・確認」の順にできていきます。下の工程表で言葉を押すと、名前と説明が出ます。画面の部品は、1巻目の見本図(スマホ・PCのページ)で場所から探せます。</p></div>
+   <div class="figure-box">
+     <div class="tabs" role="tablist" aria-label="見本図を切り替える">
+       <button type="button" role="tab" data-fig="flow" aria-selected="${state.fig==="flow"}">工程表</button>
+       <button type="button" role="tab" data-fig="sp" aria-selected="${state.fig==="sp"}">スマホのページ</button>
+       <button type="button" role="tab" data-fig="pc" aria-selected="${state.fig==="pc"}">PCのページ</button></div>
+     <div class="stage" id="stage"></div></div>
+  </div>`;
+  const draw=()=>{
+    const st=document.getElementById("stage");
+    if(state.fig==="flow"){
+      st.className="stage wide";
+      st.innerHTML=`<div id="fig" role="tabpanel">${flowHTML(state.sel)}</div><div class="pick-row"><div class="pick" id="pick" aria-live="polite"></div>${HOOK.aside()}</div>`;
+    }else{
+      const F=FIG[state.fig];if(!F.parts.includes(state.sel))state.sel=F.parts[0];
+      st.className="stage";
+      st.innerHTML=`<div id="fig" role="tabpanel">${bigFigure(state.fig,state.sel)}</div><div style="display:grid;gap:14px;min-width:0"><div class="chips" role="group" aria-label="名前を選ぶ">${F.parts.map(id=>`<button type="button" data-id="${id}" aria-pressed="${id===state.sel}">${T[id].nm}</button>`).join("")}</div><div class="pick" id="pick" aria-live="polite"></div><button type="button" class="back" data-fig="flow">← 工程表にもどる</button></div>`;
+    }
+    const x=T[state.sel];
+    document.getElementById("pick").innerHTML=`<p class="small muted">${stepName(stepOf(x.id))}</p><div class="nm">${esc(x.nm)}</div>${x.alias?`<p class="small muted">${esc(x.alias)}</p>`:""}<p>${esc(x.desc)}</p><a class="go" href="#t-${x.id}">図解と、発注での言い方を見る →</a>${HOOK.ctl(x.id)}`;
+    st.querySelectorAll("[data-part],.lab,.fbtn[data-id],.chips button").forEach(el=>el.addEventListener("click",()=>{state.sel=el.dataset.part||el.dataset.id;save();draw();
+      /* スマホでは説明が工程表の下に隠れるので、見える所まで送る */
+      if(NARROW.matches){const pk=document.getElementById("pick");if(pk)pk.scrollIntoView({block:"nearest"});}}));
+    st.querySelectorAll(".to-fig,.back").forEach(b=>b.addEventListener("click",()=>{state.fig=b.dataset.fig;save();draw();
+      /* 見本図と工程表を切り替えたら、切り替えた図の頭から見せる(上に固定のヘッダーの分だけ下げる) */
+      const fb=document.querySelector(".figure-box"),hd=document.querySelector(".site-head");
+      if(fb)window.scrollTo({top:Math.max(0,fb.getBoundingClientRect().top+scrollY-(hd?hd.offsetHeight:0)-8),behavior:RM.matches?"auto":"smooth"});}));
+    document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.fig===state.fig));
+    HOOK.after();zen(view);};
+  document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{state.fig=b.dataset.fig;save();draw();}));
+  draw();
+}
+const chapter=c=>`<div class="chapter">${c.st===4?`<div class="chapter-head"><h3 class="h-s">${c.nm}</h3><span class="muted small">${c.note}</span></div>`:`<p class="muted small">${c.note}</p>`}<div class="tiles">${TERMS.filter(x=>x.ch===c.id).map(tile).join("")}</div></div>`;
+function tile(x){return `<a class="tile" href="#t-${x.id}"><div class="pic">${zukai(x.id)}</div><div class="txt"><span class="nm">${esc(x.nm)}</span>${DEMO[x.id]?`<span class="try">さわって試せる</span>`:""}</div></a>`;}
+function pageList(){
+  view.innerHTML=`<div class="stack"><div class="term-top"><p class="eyebrow">用語一覧</p><h1 class="h-l">${TERMS.length}の言葉を、工程の順に</h1><p class="lead">絵を見て、近いものを押してください。名前が分からなくても、絵から探せます。工程4の言葉は、1巻目「Webデザイン用語の絵図鑑」と同じものです。</p></div>
+   ${STEPS.map(s=>`<section class="stack" style="gap:20px"><div class="step-title"><span class="num" aria-hidden="true">${s.n}</span><h2 class="h-m">${s.nm}</h2></div>${CH.filter(c=>c.st===s.n).map(chapter).join("")}</section>`).join("")}</div>`;
+}
+function pageTerm(id){
+  const x=T[id],i=TERMS.indexOf(x),prev=TERMS[i-1],next=TERMS[i+1],ch=CH.find(c=>c.id===x.ch);
+  const where=(x.ch==="sp"||x.ch==="pc")
+    ?`<div class="box"><h3>見本図での場所</h3><div style="max-width:${x.ch==="sp"?"180px":"100%"}">${smallFigure(x.ch,id)}</div><a class="small" href="#top" data-fig="${x.ch}" data-sel="${id}" id="to-fig">見本図で見る</a></div>`
+    :`<div class="box"><h3>工程表での場所</h3>${miniFlow(ch.st)}<a class="small" href="#top" data-fig="flow" data-sel="${id}" id="to-fig">工程表で見る</a></div>`;
+  view.innerHTML=`<div class="stack">
+   <div class="term-top"><p class="eyebrow">${stepName(ch.st)}${ch.st===4?`・${ch.nm}`:""}</p><h1 class="h-xl">${esc(x.nm)}</h1>${x.alias?`<p class="muted">${esc(x.alias)}</p>`:""}</div>
+   <div class="term-grid">
+     <figure class="zukai" style="margin:0"><figcaption class="cap">図解</figcaption>${zukai(id)}<p style="font-weight:700">${esc(x.cap)}</p></figure>
+     <div class="side">
+       <div class="box"><h3>どんなもの</h3><p>${esc(x.desc)}</p></div>
+       <div class="box"><h3>発注で使える言い方(例)</h3><p class="who">制作会社に伝えるとき</p><p class="order">「${esc(x.order)}」</p><p class="who">AIに指示するとき</p><p class="order ai">「${esc(x.ai)}」</p></div>
+       ${HOOK.ctl(id)}${where}
+     </div>
+   </div>
+   ${demoBox(id)}
+   <section class="box" style="background:none;padding:0"><h3>あわせて覚えたい言葉</h3><div class="rel">${x.rel.map(r=>`<a href="#t-${r}">${esc(T[r].nm)}</a>`).join("")}</div></section>
+   <nav class="pager" aria-label="前後の言葉">${prev?`<a href="#t-${prev.id}">← ${esc(prev.nm)}</a>`:"<span></span>"}${next?`<a href="#t-${next.id}">${esc(next.nm)} →</a>`:`<a href="#list">用語一覧へ</a>`}</nav>
+  </div>`;
+  const tf=document.getElementById("to-fig");if(tf)tf.addEventListener("click",()=>{state.fig=tf.dataset.fig;state.sel=tf.dataset.sel;save();});
+  initDemo(id);revealSVG(view);
+  HOOK.after();
+}
+/* 道具の名前(社長が別のAIに聞いた返事をもとに、技術が確かめて直した) */
+const TOOLS=[
+ ["HTML・CSS・JavaScript","ページの中身・見た目・動き","どのサイトでも","お店のサイトの多くは、HTMLとCSSが中心で足ります",3],
+ ["Tailwind CSS","短い指定を組み合わせて、見た目を早く整える","早く形にしたいとき","書き方が独特で、あとで人が直すときに好みが分かれます",3],
+ ["Google Fonts","無料のWebフォントの集まり","書体にこだわりたいとき","日本語の書体は重く、表示が遅くなることがあります",3],
+ ["GSAP","本格的な動き、スクロールに合わせた演出","見せ場のあるページ","入れるほど重くなります。動きを減らす設定にしている人への配慮も要ります",3],
+ ["Three.js","3Dの絵や、立体的な背景","立体で見せたいとき","重く、お店のサイトには大げさなことが多いです",3],
+ ["React・Vue","部品を組み合わせて画面を作る","ページや機能が多いサイト・アプリ","数ページのお店のサイトには大げさなことが多いです",3],
+ ["Next.js・Astro","1つのデータから、たくさんのページを自動で作る","お知らせや実績がどんどん増えるサイト","表示は速くなりますが、「検索に強い」は言い過ぎです。検索の順位を決めるのは主に中身です",3],
+ ["shadcn/ui・Radix UI","ボタンやメニューなど、整った部品の集まり","Reactで作るとき","Reactを使わないなら関係ありません",3],
+ ["Figma","画面の設計図(デザインカンプ)を描く道具","作る前に見た目を決めたいとき","AIへの指示に名前を書くだけでは何も変わりません。描いた設計図を渡して初めて効きます",2],
+ ["GitHub Pages・Netlify・Vercel","作ったサイトを公開する場所","無料か安く公開したいとき","無料の枠には条件があります。たとえばVercelの無料プランは、個人の非商用向けです",5],
+ ["Playwright","スマホやPCでの見え方を、自動で画面写真にして確かめる","公開の前の確認","見る人には関係のない、作る側の道具です",5]
+];
+function pageTools(){
+  view.innerHTML=`<div class="stack"><div class="term-top"><p class="eyebrow">道具の名前</p><h1 class="h-l">AIへの指示によく出る道具</h1><p class="lead">AIにサイトを作らせるとき、指示によく出てくる道具の名前です。入れると効果が出ることもありますが、入れるほど良くなるわけではありません。道具の名前は数年で入れ替わることがあり、料金や規約も変わるので、使う前に確かめてください。</p></div>
+   <div class="tbl-wrap"><table class="tbl"><thead><tr><th scope="col">名前</th><th scope="col">受け持つこと</th><th scope="col">向いている場面</th><th scope="col">気をつけること</th><th scope="col">工程</th></tr></thead>
+   <tbody>${TOOLS.map(([a,b,c,d,n])=>`<tr><th scope="row">${esc(a)}</th><td data-l="受け持つこと">${esc(b)}</td><td data-l="向いている場面">${esc(c)}</td><td data-l="気をつけること">${esc(d)}</td><td class="nowrap" data-l="工程">${n} ${STEPS[n-1].nm}</td></tr>`).join("")}</tbody></table></div>
+   <div class="box" style="max-width:760px"><h3>迷ったときの目安</h3><p>すっきり軽く作りたいなら、HTMLとCSS。見栄えの演出を足したいなら、TailwindやGSAP。お知らせや実績を自分で増やしていきたいなら、AstroやNext.js、またはCMS。まずは少ない道具で作り、足りないものだけを足すほうが、壊れにくく直しやすいサイトになります。</p></div></div>`;
+}
+function pageHowto(){
+  view.innerHTML=`<div class="stack"><div class="term-top"><p class="eyebrow">使い方</p><h1 class="h-l">頼む前に、3つだけ</h1><p class="lead">制作会社に頼むときも、AIにサイトを作らせるときも、言葉に詰まったときのための使い方です。</p></div>
+   <ol class="steps">
+    <li data-n="１"><div><h3>いまの工程を、工程表で押す</h3><p>「見積もりの話をしている」「公開の前」のように、いまどの段階かが分かれば、<a href="#top">工程表</a>のその列に、よく出る言葉が並んでいます。</p></div></li>
+    <li data-n="２"><div><h3>画面の部品は、見本図で場所から探す</h3><p>「上のほうの帯」のように場所なら分かるときは、工程表の「画面に部品を置く」から、スマホやPCのページの見本図を開いて押します。</p></div></li>
+    <li data-n="３"><div><h3>例の言い方を、まねして使う</h3><p>各用語のページに「発注で使える言い方」が2通りあります。制作会社に伝えるときの短い言い方と、AIに指示するときの細かい言い方です。例は架空のお店の中身なので、自分のお店の内容に書き換えて使ってください。</p></div></li>
+   </ol>
+   <div class="box" style="max-width:760px"><h3>AIに指示するときのこつ</h3><p>用語の名前だけでなく、「誰が、何をしに来るか」と「どうなればよいか」を書くと、AIの作るものが大きく変わります。例:「初めて開いた人が、30秒で予約ボタンに辿り着けるようにしてください。」部品については「何を入れるか」「どこに置くか」「スマホではどうするか」の3つを一緒に書くと、思った形に近づきます。</p></div>
+   <div class="box" style="max-width:760px"><h3>注意</h3><p>同じものでも、制作会社やAIによって呼び方や受け取り方が少し違うことがあります。工程の分け方や呼び方も会社ごとに違います。通じないときは、図解の画面を見せて「ここのことです」と伝えてください。費用や契約のことは、必ず相手に確かめてください。</p></div></div>`;
+}
+
+/* 画面に出る文字の数字と?を全角にする(社長の指示)。属性やURLには触れない */
+function zen(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;
+  while((n=w.nextNode())){if(n.parentNode.closest&&n.parentNode.closest("style,script,textarea,.nozen"))continue;
+    const v=n.nodeValue.replace(/[0-9]/g,d=>String.fromCharCode(d.charCodeAt(0)+0xFEE0)).replace(/\?/g,"？");if(v!==n.nodeValue)n.nodeValue=v;}}
+function route(){
+  const h=location.hash.replace("#","")||"top";
+  if(h.startsWith("t-")&&T[h.slice(2)])pageTerm(h.slice(2));
+  else if(h==="list")pageList();
+  else if(h==="howto")pageHowto();
+  else if(h==="tools")pageTools();
+  else if(h==="tree"&&HOOK.page)HOOK.page();
+  else pageTop();
+  zen(view);revealView();
+  const navKey=h.startsWith("t-")&&T[h.slice(2)]?"list":(["list","howto","tools","tree"].includes(h)?h:"top");
+  document.querySelectorAll(".gnav a").forEach(a=>a.dataset.nav===navKey?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
+}
+NARROW.addEventListener("change",()=>route());
+window.addEventListener("hashchange",()=>{route();window.scrollTo(0,0);document.getElementById("main").focus({preventScroll:true});});
+document.getElementById("skip").addEventListener("click",()=>document.getElementById("main").focus());
+zen(document.querySelector(".site-head"));zen(document.querySelector(".site-foot"));
+route();
+</script>
+</body>
+</html>
