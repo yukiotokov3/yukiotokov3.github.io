@@ -357,3 +357,4 @@ ul[role="list"], ol[role="list"] { list-style: none; }
 @media (max-width: 760px) { .timeline-track { display: none; } }
 @media (prefers-reduced-motion: reduce) { .motion .shot img { scale: 1; } }
 @media (min-width: 761px) { .motion .timeline li { border-top-color: transparent; padding-top: 0; } }
+
