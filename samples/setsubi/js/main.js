@@ -186,8 +186,8 @@
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var action = form.getAttribute("action") || "";
-      if (action.indexOf("YOUR_FORM_ID") !== -1) {
-        message.textContent = "フォームは準備中です。お手数ですが、お電話（000-000-0000）でお問い合わせください。";
+      if (!action || action.indexOf("YOUR_FORM_ID") !== -1) {
+        message.textContent = "これは見本サイトのため、送信されません。";
         return;
       }
       var button = form.querySelector('button[type="submit"]');

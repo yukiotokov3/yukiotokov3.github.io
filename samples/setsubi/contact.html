@@ -68,8 +68,10 @@
           <p class="tel-note">受付 8:30〜17:00（土日祝除く）</p>
         </div>
 
-        <!-- フォームの送信先：Formspree の登録後、YOUR_FORM_ID を発行されたIDに書き換えてください -->
-        <form class="form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <!-- 見本サイトのため、フォームは送信できないようにしている(2026-10-25 外部監査の指摘で変更) -->
+        <p class="form-sample-note" id="form-sample-note"><strong>これは見本サイトです。</strong>このフォームは送信されず、入力もできません。実在する会社ではないため、お問い合わせ・ご応募は受け付けていません。</p>
+        <form class="form" aria-describedby="form-sample-note" onsubmit="return false">
+          <fieldset class="form-sample" disabled>
           <div class="form-row">
             <span class="label">お問い合わせ種別<span class="req">必須</span></span>
             <div class="radio-group">
@@ -115,6 +117,7 @@
             <label><input type="checkbox" name="プライバシーポリシーへの同意" value="同意する" required> <a href="privacy.html" target="_blank">プライバシーポリシー</a>に同意する</label>
           </div>
           <div class="form-submit"><button class="btn" type="submit">送信する</button></div>
+          </fieldset>
           <p class="form-message" role="status" aria-live="polite"></p>
         </form>
       </div>
