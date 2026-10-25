@@ -115,9 +115,66 @@
     el.innerHTML = '<p class="empty">作品のデータを読み込めませんでした。ページを読み込み直してください。</p>';
   }
 
+  /* ---------- お知らせのスライダー(自動で7秒ごと。触ったら自動は止める) ---------- */
+  function initNews() {
+    var box = document.querySelector("[data-news]");
+    if (!box) return;
+    var track = box.querySelector(".news-track");
+    var slides = Array.prototype.slice.call(track.querySelectorAll(".news-slide"));
+    var dotsEl = box.querySelector(".news-dots");
+    var pauseBtn = box.querySelector("[data-news-pause]");
+    if (slides.length < 2) { box.querySelector(".news-ctrl").hidden = true; return; }
+    var cur = 0, timer = null, stopped = reduceMotion.matches, hover = false;
+    slides.forEach(function (s, i) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "news-dot";
+      b.setAttribute("aria-label", (i + 1) + "件目");
+      b.addEventListener("click", function () { userGo(i); });
+      dotsEl.appendChild(b);
+    });
+    var dots = dotsEl.querySelectorAll(".news-dot");
+    function mark(i) {
+      cur = i;
+      dots.forEach(function (d, k) { d.setAttribute("aria-current", String(k === i)); });
+      slides.forEach(function (s, k) { s.setAttribute("aria-hidden", String(k !== i)); s.querySelectorAll("a").forEach(function (a) { a.tabIndex = k === i ? 0 : -1; }); });
+    }
+    function go(i) {
+      i = (i + slides.length) % slides.length;
+      track.scrollTo({ left: slides[i].offsetLeft - track.offsetLeft, behavior: reduceMotion.matches ? "auto" : "smooth" });
+      mark(i);
+    }
+    function stop() { stopped = true; clearInterval(timer); timer = null; pauseBtn.textContent = "自動で送る"; pauseBtn.setAttribute("aria-pressed", "true"); }
+    function play() { stopped = false; pauseBtn.textContent = "止める"; pauseBtn.setAttribute("aria-pressed", "false"); tick(); }
+    function tick() { clearInterval(timer); timer = setInterval(function () { if (!hover && !document.hidden) go(cur + 1); }, 7000); }
+    function userGo(i) { stop(); go(i); }
+    box.querySelector("[data-news-prev]").addEventListener("click", function () { userGo(cur - 1); });
+    box.querySelector("[data-news-next]").addEventListener("click", function () { userGo(cur + 1); });
+    pauseBtn.addEventListener("click", function () { stopped ? play() : stop(); });
+    box.addEventListener("mouseenter", function () { hover = true; });
+    box.addEventListener("mouseleave", function () { hover = false; });
+    box.addEventListener("focusin", function () { hover = true; });
+    box.addEventListener("focusout", function () { hover = false; });
+    track.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight") { e.preventDefault(); userGo(cur + 1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); userGo(cur - 1); }
+    });
+    var st;
+    track.addEventListener("scroll", function () {
+      clearTimeout(st);
+      st = setTimeout(function () {
+        var i = Math.round(track.scrollLeft / track.clientWidth);
+        if (i !== cur) { mark(i); }
+      }, 80);
+    }, { passive: true });
+    track.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse") stop(); });
+    mark(0);
+    if (stopped) stop(); else tick();
+  }
+
   /* ---------- ページごと ---------- */
   var pages = {
     home: function () {
+      initNews();
       var el = document.getElementById("latest");
       loadWorks().then(function (data) {
         el.innerHTML = data.works.slice(0, 3).map(function (w, i) { return workRow(data, w, i); }).join("");
