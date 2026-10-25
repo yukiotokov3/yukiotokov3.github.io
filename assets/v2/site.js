@@ -221,8 +221,10 @@
 
     work: function () {
       var el = document.getElementById("work-detail");
+      var initial = el.innerHTML; // 本番では全作品の記録が最初から入っている(prerender.py)
       function render(data) {
         var id = location.hash.slice(1), idx = -1;
+        if (!id && initial.indexOf("<article") !== -1) { el.innerHTML = initial; reveal(el); return; }
         data.works.forEach(function (w, i) { if (w.id === id) idx = i; });
         if (idx < 0) {
           document.title = "作品が見つかりません | テアシ商会";
@@ -267,6 +269,7 @@
       }
       loadWorks().then(function (data) {
         render(data);
+        if (location.hash) window.scrollTo(0, 0); // 最初の記録(同じidの見出し)へ飛んだ位置を戻す
         window.addEventListener("hashchange", function () {
           withTransition(function () { render(data); window.scrollTo(0, 0); });
           var h = el.querySelector("h1");
