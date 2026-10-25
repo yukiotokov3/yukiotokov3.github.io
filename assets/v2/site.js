@@ -122,7 +122,6 @@
     var track = box.querySelector(".news-track");
     var slides = Array.prototype.slice.call(track.querySelectorAll(".news-slide"));
     var dotsEl = box.querySelector(".news-dots");
-    var pauseBtn = box.querySelector("[data-news-pause]");
     if (slides.length < 2) { box.querySelector(".news-ctrl").hidden = true; return; }
     var cur = 0, timer = null, stopped = reduceMotion.matches, hover = false;
     slides.forEach(function (s, i) {
@@ -143,13 +142,11 @@
       track.scrollTo({ left: slides[i].offsetLeft - track.offsetLeft, behavior: reduceMotion.matches ? "auto" : "smooth" });
       mark(i);
     }
-    function stop() { stopped = true; clearInterval(timer); timer = null; pauseBtn.textContent = "自動で送る"; pauseBtn.setAttribute("aria-pressed", "true"); }
-    function play() { stopped = false; pauseBtn.textContent = "止める"; pauseBtn.setAttribute("aria-pressed", "false"); tick(); }
+    function stop() { stopped = true; clearInterval(timer); timer = null; }
     function tick() { clearInterval(timer); timer = setInterval(function () { if (!hover && !document.hidden) go(cur + 1); }, 7000); }
     function userGo(i) { stop(); go(i); }
     box.querySelector("[data-news-prev]").addEventListener("click", function () { userGo(cur - 1); });
     box.querySelector("[data-news-next]").addEventListener("click", function () { userGo(cur + 1); });
-    pauseBtn.addEventListener("click", function () { stopped ? play() : stop(); });
     box.addEventListener("mouseenter", function () { hover = true; });
     box.addEventListener("mouseleave", function () { hover = false; });
     box.addEventListener("focusin", function () { hover = true; });
@@ -168,7 +165,7 @@
     }, { passive: true });
     track.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse") stop(); });
     mark(0);
-    if (stopped) stop(); else tick();
+    if (!stopped) tick();
   }
 
   /* ---------- ページごと ---------- */

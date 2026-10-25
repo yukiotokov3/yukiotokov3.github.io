@@ -345,7 +345,6 @@ ul[role="list"], ol[role="list"] { list-style: none; }
 .news-btn { min-width: 40px; height: 36px; padding: 0 var(--sp-3); border: 1.5px solid var(--ink); border-radius: var(--r-btn); background: var(--bg); color: var(--ink); font: inherit; font-size: var(--fs-small); cursor: pointer; transition: background var(--t-hover); }
 .news-btn:hover { background: var(--surface); }
 .news-btn:focus-visible, .news-dot:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
-.news-pause { margin-left: auto; }
 .news-dots { display: flex; gap: var(--sp-1); }
 .news-dot { width: 28px; height: 28px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
 .news-dot::before { content: ""; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--ink); background: transparent; transition: background var(--t-hover); }
