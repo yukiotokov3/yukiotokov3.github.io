@@ -123,6 +123,10 @@
     var slides = Array.prototype.slice.call(track.querySelectorAll(".news-slide"));
     var dotsEl = box.querySelector(".news-dots");
     if (slides.length < 2) { box.querySelector(".news-ctrl").hidden = true; return; }
+    var clone = slides[0].cloneNode(true);
+    clone.setAttribute("aria-hidden", "true"); clone.removeAttribute("aria-label");
+    clone.querySelectorAll("a").forEach(function (a) { a.tabIndex = -1; });
+    track.appendChild(clone);
     var cur = 0, timer = null, stopped = reduceMotion.matches, hover = false;
     slides.forEach(function (s, i) {
       var b = document.createElement("button");
@@ -137,16 +141,16 @@
       dots.forEach(function (d, k) { d.setAttribute("aria-current", String(k === i)); });
       slides.forEach(function (s, k) { s.setAttribute("aria-hidden", String(k !== i)); s.querySelectorAll("a").forEach(function (a) { a.tabIndex = k === i ? 0 : -1; }); });
     }
+    function to(el, smooth) { track.scrollTo({ left: el.offsetLeft - track.offsetLeft, behavior: smooth && !reduceMotion.matches ? "smooth" : "auto" }); }
     function go(i) {
+      if (i >= slides.length) { to(clone, true); mark(0); return; } // 最後の次は、複製した1枚目へ進めてから先頭に戻す(折り返し)
       i = (i + slides.length) % slides.length;
-      track.scrollTo({ left: slides[i].offsetLeft - track.offsetLeft, behavior: reduceMotion.matches ? "auto" : "smooth" });
+      to(slides[i], true);
       mark(i);
     }
     function stop() { stopped = true; clearInterval(timer); timer = null; }
     function tick() { clearInterval(timer); timer = setInterval(function () { if (!hover && !document.hidden) go(cur + 1); }, 7000); }
     function userGo(i) { stop(); go(i); }
-    box.querySelector("[data-news-prev]").addEventListener("click", function () { userGo(cur - 1); });
-    box.querySelector("[data-news-next]").addEventListener("click", function () { userGo(cur + 1); });
     box.addEventListener("mouseenter", function () { hover = true; });
     box.addEventListener("mouseleave", function () { hover = false; });
     box.addEventListener("focusin", function () { hover = true; });
@@ -160,6 +164,7 @@
       clearTimeout(st);
       st = setTimeout(function () {
         var i = Math.round(track.scrollLeft / track.clientWidth);
+        if (i >= slides.length) { to(slides[0], false); i = 0; }
         if (i !== cur) { mark(i); }
       }, 80);
     }, { passive: true });
