@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <meta name="robots" content="noindex">
+  <title>お問い合わせ｜株式会社青葉設備工業</title>
+  <meta name="description" content="株式会社青葉設備工業へのお問い合わせ・採用へのご応募はこちらから。お電話（000-000-0000）でも受け付けています。">
+  <meta property="og:title" content="お問い合わせ｜株式会社青葉設備工業">
+  <meta property="og:description" content="株式会社青葉設備工業へのお問い合わせ・採用へのご応募はこちらから。お電話（000-000-0000）でも受け付けています。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="images/ogp.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="index.html">
+        <!-- ロゴ画像を images/logo.png に入れたら、下の行の先頭の「＜!--」と末尾の「--＞」を消してください -->
+        <!-- <img src="images/logo.png" alt="株式会社青葉設備工業"> -->
+        <span class="logo-text"><small>給排水・空調設備の工事とメンテナンス</small>株式会社青葉設備工業</span>
+      </a>
+      <nav class="global-nav" id="global-nav" aria-label="メインメニュー">
+        <ul>
+          <li><a href="index.html">トップ</a></li>
+          <li><a href="news.html">お知らせ</a></li>
+          <li><a href="about.html">会社紹介</a></li>
+          <li><a href="service.html">事業案内</a></li>
+          <li><a href="works.html">施工実績</a></li>
+          <li><a href="recruit.html">採用情報</a></li>
+        </ul>
+        <div class="nav-extra">
+          <a class="btn" href="contact.html" style="width:100%;text-align:center">お問い合わせ</a>
+          <p style="text-align:center;margin-top:16px">TEL <a href="#">000-000-0000</a><br><small>受付 8:30〜17:00（土日祝除く）</small></p>
+        </div>
+      </nav>
+      <div class="header-contact">
+        <a class="header-tel" href="#"><strong>TEL 000-000-0000</strong><span>受付 8:30〜17:00（土日祝除く）</span></a>
+        <a class="btn btn-small" href="contact.html">お問い合わせ</a>
+      </div>
+      <button class="menu-toggle" type="button" aria-controls="global-nav" aria-expanded="false">
+        <span></span><span></span><span></span><span class="sr-only">メニューを開く</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+  <div class="sample-notice">これはテアシ商会が作った<strong>見本サイト</strong>です。会社名・住所・電話番号・実績はすべて架空です。　<a href="https://teashi-shokai.com/">テアシ商会のサイトへ</a></div>
+    <section class="page-hero">
+      <div class="container">
+        <span class="en">Contact</span>
+        <h1>お問い合わせ</h1>
+      </div>
+    </section>
+    <nav class="breadcrumb" aria-label="パンくずリスト">
+      <div class="container"><ol><li><a href="index.html">トップ</a></li><li>お問い合わせ</li></ol></div>
+    </nav>
+    <section class="section">
+      <div class="container">
+        <p class="lead">工事のご相談、採用へのご応募・ご質問は、お電話または下のフォームからお問い合わせください。</p>
+        <div class="contact-band" style="margin-bottom:56px">
+          <a class="tel-big" href="#">TEL 000-000-0000</a>
+          <p class="tel-note">受付 8:30〜17:00（土日祝除く）</p>
+        </div>
+
+        <!-- フォームの送信先：Formspree の登録後、YOUR_FORM_ID を発行されたIDに書き換えてください -->
+        <form class="form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <div class="form-row">
+            <span class="label">お問い合わせ種別<span class="req">必須</span></span>
+            <div class="radio-group">
+              <label><input type="radio" name="種別" value="工事のご相談" checked> 工事のご相談</label>
+              <label><input type="radio" name="種別" value="採用への応募"> 採用への応募</label>
+              <label><input type="radio" name="種別" value="その他"> その他</label>
+            </div>
+          </div>
+          <div class="form-row only-recruit" hidden>
+            <label for="f-job">希望職種<span class="req">必須</span></label>
+            <select id="f-job" name="希望職種">
+              <option value="">選択してください</option>
+              <option>設備施工管理</option>
+              <option>設備工</option>
+              <option>まだ決めていない</option>
+            </select>
+          </div>
+          <div class="form-row only-recruit" hidden>
+            <label for="f-age">年齢<span class="opt">任意</span></label>
+            <input id="f-age" type="text" name="年齢" inputmode="numeric" placeholder="例：28">
+          </div>
+          <div class="form-row">
+            <label for="f-name">お名前<span class="req">必須</span></label>
+            <input id="f-name" type="text" name="お名前" required autocomplete="name" placeholder="例：青葉 太郎">
+          </div>
+          <div class="form-row">
+            <label for="f-company">会社名<span class="opt">任意</span></label>
+            <input id="f-company" type="text" name="会社名" autocomplete="organization">
+          </div>
+          <div class="form-row">
+            <label for="f-tel">電話番号<span class="req">必須</span></label>
+            <input id="f-tel" type="tel" name="電話番号" required autocomplete="tel" placeholder="例：090-1234-5678">
+          </div>
+          <div class="form-row">
+            <label for="f-email">メールアドレス<span class="req">必須</span></label>
+            <input id="f-email" type="email" name="email" required autocomplete="email" placeholder="例：info@example.com">
+          </div>
+          <div class="form-row">
+            <label for="f-body">お問い合わせ内容<span class="req">必須</span></label>
+            <textarea id="f-body" name="お問い合わせ内容" required></textarea>
+          </div>
+          <div class="form-agree">
+            <label><input type="checkbox" name="プライバシーポリシーへの同意" value="同意する" required> <a href="privacy.html" target="_blank">プライバシーポリシー</a>に同意する</label>
+          </div>
+          <div class="form-submit"><button class="btn" type="submit">送信する</button></div>
+          <p class="form-message" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-info">
+        <p class="footer-name">株式会社青葉設備工業</p>
+        <p>〒000-0000 〇〇県みどり市本町1丁目2番3号</p>
+        <p>TEL <a href="#">000-000-0000</a>（受付 8:30〜17:00 土日祝除く）</p>
+        <p>建設業許可：〇〇県知事許可 第000000号</p>
+      </div>
+      <nav class="footer-nav" aria-label="フッターメニュー">
+        <ul>
+          <li><a href="index.html">トップ</a></li>
+          <li><a href="news.html">お知らせ</a></li>
+          <li><a href="about.html">会社紹介</a></li>
+          <li><a href="service.html">事業案内</a></li>
+          <li><a href="works.html">施工実績</a></li>
+          <li><a href="recruit.html">採用情報</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+          <li><a href="privacy.html">プライバシーポリシー</a></li>
+        </ul>
+      </nav>
+    </div>
+    <p class="copyright">&copy; <span data-year>2026</span> 株式会社青葉設備工業</p>
+  </footer>
+
+  <div class="sp-bar">
+    <a class="sp-tel" href="#">電話する</a>
+    <a class="sp-recruit" href="recruit.html">採用情報を見る</a>
+  </div>
+  <button class="to-top" type="button" aria-label="ページの先頭へ">▲</button>
+
+  <script src="js/main.js"></script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a67113dc7b04408eb6fe773998c85dfe"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
