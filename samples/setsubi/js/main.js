@@ -16,11 +16,10 @@
       .replace(/"/g, "&quot;");
   }
 
-  // 写真の枠（写真がなければ説明文を表示）
+  // 写真の枠（見本のため写真は入れず、説明文だけを表示。写真を入れるときは img を戻す）
   function photo(src, label, plan) {
     return (
       '<div class="photo photo-plan">' +
-      '<img src="' + esc(src) + '" alt="' + esc(label) + '" loading="lazy" onerror="this.remove()">' +
       '<div class="photo-label"><span class="plan-tag">写真の提案</span>' +
       '<span class="plan-desc">' + esc(plan || label) + "</span></div>" +
       "</div>"
