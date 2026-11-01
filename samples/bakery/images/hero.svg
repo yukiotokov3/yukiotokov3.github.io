@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <title>赤い屋根の小さなパン屋の外観と、窓辺に並ぶ焼きたてのパンのイラスト</title>
+  <rect width="1600" height="900" fill="#FAE9CF"/>
+  <circle cx="1320" cy="170" r="110" fill="#F5C773"/>
+  <polygon points="360,330 1240,330 1220,342 1220,700 380,700 380,342" fill="#FFF6E8"/>
+  <rect x="360" y="260" width="880" height="70" fill="#C9694A"/>
+  <polygon points="330,260 800,120 1270,260" fill="#A9553A"/>
+  <rect x="440" y="390" width="420" height="250" rx="10" fill="#90B2C5"/>
+  <rect x="440" y="560" width="420" height="80" fill="#7A4A2C"/>
+  <ellipse cx="520" cy="550" rx="55" ry="26" fill="#D89A4E"/>
+  <ellipse cx="650" cy="545" rx="70" ry="32" fill="#D89A4E"/>
+  <ellipse cx="785" cy="552" rx="50" ry="24" fill="#D89A4E"/>
+  <g stroke="#B8792F" stroke-width="5"><line x1="620" y1="540" x2="640" y2="528"/><line x1="650" y1="545" x2="670" y2="533"/><line x1="680" y1="540" x2="700" y2="528"/></g>
+  <rect x="940" y="400" width="200" height="300" rx="10" fill="#6B3F26"/>
+  <rect x="960" y="425" width="160" height="110" rx="5" fill="#90B2C5"/>
+  <circle cx="1110" cy="560" r="10" fill="#F5C773"/>
+  <rect y="700" width="1600" height="200" fill="#D7B48A"/>
+  <circle cx="300" cy="640" r="70" fill="#5E8F4E"/>
+  <rect x="290" y="650" width="20" height="60" fill="#6B3F26"/>
+  <circle cx="1320" cy="650" r="60" fill="#5E8F4E"/>
+  <rect x="1312" y="660" width="16" height="50" fill="#6B3F26"/>
+</svg>
