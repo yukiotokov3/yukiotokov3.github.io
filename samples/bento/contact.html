@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <meta name="robots" content="noindex">
+  <title>ご注文・お問い合わせ｜仕出し弁当 たまき屋(見本)</title>
+  <meta name="description" content="たまき屋へのご注文・お見積もり・ご相談(テアシ商会の見本・架空のお店)。">
+  <meta property="og:title" content="ご注文・お問い合わせ｜仕出し弁当 たまき屋(見本)">
+  <meta property="og:description" content="たまき屋へのご注文・お見積もり・ご相談(テアシ商会の見本・架空のお店)。">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="sample-notice">これはテアシ商会が作った<strong>見本サイト</strong>です。店名・住所・電話番号・料金・お知らせはすべて架空です。<a href="https://teashi-shokai.com/">テアシ商会のサイトへ</a></div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="index.html">
+        <!-- ロゴ画像を images/logo.png に入れたら、下の行の先頭の「＜!--」と末尾の「--＞」を消してください -->
+        <!-- <img src="images/logo.png" alt="仕出し弁当 たまき屋"> -->
+        <span class="logo-mark" aria-hidden="true">環</span>
+        <span class="logo-text"><small>みどり市の仕出し・お弁当</small>たまき屋</span>
+      </a>
+      <nav class="global-nav" id="global-nav" aria-label="メインメニュー">
+        <ul>
+          <li><a href="index.html">トップ</a></li>
+          <li><a href="menu.html">お品書き</a></li>
+          <li><a href="order.html">ご注文の方法</a></li>
+          <li><a href="about.html">たまき屋について</a></li>
+          <li><a href="contact.html" aria-current="page">ご注文・お問い合わせ</a></li>
+        </ul>
+      </nav>
+      <a class="header-tel" href="#"><small>ご注文はお電話で</small><strong>000-000-0000</strong></a>
+      <button class="menu-toggle" type="button" aria-controls="global-nav" aria-expanded="false">
+        <span></span><span></span><span class="sr-only">メニューを開く</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <span class="en">Contact</span>
+        <h1>ご注文・お問い合わせ</h1>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container narrow">
+        <div class="tel-box fade">
+          <p>お急ぎの方・明日のご注文はお電話で</p>
+          <a class="tel-big" href="#">TEL 000-000-0000</a>
+          <p class="small">電話受付 8:00〜18:00(日曜・祝日も受付)　FAX 000-000-0001(FAX用の注文用紙は、お電話でお送りします)</p>
+        </div>
+
+        <h2 class="form-head">フォームでのご注文・ご相談</h2>
+        <p>フォームは<strong>2日後以降のご注文</strong>と、お見積もり・ご相談に使ってください。その日のうちに、お電話かメールで内容と金額をお返しします。<strong>お返しした時点で、ご注文が決まります。</strong></p>
+
+        <form class="form" action="#" method="post" novalidate>
+          <p class="form-sample-note" role="note"><strong>見本のため、このフォームは送信できません。</strong>入力欄の形だけをお見せしています。実際のお店では、送信先を決めてから使えるようにします。</p>
+          <fieldset disabled>
+            <legend class="sr-only">ご注文の内容</legend>
+            <div class="form-row">
+              <label for="f-type">ご用件<span class="req">必須</span></label>
+              <select id="f-type" name="type">
+                <option>お弁当のご注文</option>
+                <option>法事・お祝いの仕出しのご注文</option>
+                <option>オードブル・お寿司桶のご注文</option>
+                <option>お見積もり・ご相談</option>
+              </select>
+            </div>
+            <div class="form-row two">
+              <div>
+                <label for="f-date">お届けの日<span class="req">必須</span></label>
+                <input id="f-date" name="date" type="text" placeholder="例)11月12日(木)">
+              </div>
+              <div>
+                <label for="f-time">お届けの時間<span class="req">必須</span></label>
+                <input id="f-time" name="time" type="text" placeholder="例)11時30分">
+              </div>
+            </div>
+            <div class="form-row">
+              <label for="f-items">お品と個数<span class="req">必須</span></label>
+              <textarea id="f-items" name="items" rows="3" placeholder="例)幕の内弁当 12個、お茶 12本"></textarea>
+            </div>
+            <div class="form-row">
+              <label for="f-place">お届け先<span class="req">必須</span></label>
+              <input id="f-place" name="place" type="text" placeholder="例)みどり市本町1-2-3 ○○ビル3階 会議室">
+            </div>
+            <div class="form-row two">
+              <div>
+                <label for="f-name">お名前・会社名<span class="req">必須</span></label>
+                <input id="f-name" name="name" type="text" autocomplete="name" placeholder="例)○○株式会社 総務部 山田">
+              </div>
+              <div>
+                <label for="f-tel">電話番号<span class="req">必須</span></label>
+                <input id="f-tel" name="tel" type="tel" autocomplete="tel" placeholder="例)000-0000-0000">
+              </div>
+            </div>
+            <div class="form-row">
+              <label for="f-mail">メールアドレス</label>
+              <input id="f-mail" name="email" type="email" autocomplete="email" placeholder="例)name@example.com">
+            </div>
+            <div class="form-row">
+              <span class="label">お支払い</span>
+              <div class="choices">
+                <label><input type="radio" name="pay" checked> お届けのときに現金で</label>
+                <label><input type="radio" name="pay"> 請求書で(会社・団体さま)</label>
+              </div>
+            </div>
+            <div class="form-row">
+              <label for="f-msg">アレルギー・ご要望</label>
+              <textarea id="f-msg" name="message" rows="4" placeholder="例)1名、えびが食べられません。領収書の宛名は○○株式会社で。"></textarea>
+            </div>
+            <div class="form-agree">
+              <label><input type="checkbox" name="agree"> 下の「個人情報の取り扱い」に同意します</label>
+            </div>
+            <div class="form-submit"><button class="btn" type="submit">送信する(見本のため押せません)</button></div>
+          </fieldset>
+        </form>
+
+        <div class="privacy" id="privacy">
+          <h2>個人情報の取り扱い</h2>
+          <p>お聞きしたお名前・会社名・電話番号・メールアドレス・お届け先は、ご注文のお返事とお届け、ご請求のためだけに使います。法律で決められた場合を除き、ほかの人や会社に渡すことはありません。</p>
+          <p>ご自分の情報を消してほしいときは、お電話でお申し付けください。</p>
+          <p class="small">(見本サイトのため、この文は例です。実際のお店では、お店の方と内容を決めて載せます。)</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-info">
+        <p class="footer-name"><span class="logo-mark" aria-hidden="true">環</span>仕出し弁当 たまき屋</p>
+        <p>〒000-0000 〇〇県みどり市東町3丁目8-2</p>
+        <p>TEL <a href="#">000-000-0000</a>　FAX 000-000-0001<br>電話受付 8:00〜18:00(日曜・祝日も受付)</p>
+        <p>店頭販売 11:00〜13:30(日曜・祝日は休み)</p>
+        <p class="small">飲食店営業許可 〇〇県みどり保健所 第000000号(架空)</p>
+      </div>
+      <nav class="footer-nav" aria-label="フッターメニュー">
+        <ul>
+          <li><a href="index.html">トップ</a></li>
+          <li><a href="menu.html">お品書き</a></li>
+          <li><a href="order.html">ご注文の方法</a></li>
+          <li><a href="about.html">たまき屋について</a></li>
+          <li><a href="contact.html">ご注文・お問い合わせ</a></li>
+          <li><a href="contact.html#privacy">個人情報の取り扱い</a></li>
+        </ul>
+      </nav>
+    </div>
+    <p class="copyright">&copy; <span data-year>2026</span> 仕出し弁当 たまき屋　<small>(見本サイト・架空のお店)</small></p>
+  </footer>
+
+  <div class="sp-bar">
+    <a class="sp-tel" href="#">電話で注文</a>
+    <a href="contact.html">フォームで相談</a>
+  </div>
+
+  <script src="js/main.js"></script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a67113dc7b04408eb6fe773998c85dfe"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
