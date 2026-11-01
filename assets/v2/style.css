@@ -427,7 +427,7 @@ ul[role="list"], ol[role="list"] { list-style: none; }
 .peek-note { margin-top: 10px; font-size: 13px; color: var(--band-sub); }
 @media (prefers-reduced-motion: reduce) { .peek-clock::before, .peek-bubble { animation: none; } }
 .peek.is-night .peek-board { opacity: .55; }
-@container (max-width: 460px) { .peek-bubble, .peek-board { display: none; } }
+@container (max-width: 460px) { .peek-bubble, .peek-board { display: none; } .peek-card { top: calc(100% + 8px); left: 0 !important; transform: none; width: 100%; } }
 .peek-head { flex-wrap: wrap; }
 
 /* 看板の右に置く窓(2026-11-01 社長指示でロゴの代わりに) */
