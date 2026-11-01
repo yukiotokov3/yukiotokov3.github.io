@@ -21,7 +21,7 @@
     kikaku:  { name: "企画", kind: "AI社員", color: "#4A6400", shade: "#36490a", role: "何を作るかの案出しと、仕様・原稿の下書き", verb: "の案と原稿を出した" },
     gijutsu: { name: "技術", kind: "AI社員", color: "#3a3a42", shade: "#24242a", role: "コードを書いて、公開の準備をする", verb: "を組んで、公開の準備をした" },
     henshu:  { name: "編集", kind: "AI社員", color: "#e0894a", shade: "#b8662f", role: "文章と見た目を確かめて、直す", verb: "の文と見た目を確かめた" },
-    lime:    { name: "秘書ライム", kind: "AI秘書", color: "#9BCB00", shade: "#6f9200", role: "SNSの数字の記録と、調べもの", verb: null },
+    lime:    { name: "秘書", kind: "AI秘書", color: "#9BCB00", shade: "#6f9200", role: "SNSの数字の記録と、調べもの", verb: null },
     boss:    { name: "社長", kind: "人", role: "何を作るかと、公開するかを決める", verb: "の公開を決めた" }
   };
   var STAFF = [{ id: "kikaku", ex: "open" }, { id: "gijutsu", ex: "focus" }, { id: "henshu", ex: "happy" }];
