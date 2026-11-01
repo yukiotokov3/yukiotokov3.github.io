@@ -7,7 +7,14 @@
   "use strict";
   var SCRIPT = document.currentScript;
   var DATA_URL = SCRIPT ? new URL("data.json", SCRIPT.src).href : null;
-  var W = 400, H = 80, DY = 56;
+  var LAYOUTS = {
+    band: { W: 400, H: 80, wallH: 40, rail: 27, windows: [8, 348], clock: [56, 7], poster: [76, 8], board: [196, 4, 84, 30], shelf: [292, 6], plant: [318, 28], server: [332, 14],
+      lamps: [62, 112, 162, 362], staff: [62, 112, 162], DY: 56, chairY: 36, boxY: 40, boss: { cx: 362, DY: 56, chairY: 34, figY: 36 }, lime: [274, 41], limeWrites: true,
+      meet: [[200, 40], [224, 40], [248, 40]], meetBoss: [276, 33] },
+    hero: { W: 176, H: 144, wallH: 54, rail: 40, windows: [8], clock: [52, 8], poster: [52, 24], board: [84, 5, 86, 32], shelf: null, plant: [158, 86], server: null,
+      lamps: [28, 82, 136], staff: [28, 82, 136], DY: 78, chairY: 58, boxY: 62, boss: { cx: 116, DY: 120, chairY: 100, figY: 102 }, lime: [22, 112], limeWrites: false,
+      meet: [[6, 108], [30, 108], [54, 108]], meetBoss: [74, 98] }
+  };
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var PEOPLE = {
@@ -17,7 +24,7 @@
     lime:    { name: "秘書ライム", kind: "AI秘書", color: "#9BCB00", shade: "#6f9200", role: "SNSの数字の記録と、調べもの", verb: null },
     boss:    { name: "社長", kind: "人", role: "何を作るかと、公開するかを決める", verb: "の公開を決めた" }
   };
-  var STAFF = [{ id: "kikaku", cx: 62, ex: "open" }, { id: "gijutsu", cx: 112, ex: "focus" }, { id: "henshu", cx: 162, ex: "happy" }];
+  var STAFF = [{ id: "kikaku", ex: "open" }, { id: "gijutsu", ex: "focus" }, { id: "henshu", ex: "happy" }];
 
   // ---------- 時刻 ----------
   function nowJST() {
@@ -67,8 +74,8 @@
   }
 
   // ---------- 絵 ----------
-  function Painter(ctx) {
-    var c = ctx;
+  function Painter(ctx, L) {
+    var c = ctx, W = L.W, H = L.H, DY = L.DY;
     var R = function (x, y, w, h, col) { c.fillStyle = col; c.fillRect(x, y, w, h); };
     var PAL = { k: "#16161a", s: "#f3d0a8", S: "#d9a77e", g: "#9BCB00", H: "#3a2416", J: "#5a3a24", r: "#d9776a", x: "#f7f7f2", n: "#2a2a30", N: "#1c1c21", m: "#5c5f66", M: "#43464c" };
     function spr(rows, x, y, pal) {
@@ -88,12 +95,13 @@
       evening: ["#f4a259", "#f9dc8f", "#c06a3a", "#fff2b8"], night: ["#0b1430", "#22305e", "#121a33", null]
     };
     function room(s) {
-      var night = s.sky === "night", sk = SKY[s.sky];
-      R(0, 0, W, 40, "#4a4842"); for (var x = 0; x < W; x += 6) R(x, 0, 1, 28, "#504e47");
-      R(0, 27, W, 1, "#9BCB00"); R(0, 28, W, 10, "#3a342c"); for (x = 2; x < W; x += 22) { R(x, 30, 18, 6, "#453e35"); R(x, 30, 18, 1, "#2e2922"); }
-      R(0, 38, W, 2, "#26221d");
-      for (var y = 40; y < H; y += 4) { R(0, y, W, 4, (y / 4) % 2 ? "#6b4a32" : "#654530"); R(0, y, W, 1, "#5a3d29"); for (x = (y * 7) % 40; x < W; x += 40) R(x, y, 1, 4, "#56392a"); }
-      [8, 348].forEach(function (wx) {
+      var night = s.sky === "night", sk = SKY[s.sky], x, y, i;
+      var wh = L.wallH, rl = L.rail;
+      R(0, 0, W, wh, "#4a4842"); for (x = 0; x < W; x += 6) R(x, 0, 1, rl + 1, "#504e47");
+      R(0, rl, W, 1, "#9BCB00"); R(0, rl + 1, W, wh - rl - 3, "#3a342c"); for (x = 2; x < W; x += 22) { R(x, rl + 3, 18, wh - rl - 7, "#453e35"); R(x, rl + 3, 18, 1, "#2e2922"); }
+      R(0, wh - 2, W, 2, "#26221d");
+      for (y = wh; y < H; y += 4) { R(0, y, W, 4, (y / 4) % 2 ? "#6b4a32" : "#654530"); R(0, y, W, 1, "#5a3d29"); for (x = (y * 7) % 40; x < W; x += 40) R(x, y, 1, 4, "#56392a"); }
+      L.windows.forEach(function (wx) {
         var g = c.createLinearGradient(0, 6, 0, 26); g.addColorStop(0, sk[0]); g.addColorStop(1, sk[1]);
         R(wx - 2, 4, 40, 24, "#2b2620"); c.fillStyle = g; c.fillRect(wx, 6, 36, 20);
         [[0, 8, 6], [6, 12, 5], [11, 5, 7], [18, 10, 6], [24, 7, 5], [29, 13, 7]].forEach(function (b) {
@@ -103,32 +111,26 @@
         if (night) { R(wx + 5, 9, 1, 1, "#fff"); R(wx + 20, 8, 1, 1, "#fff"); R(wx + 29, 11, 1, 1, "#cde"); }
         else { R(wx + 22, 10, 5, 5, sk[3]); R(wx + 23, 9, 3, 1, sk[3]); R(wx + 3, 9, 8, 2, "rgba(255,255,255,.7)"); R(wx + 5, 8, 4, 1, "rgba(255,255,255,.7)"); }
         R(wx + 17, 6, 2, 20, "#2b2620"); R(wx, 15, 36, 1, "#2b2620"); R(wx - 3, 26, 42, 2, "#5c5247"); R(wx - 3, 26, 42, 1, "#7a6e5f");
+        if (!night) { c.fillStyle = s.sky === "evening" ? "rgba(255,190,110,.13)" : "rgba(255,255,255,.07)"; c.beginPath(); c.moveTo(wx - 4, wh); c.lineTo(wx + 40, wh); c.lineTo(wx + 62, wh + 30); c.lineTo(wx + 12, wh + 30); c.fill(); }
       });
-      if (!night) {
-        c.fillStyle = s.sky === "evening" ? "rgba(255,190,110,.13)" : "rgba(255,255,255,.07)";
-        c.beginPath(); c.moveTo(4, 40); c.lineTo(48, 40); c.lineTo(70, 70); c.lineTo(20, 70); c.fill();
-        c.beginPath(); c.moveTo(344, 40); c.lineTo(388, 40); c.lineTo(400, 62); c.lineTo(360, 70); c.fill();
+      L.lamps.forEach(function (x) { R(x, 0, 1, 4, "#16161a"); R(x - 4, 4, 9, 3, "#16161a"); R(x - 3, 4, 7, 2, "#2f2f34"); R(x - 2, 7, 5, 1, night ? "#fff2b8" : "#e9dfb8"); });
+      var ck = L.clock; R(ck[0], ck[1], 11, 11, "#16161a"); R(ck[0] + 1, ck[1] + 1, 9, 9, "#efeee6"); R(ck[0] + 1, ck[1] + 1, 9, 1, "#fff");
+      var po = L.poster; R(po[0], po[1], 22, 14, "#16161a"); R(po[0] + 1, po[1] + 1, 20, 12, "#111"); R(po[0] + 4, po[1] + 7, 3, 3, "#efeee6"); R(po[0] + 8, po[1] + 5, 4, 4, "#efeee6"); R(po[0] + 13, po[1] + 3, 5, 5, "#efeee6"); R(po[0] + 17, po[1] + 9, 2, 2, "#9BCB00");
+      var bd = L.board; R(bd[0], bd[1], bd[2], bd[3], "#16161a"); R(bd[0] + 1, bd[1] + 1, bd[2] - 2, bd[3] - 3, "#f4f3ee"); R(bd[0] + 1, bd[1] + 1, bd[2] - 2, 1, "#ffffff"); R(bd[0] + 1, bd[1] + bd[3] - 3, bd[2] - 2, 1, "#c9c7bd");
+      R(bd[0] + 4, bd[1] + bd[3] - 1, 40, 2, "#8b8f96"); R(bd[0] + 9, bd[1] + bd[3] - 2, 4, 1, "#d9534f"); R(bd[0] + 15, bd[1] + bd[3] - 2, 4, 1, "#3d6fb0"); R(bd[0] + bd[2] - 6, bd[1] + 3, 3, 3, "#9BCB00"); R(bd[0] + 3, bd[1] + 3, 3, 3, "#d9534f");
+      if (L.shelf) {
+        var sx = L.shelf[0], sy = L.shelf[1]; R(sx, sy, 22, 32, "#16161a"); R(sx + 1, sy + 1, 20, 30, "#5a3e2a");
+        var cols = ["#9BCB00", "#efeee6", "#e0894a", "#3d6fb0", "#d9534f", "#4A6400"];
+        for (i = 0; i < 3; i++) { R(sx + 1, sy + 10 + i * 10, 20, 2, "#3d2a1c"); for (var b = 0; b < 6; b++) { var hh = 6 + ((b + i) % 3); R(sx + 2 + b * 3, sy + 10 + i * 10 - hh, 2, hh, cols[(b + i * 2) % 6]); R(sx + 2 + b * 3, sy + 10 + i * 10 - hh, 2, 1, "rgba(255,255,255,.35)"); } }
       }
-      [62, 112, 162, 362].forEach(function (x) { R(x, 0, 1, 4, "#16161a"); R(x - 4, 4, 9, 3, "#16161a"); R(x - 3, 4, 7, 2, "#2f2f34"); R(x - 2, 7, 5, 1, night ? "#fff2b8" : "#e9dfb8"); });
-      // 壁の時計(本当の時刻の針)
-      R(56, 7, 11, 11, "#16161a"); R(57, 8, 9, 9, "#efeee6"); R(57, 8, 9, 1, "#fff");
-      // ロゴのポスター
-      R(76, 8, 22, 14, "#16161a"); R(77, 9, 20, 12, "#111"); R(80, 15, 3, 3, "#efeee6"); R(84, 13, 4, 4, "#efeee6"); R(89, 11, 5, 5, "#efeee6"); R(93, 17, 2, 2, "#9BCB00");
-      // ボード
-      R(196, 4, 84, 30, "#16161a"); R(197, 5, 82, 27, "#f4f3ee"); R(197, 5, 82, 1, "#ffffff"); R(197, 31, 82, 1, "#c9c7bd"); R(200, 33, 40, 2, "#8b8f96"); R(205, 32, 4, 1, "#d9534f"); R(211, 32, 4, 1, "#3d6fb0"); R(274, 7, 3, 3, "#9BCB00"); R(199, 7, 3, 3, "#d9534f");
-      // 本棚
-      R(292, 6, 22, 32, "#16161a"); R(293, 7, 20, 30, "#5a3e2a");
-      var cols = ["#9BCB00", "#efeee6", "#e0894a", "#3d6fb0", "#d9534f", "#4A6400"];
-      for (var i = 0; i < 3; i++) { R(293, 16 + i * 10, 20, 2, "#3d2a1c"); for (var b = 0; b < 6; b++) { var hh = 6 + ((b + i) % 3); R(294 + b * 3, 16 + i * 10 - hh, 2, hh, cols[(b + i * 2) % 6]); R(294 + b * 3, 16 + i * 10 - hh, 2, 1, "rgba(255,255,255,.35)"); } }
-      // 植木・ウォーターサーバー
-      R(318, 28, 10, 10, "#16161a"); R(319, 29, 8, 9, "#b8662f"); R(319, 29, 8, 1, "#e0894a");
-      [[322, 14], [318, 18], [326, 17], [320, 22], [325, 22], [323, 19]].forEach(function (p, i) { R(p[0] - 1, p[1] - 1, 5, 4, "#16161a"); R(p[0], p[1], 3, 2, i % 2 ? "#6f9200" : "#9BCB00"); });
-      R(332, 14, 10, 24, "#16161a"); R(333, 15, 8, 8, "#9fd3f0"); R(333, 15, 8, 2, "#c9ecff"); R(333, 23, 8, 14, "#efeee6"); R(335, 27, 2, 1, "#3d6fb0"); R(338, 27, 2, 1, "#d9534f");
+      var pl = L.plant; R(pl[0], pl[1], 10, 10, "#16161a"); R(pl[0] + 1, pl[1] + 1, 8, 9, "#b8662f"); R(pl[0] + 1, pl[1] + 1, 8, 1, "#e0894a");
+      [[4, -14], [0, -10], [8, -11], [2, -6], [7, -6], [5, -9]].forEach(function (p, i) { R(pl[0] + p[0] - 1, pl[1] + p[1] - 1, 5, 4, "#16161a"); R(pl[0] + p[0], pl[1] + p[1], 3, 2, i % 2 ? "#6f9200" : "#9BCB00"); });
+      if (L.server) { var sv = L.server; R(sv[0], sv[1], 10, 24, "#16161a"); R(sv[0] + 1, sv[1] + 1, 8, 8, "#9fd3f0"); R(sv[0] + 1, sv[1] + 1, 8, 2, "#c9ecff"); R(sv[0] + 1, sv[1] + 9, 8, 14, "#efeee6"); R(sv[0] + 3, sv[1] + 13, 2, 1, "#3d6fb0"); R(sv[0] + 6, sv[1] + 13, 2, 1, "#d9534f"); }
     }
     function clockHands(n) {
-      var cx = 61.5, cy = 12.5, a1 = ((n.h % 12) + n.m / 60) / 12 * Math.PI * 2, a2 = n.m / 60 * Math.PI * 2;
+      var cx = L.clock[0] + 5.5, cy = L.clock[1] + 5.5, a1 = ((n.h % 12) + n.m / 60) / 12 * Math.PI * 2, a2 = n.m / 60 * Math.PI * 2;
       [[a1, 2.6], [a2, 3.8]].forEach(function (p) { for (var r = 0; r <= p[1]; r += 0.5) R(Math.floor(cx + Math.sin(p[0]) * r), Math.floor(cy - Math.cos(p[0]) * r), 1, 1, "#16161a"); });
-      R(61, 8, 1, 1, "#9BCB00");
+      R(L.clock[0] + 5, L.clock[1] + 1, 1, 1, "#9BCB00");
     }
     function chair(cx, y) { R(cx - 10, y, 20, 20, "#16161a"); R(cx - 9, y + 1, 18, 19, "#3b3530"); R(cx - 9, y + 1, 18, 2, "#554c44"); R(cx - 8, y + 3, 1, 14, "#4a423b"); }
     function desk(x, y, w, tag) {
@@ -161,7 +163,7 @@
     function standingBox(x, y, p, ex, lit, f, write) {
       c.fillStyle = "rgba(0,0,0,.25)"; c.fillRect(x, y + 19, 18, 2);
       box(x, y, p.color, p.shade, ex, lit);
-      if (write) { var w = f % 4 < 2; arm(x + 17, y + 5, x + 20, y - 3 + (w ? 0 : 2), p.color); R(x + 21, y - 4 + (w ? 0 : 2), 1, 2, "#3d6fb0"); }
+      if (write && L.limeWrites) { var w = f % 4 < 2; arm(x + 17, y + 5, x + 20, y - 3 + (w ? 0 : 2), p.color); R(x + 21, y - 4 + (w ? 0 : 2), 1, 2, "#3d6fb0"); }
       else arm(x + 17, y + 7, x + 20, y + 11, p.color);
       arm(x, y + 7, x - 3, y + 11, p.color);
       [[4, 0], [12, 1]].forEach(function (d) { var up = (f + d[1]) % 4 === 0 ? 1 : 0; R(x + d[0], y + 14 - up, 2, 4, "#16161a"); R(x + d[0] - 1, y + 17 - up, 4, 2, "#16161a"); });
@@ -178,51 +180,63 @@
       var night = s.sky === "night";
       c.clearRect(0, 0, W, H); room(s); clockHands(n); hits = {};
       STAFF.forEach(function (st, i) {
-        var p = PEOPLE[st.id], state = s[st.id], cx = st.cx;
-        chair(cx, 36);
-        if (state === "desk" || state === "sleep") {
+        var p = PEOPLE[st.id], state = s[st.id], cx = L.staff[i];
+        chair(cx, L.chairY);
+        var seated = state === "desk" || state === "sleep";
+        if (seated) {
           var sleep = state === "sleep", bob = sleep ? 1 : ((f + i * 2) % 8 < 4 ? 0 : 1);
           var ex = sleep ? "sleep" : (((f + i * 7) % 23) === 0 ? "blink" : st.ex);
-          box(cx - 9, 40 + bob, p.color, p.shade, ex, night);
-          hits[st.id] = [cx - 12, 36, 24, 40];
+          box(cx - 9, L.boxY + bob, p.color, p.shade, ex, night);
+          hits[st.id] = [cx - 12, L.chairY, 24, DY - L.chairY + 20];
         }
         desk(cx - 22, DY, 44, ["#9BCB00", "#efeee6", "#e0894a"][i]);
         spr(MON, cx - 26 + (i === 1 ? 30 : 2), DY - 11);
-        if (state === "desk" || state === "sleep") {
+        if (seated) {
           [[-6, 0], [4, 1]].forEach(function (d) { var up = state === "desk" && (f + i + d[1]) % 4 === 0 ? 1 : 0; R(cx + d[0], DY + 15 - up, 2, 3, "#16161a"); R(cx + d[0] - 1, DY + 17 - up, 4, 2, "#16161a"); });
-          if (night) { c.fillStyle = "rgba(210,242,90,.18)"; c.fillRect(cx - 8, 41, 16, 10); }
+          if (night) { c.fillStyle = "rgba(210,242,90,.18)"; c.fillRect(cx - 8, L.boxY + 1, 16, 10); }
         }
         keyboard(cx, DY - 1);
-        if (state === "desk" || state === "sleep") {
+        if (seated) {
           var tt = state === "sleep" ? 0 : ((f + i) % 4 < 2 ? 0 : 1);
           [[cx - 6, tt], [cx + 3, 1 - tt]].forEach(function (h) { R(h[0] - 1, DY - 3 - h[1], 5, 4, "#16161a"); R(h[0], DY - 2 - h[1], 3, 2, p.color); });
         }
         if (i === 0) mug(cx + 12, DY - 6, f, !night && !reduce); if (i === 1) papers(cx - 20, DY - 3); if (i === 2) { mug(cx + 10, DY - 6, f + 1, !night && !reduce); papers(cx - 19, DY - 3); }
-        if (state === "sleep") { var z = reduce ? 0 : f % 6; c.fillStyle = "#efeee6"; c.font = "5px monospace"; c.fillText("z", cx + 8, 38 - z); c.fillText("Z", cx + 11, 33 - z); }
+        if (state === "sleep") { var z = reduce ? 0 : f % 6; c.fillStyle = "#efeee6"; c.font = "5px monospace"; c.fillText("z", cx + 8, L.boxY - 2 - z); c.fillText("Z", cx + 11, L.boxY - 7 - z); }
       });
-      // 会議: ボードの前に並ぶ
+      var B = L.boss, bx = B.cx;
+      var bossDesk = function () {
+        chair(bx, B.chairY); R(bx - 11, B.chairY - 2, 22, 4, "#16161a"); R(bx - 10, B.chairY - 1, 20, 2, "#1f2a0a");
+        if (s.boss === "desk") { bossFigure(bx - 7, B.figY, f, false); hits.boss = [bx - 14, B.chairY - 4, 28, 30]; }
+        desk(bx - 28, B.DY, 56); R(bx - 8, B.DY - 4, 16, 4, "#16161a"); R(bx - 7, B.DY - 3, 14, 2, "#9BCB00");
+        if (s.boss === "desk") { papers(bx + 12, B.DY - 3); mug(bx - 22, B.DY - 6, f + 2, !night && !reduce); }
+      };
+      var front = B.DY > DY; // 社長の机が手前の列なら、立っている人より後に描く
+      if (!front) bossDesk();
       if (s.meeting) {
-        STAFF.forEach(function (st, i) { var x = 200 + i * 24; standingBox(x, 40, PEOPLE[st.id], ((f + i * 5) % 23) === 0 ? "blink" : st.ex, night, f + i, false); hits[st.id] = [x - 3, 36, 24, 26]; });
+        STAFF.forEach(function (st, i) { var m = L.meet[i]; standingBox(m[0], m[1], PEOPLE[st.id], ((f + i * 5) % 23) === 0 ? "blink" : st.ex, night, f + i, false); hits[st.id] = [m[0] - 3, m[1] - 4, 24, 26]; });
       }
-      if (s.lime === "board") { standingBox(274, 41 + (f % 8 < 4 ? 0 : 1), PEOPLE.lime, ((f % 19) === 0) ? "blink" : "happy", night, f, true); hits.lime = [270, 30, 28, 34]; }
-      // 社長の机
-      var bx = 362; chair(bx, 34); R(bx - 11, 32, 22, 4, "#16161a"); R(bx - 10, 33, 20, 2, "#1f2a0a");
-      if (s.boss === "desk") { bossFigure(bx - 7, 36, f, false); hits.boss = [bx - 14, 30, 28, 30]; }
-      desk(bx - 28, DY, 56); R(bx - 8, DY - 4, 16, 4, "#16161a"); R(bx - 7, DY - 3, 14, 2, "#9BCB00");
-      if (s.boss === "desk") { papers(bx + 12, DY - 3); mug(bx - 22, DY - 6, f + 2, !night && !reduce); }
-      if (s.boss === "board") { bossFigure(276, 33, f, true); hits.boss = [272, 30, 22, 34]; }
+      if (s.lime === "board") { var lm = L.lime; standingBox(lm[0], lm[1] + (f % 8 < 4 ? 0 : 1), PEOPLE.lime, ((f % 19) === 0) ? "blink" : "happy", night, f, true); hits.lime = [lm[0] - 4, lm[1] - 10, 28, 34]; }
+      if (s.boss === "board") { bossFigure(L.meetBoss[0], L.meetBoss[1], f, true); hits.boss = [L.meetBoss[0] - 4, L.meetBoss[1] - 3, 22, 34]; }
+      if (front) bossDesk();
       if (night) {
         c.fillStyle = "rgba(8,10,30,.38)"; c.fillRect(0, 0, W, H);
-        var g = c.createRadialGradient(112, 46, 2, 112, 46, 30); g.addColorStop(0, "rgba(210,242,90,.35)"); g.addColorStop(1, "rgba(210,242,90,0)"); c.fillStyle = g; c.fillRect(70, 10, 90, 70);
-        var lg = c.createRadialGradient(112, 8, 1, 112, 8, 26); lg.addColorStop(0, "rgba(255,242,184,.35)"); lg.addColorStop(1, "rgba(255,242,184,0)"); c.fillStyle = lg; c.fillRect(80, 0, 64, 40); R(110, 7, 5, 1, "#fff2b8");
+        var gx = L.staff[1], g = c.createRadialGradient(gx, L.boxY + 6, 2, gx, L.boxY + 6, 30); g.addColorStop(0, "rgba(210,242,90,.35)"); g.addColorStop(1, "rgba(210,242,90,0)"); c.fillStyle = g; c.fillRect(gx - 42, L.boxY - 30, 84, 70);
+        var lg = c.createRadialGradient(gx, 8, 1, gx, 8, 26); lg.addColorStop(0, "rgba(255,242,184,.35)"); lg.addColorStop(1, "rgba(255,242,184,0)"); c.fillStyle = lg; c.fillRect(gx - 32, 0, 64, 40); R(gx - 2, 7, 5, 1, "#fff2b8");
       }
     }
     return { draw: draw, hit: function (x, y) { for (var k in hits) { var r = hits[k]; if (x >= r[0] && x < r[0] + r[2] && y >= r[1] && y < r[1] + r[3]) return k; } return null; }, hits: function () { return hits; } };
   }
 
   // ---------- 画面の部品 ----------
-  var BUBBLE_POS = { kikaku: [55, 38], gijutsu: [105, 38], henshu: [155, 38], lime: [278, 39], boss: [368, 34] };
-  var BUBBLE_POS_MEETING = { kikaku: [196, 50, 1], boss: [292, 31, 0] };
+  // 吹き出しの位置(しっぽの先)。右寄りの人は左向きに出す
+  function bubblePos(L, s, id) {
+    var p;
+    if (s.meeting && L.meet && ["kikaku", "gijutsu", "henshu"].indexOf(id) >= 0) { var m = L.meet[["kikaku", "gijutsu", "henshu"].indexOf(id)]; p = [m[0] + 6, m[1] - 2]; }
+    else if (id === "boss") p = s.boss === "board" ? [L.meetBoss[0] + 7, L.meetBoss[1] - 2] : [L.boss.cx + 2, L.boss.figY - 2];
+    else if (id === "lime") p = [L.lime[0] + 6, L.lime[1] - 2];
+    else p = [L.staff[["kikaku", "gijutsu", "henshu"].indexOf(id)] - 7, L.boxY - 2];
+    return [p[0], p[1], p[0] > L.W * 0.6];
+  }
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]; }); }
   function mmdd(d) { var p = (d || "").split("-"); return p.length === 3 ? p[1] + "/" + p[2] : d; }
@@ -231,11 +245,14 @@
     var mode = root.getAttribute("data-peek") || "band";
     var detail = root.getAttribute("data-detail") || "/samples/detail/#";
     var stage = root.querySelector(".peek-stage");
-    stage.innerHTML = '<canvas width="400" height="80" role="img"></canvas><div class="peek-board" aria-hidden="true"></div><div class="peek-bubbles" aria-hidden="true"></div><div class="peek-card" role="dialog" aria-modal="false" hidden></div>';
+    var L = LAYOUTS[mode === "hero" ? "hero" : "band"], W = L.W, H = L.H;
+    stage.style.aspectRatio = W + " / " + H;
+    stage.innerHTML = '<canvas width="' + W + '" height="' + H + '" role="img"></canvas><div class="peek-board" aria-hidden="true"></div><div class="peek-bubbles" aria-hidden="true"></div><div class="peek-card" role="dialog" aria-modal="false" hidden></div>';
     var canvas = stage.querySelector("canvas"), ctx = canvas.getContext("2d");
     var boardEl = stage.querySelector(".peek-board"), bubblesEl = stage.querySelector(".peek-bubbles"), card = stage.querySelector(".peek-card");
+    var bd = L.board; boardEl.style.left = ((bd[0] + 4) / W * 100) + "%"; boardEl.style.top = ((bd[1] + 3) / H * 100) + "%"; boardEl.style.width = ((bd[2] - 10) / W * 100) + "%";
     var clockEl = root.querySelector(".peek-clock"), liveEl = root.querySelector(".peek-live"), chips = root.querySelector(".peek-chips");
-    var painter = Painter(ctx), data = null, f = 0, bubbleIdx = 0, lastKey = "";
+    var painter = Painter(ctx, L), data = null, f = 0, bubbleIdx = 0, lastKey = "";
 
     function present(s) { return ["kikaku", "gijutsu", "henshu", "lime", "boss"].filter(function (id) { return s[id] !== "away"; }); }
 
@@ -260,8 +277,8 @@
       var ids = Object.keys(s.bubbles).filter(function (id) { return s[id] !== "away"; });
       bubblesEl.innerHTML = "";
       if (!ids.length) return;
-      var id = ids[bubbleIdx % ids.length], pos = (s.meeting && BUBBLE_POS_MEETING[id]) || BUBBLE_POS[id];
-      var b = document.createElement("div"); b.className = "peek-bubble" + ((pos.length > 2 ? pos[2] : id === "boss") ? " is-boss" : "");
+      var id = ids[bubbleIdx % ids.length], pos = bubblePos(L, s, id);
+      var b = document.createElement("div"); b.className = "peek-bubble" + (pos[2] ? " is-boss" : "");
       b.style.left = (pos[0] / W * 100) + "%"; b.style.top = (pos[1] / H * 100) + "%";
       b.innerHTML = "<small>" + PEOPLE[id].name + "</small>" + esc(s.bubbles[id]);
       bubblesEl.appendChild(b);

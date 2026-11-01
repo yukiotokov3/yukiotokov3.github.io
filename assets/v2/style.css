@@ -427,5 +427,21 @@ ul[role="list"], ol[role="list"] { list-style: none; }
 .peek-note { margin-top: 10px; font-size: 13px; color: var(--band-sub); }
 @media (prefers-reduced-motion: reduce) { .peek-clock::before, .peek-bubble { animation: none; } }
 .peek.is-night .peek-board { opacity: .55; }
-@container (max-width: 700px) { .peek-bubble, .peek-board { display: none; } }
+@container (max-width: 460px) { .peek-bubble, .peek-board { display: none; } }
 .peek-head { flex-wrap: wrap; }
+
+/* 看板の右に置く窓(2026-11-01 社長指示でロゴの代わりに) */
+.hero .wrap { position: relative; }
+.hero .wrap > :not(.hero-peek) { max-width: 560px; }
+.hero-peek { position: absolute; right: max(var(--gutter), env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%); width: 500px; }
+.hero-peek .peek-head { margin-bottom: 8px; align-items: baseline; }
+.hero-peek .peek-title { font-size: 18px; display: flex; gap: 12px; align-items: baseline; }
+.hero-peek .peek-eyebrow { font-size: 12px; }
+.hero-peek .peek-clock { font-size: 13px; font-family: "DotGothic16", monospace; }
+.hero-peek .peek-foot { margin-top: 10px; flex-wrap: nowrap; gap: 8px; }
+.hero-peek .peek-chips { gap: 5px; flex-wrap: nowrap; }
+.hero-peek .peek-chips button { font-size: 12px; padding: 4px 7px; min-height: 30px; gap: 5px; white-space: nowrap; }
+.hero-peek .peek-more { white-space: nowrap; }
+.hero-peek .peek-more { font-size: 14px; }
+.hero-peek .peek-bubble { font-size: 11px; }
+.hero-peek .peek-board { font-size: 11px; line-height: 1.4; }
