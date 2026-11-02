@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="部品を選ぶだけで、アクセスカウンターやキリ番、工事中の看板がある1996年風の自分のホームページが作れます。">
+<link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="icon" href="/favicon-96.png" sizes="96x96" type="image/png">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>1996年風ホームページ メーカー</title>
+</head>
+<body>
+<nav class="ts-back" aria-label="テアシ商会"><style>.ts-back{margin:0;background:#111111;padding:6px max(16px,env(safe-area-inset-right,0px)) 6px max(16px,env(safe-area-inset-left,0px));font:13px/1.5 "Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif}.ts-back a{color:#FFFFFF;text-decoration:none}.ts-back a:hover,.ts-back a:focus-visible{text-decoration:underline}.ts-back a:focus-visible{outline:2px solid #9BCB00;outline-offset:2px}</style><a href="/">← テアシ商会のサイトへ</a></nav>
+<style>
+/* ===== 作成ソフトの画面(Windows 95 風) ===== */
+.hm{--g:#c0c0c0;--d:#808080;--n:#000080;font:14px/1.5 "MS PGothic","ＭＳ Ｐゴシック","IPAPGothic","Hiragino Kaku Gothic ProN",sans-serif;color:#000;background:#008080;min-height:100vh;padding:24px;box-sizing:border-box}
+.hm *{box-sizing:border-box}
+.hm-win{max-width:1232px;margin:0 auto;background:var(--g);border:2px solid;border-color:#fff #000 #000 #fff;box-shadow:inset -1px -1px var(--d),inset 1px 1px #dfdfdf}
+.hm-tb{background:linear-gradient(90deg,var(--n),#1084d0);color:#fff;font-weight:bold;padding:4px 8px;display:flex;justify-content:space-between;align-items:center}
+.hm-tb i{font-style:normal;display:inline-flex;gap:3px}.hm-tb i b{width:18px;height:16px;background:var(--g);border:2px solid;border-color:#fff #000 #000 #fff;color:#000;font-size:11px;line-height:11px;text-align:center}
+.hm-menu{padding:3px 8px;border-bottom:1px solid var(--d)}.hm-menu span{margin-right:16px}.hm-menu u{text-decoration:underline}
+.hm-body{display:grid;grid-template-columns:340px 1fr;gap:10px;padding:10px}
+.hm-panel{background:var(--g);border:2px solid;border-color:var(--d) #fff #fff var(--d);padding:10px;max-height:760px;overflow:auto}
+.hm-panel fieldset{border:2px groove #fff;margin:0 0 10px;padding:6px 10px 8px}
+.hm-panel legend{padding:0 4px}
+.hm-panel label{display:block;margin:3px 0;cursor:pointer}
+.hm-panel input[type=text],.hm-panel select{width:100%;font:inherit;padding:3px 4px;border:2px solid;border-color:var(--d) #fff #fff var(--d);background:#fff}
+.hm-panel input[type=checkbox],.hm-panel input[type=radio]{margin-right:6px;accent-color:#000080}
+.hm-btn{font:inherit;background:var(--g);border:2px solid;border-color:#fff #000 #000 #fff;box-shadow:inset -1px -1px var(--d);padding:5px 14px;cursor:pointer}
+.hm-btn:active{border-color:#000 #fff #fff #000;box-shadow:inset 1px 1px var(--d)}
+.hm-btn:focus-visible,.hm-panel input:focus-visible,.hm-panel select:focus-visible{outline:1px dotted #000;outline-offset:-4px}
+.hm-foot{display:flex;gap:8px;justify-content:flex-end;align-items:center;padding:0 10px 10px}
+.hm-foot .hm-msg{margin-right:auto;color:#000080}
+.hm-status{border-top:1px solid var(--d);padding:2px 8px;font-size:12px;display:flex;gap:12px}.hm-status span{border:1px solid;border-color:var(--d) #fff #fff var(--d);padding:0 8px}
+/* 古いブラウザの枠 */
+.br{border:2px solid;border-color:#fff #000 #000 #fff;background:var(--g,#c0c0c0);display:flex;flex-direction:column;height:760px}
+.br-top{display:flex;gap:6px;align-items:center;padding:4px 6px;border-bottom:1px solid #808080;font:13px "MS PGothic","IPAPGothic",sans-serif}
+.br-top .addr{flex:1;background:#fff;border:2px solid;border-color:#808080 #fff #fff #808080;padding:1px 6px;white-space:nowrap;overflow:hidden}
+.br-logo{width:30px;height:30px;background:#000080;color:#fff;display:grid;place-items:center;font-weight:bold;font-size:18px}
+.br-page{flex:1;overflow:auto;border:2px solid;border-color:#808080 #fff #fff #808080;margin:4px;background:#fff}
+.br-stat{font:12px "MS PGothic","IPAPGothic",sans-serif;padding:2px 8px}
+/* ===== 完成したホームページ(部品) ===== */
+.hp{min-height:100%;font:16px/1.6 "MS PGothic","ＭＳ Ｐゴシック","IPAPGothic",sans-serif;color:var(--fg);background:var(--bg);display:flex}
+.hp a{color:var(--ln);text-decoration:underline;cursor:pointer}
+.hp-side{width:170px;flex:none;background:var(--sb);color:var(--sf);padding:14px 12px;border-right:4px ridge #ccc}
+.hp-side a{color:var(--sf);display:block;margin:4px 0}
+.hp-main{flex:1;padding:16px 22px;text-align:center;min-width:0}
+.hp-mq{overflow:hidden;white-space:nowrap;background:#000;color:#ff0;padding:4px 0;margin-bottom:10px}
+.hp-mq span{display:inline-block;padding-left:100%;animation:hpmq 12s linear infinite}
+@keyframes hpmq{to{transform:translateX(-100%)}}
+.hp h1{margin:8px 0;font-size:38px;line-height:1.3;color:var(--h1);text-shadow:3px 3px 0 var(--sh)}
+.hp h1.rb span{text-shadow:2px 2px 0 #000}
+.hp-cnt{margin:10px 0}.hp-cnt b{background:#000;color:#0f0;font-family:"Courier New",monospace;letter-spacing:4px;padding:2px 8px;border:2px inset #888}
+.hp-kiri{font-size:14px}.hp-kiri b{color:#f00}
+.hp-koji{display:inline-block;background:repeating-linear-gradient(45deg,#ff0 0 12px,#000 12px 24px);padding:6px;margin:10px 0}
+.hp-koji div{position:relative;z-index:1;background:#ff0;color:#000;font-weight:bold;padding:6px 14px}
+.hp-koji small{display:block;font-weight:normal}
+.hp-blink{animation:hpbl 1s steps(1) infinite}@keyframes hpbl{50%{visibility:hidden}}
+.hp-new{color:#f00;font-weight:bold;font-size:13px}
+.hp-hr{height:8px;margin:14px auto;width:90%;background:linear-gradient(90deg,#f00,#f80,#ff0,#0c0,#0cf,#00f,#c0f,#f00);background-size:200% 100%;animation:hphr 3s linear infinite;border:1px solid #000}
+@keyframes hphr{to{background-position:-200% 0}}
+.hp-up{margin:10px auto;width:92%;border:3px outset #fff;background:#fff;color:#000;border-collapse:separate;text-align:left;font-size:14px}
+.hp-up th{background:#000080;color:#fff;padding:4px}.hp-up td{border:2px inset #ccc;padding:4px 6px}
+.hp-env{font-size:12px;margin-top:14px;opacity:.85}
+.hp-bn{display:inline-flex;gap:6px;margin:10px 0;flex-wrap:wrap;justify-content:center}
+.hp-bn span{width:88px;height:31px;border:1px solid #000;font-size:10px;line-height:1.2;display:grid;place-items:center;font-weight:bold;text-align:center}
+.hp-mail{display:inline-block;animation:hpmail 1s ease-in-out infinite alternate}@keyframes hpmail{to{transform:translateY(-4px) rotate(-8deg)}}
+.hp-bgm{margin:8px 0}.hp-bgm button{font:13px "MS PGothic","IPAPGothic",sans-serif;background:#c0c0c0;border:2px outset #fff;padding:2px 10px;cursor:pointer}
+.hp-since{font-size:12px;margin-top:6px}
+.hp-wel{margin:6px 0 4px;font-size:15px}
+/* 見るだけの画面 */
+.view-bar{position:fixed;left:0;right:0;bottom:0;background:#111;color:#fff;font:14px/1.4 "Noto Sans JP","Hiragino Sans",sans-serif;padding:10px 16px;display:flex;justify-content:center;gap:16px;align-items:center;z-index:10}
+.view-bar a{color:#9BCB00;font-weight:bold}
+@media (prefers-reduced-motion:reduce){.hp-mq span,.hp-blink,.hp-hr,.hp-mail{animation:none}.hp-mq span{padding-left:0}}
+body{background:#008080;margin:0}
+</style>
+<div id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+/* ===== HP96: 1996年風ホームページの部品(経営ゲームなどでも使い回せるよう独立させている) ===== */
+const HP96 = (() => {
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const BG = {
+    star:  {name:'星空',        bg:'#000 radial-gradient(#fff 1px,transparent 1.5px) 0 0/34px 34px', fg:'#fff', ln:'#0ff', h1:'#ff0', sh:'#f0f', sb:'#000033', sf:'#ff0'},
+    pink:  {name:'ピンクの水玉', bg:'#fff0f8 radial-gradient(#ffb3dd 3px,transparent 4px) 0 0/22px 22px', fg:'#333', ln:'#00f', h1:'#f0f', sh:'#0ff', sb:'#ff66b3', sf:'#fff'},
+    grid:  {name:'方眼紙',      bg:'#fff linear-gradient(#cde 1px,transparent 1px) 0 0/16px 16px,#fff linear-gradient(90deg,#cde 1px,transparent 1px) 0 0/16px 16px', fg:'#000', ln:'#00f', h1:'#000080', sh:'#9cf', sb:'#000080', sf:'#fff'},
+    brick: {name:'レンガ',      bg:'#a33 repeating-linear-gradient(0deg,#ddd 0 2px,transparent 2px 18px),#a33 repeating-linear-gradient(90deg,#ddd 0 2px,transparent 2px 36px)', fg:'#fff', ln:'#ff0', h1:'#fff', sh:'#000', sb:'#511', sf:'#ff0'},
+    gray:  {name:'灰色(初期設定)', bg:'#c0c0c0', fg:'#000', ln:'#00e', h1:'#000', sh:'#fff', sb:'#808080', sf:'#fff'},
+    matrix:{name:'黒に緑',      bg:'#000', fg:'#0f0', ln:'#0f0', h1:'#0f0', sh:'#030', sb:'#020', sf:'#0f0'},
+  };
+  const PARTS = [
+    ['marquee','流れる文字'],['rainbow','虹色の見出し'],['counter','アクセスカウンター'],['kiriban','キリ番のお知らせ'],
+    ['koji','工事中の看板'],['update','更新履歴(点滅NEW!)'],['hr','動く虹の横線'],['menu','左のメニュー'],
+    ['banner','リンクバナー(88×31)'],['mail','動くメールの手紙'],['bgm','BGMボタン'],['env','推奨環境の注意書き'],['since','Since 表記'],
+  ];
+  const DEFAULT = {t:'ようこそ!ぼくのホームページへ', w:'ゆっくりしていってね!!', h:'まさる', bg:'star',
+    p:['marquee','rainbow','counter','kiriban','koji','update','hr','menu','mail','env','since']};
+  function hash(s){let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h}
+  function render(st){
+    const on = k => st.p.includes(k), th = BG[st.bg] || BG.star;
+    const n = 100 + hash(st.t+st.h) % 9000, pad = x => String(x).padStart(6,'0');
+    const kiri = Math.ceil((n+1)/1000)*1000;
+    const vars = `--bg:${th.bg};--fg:${th.fg};--ln:${th.ln};--h1:${th.h1};--sh:${th.sh};--sb:${th.sb};--sf:${th.sf}`;
+    const title = on('rainbow')
+      ? `<h1 class="rb">${[...st.t].map((c,i)=>`<span style="color:hsl(${i*360/[...st.t].length},100%,55%)">${esc(c)}</span>`).join('')}</h1>`
+      : `<h1>${esc(st.t)}</h1>`;
+    let m = '';
+    if(on('marquee')) m += `<div class="hp-mq"><span>★☆★ ${esc(st.w)} ★☆★</span></div>`;
+    m += title;
+    if(!on('marquee') && st.w) m += `<p class="hp-wel">${esc(st.w)}</p>`;
+    if(on('counter')) m += `<div class="hp-cnt">あなたは <b data-cnt="${n}">${pad(n)}</b> 人目のお客様です</div>`;
+    if(on('kiriban')) m += `<div class="hp-kiri">★キリ番 <b>${pad(kiri)}</b> を踏んだ方は掲示板でご報告ください♪ 踏み逃げ禁止!!</div>`;
+    if(on('hr')) m += `<div class="hp-hr"></div>`;
+    if(on('koji')) m += `<div class="hp-koji"><div>工事中 ｍ(_ _)ｍ<small>このページはただいま制作中です</small></div></div>`;
+    if(on('update')) m += `<table class="hp-up"><tr><th colspan="2">更新履歴</th></tr>
+      <tr><td>96/11/01</td><td>ホームページを開設しました!! <span class="hp-new hp-blink">NEW!</span></td></tr>
+      <tr><td>96/11/01</td><td>${esc(st.h)}のプロフィールを書きました <span class="hp-new hp-blink">NEW!</span></td></tr>
+      <tr><td>96/10/30</td><td>リンク集を作りはじめました(まだ工事中です)</td></tr></table>`;
+    if(on('bgm')) m += `<div class="hp-bgm"><button type="button" data-bgm>♪ BGMを鳴らす</button> <small>(音が出ます)</small></div>`;
+    if(on('banner')) m += `<div class="hp-bn"><span style="background:#ff0;color:#f00">${esc(st.h)}の<br>ホームページ</span><span style="background:#000;color:#0f0">LINK<br>FREE!!</span><span style="background:#00f;color:#fff">相互リンク<br>募集中</span></div>`;
+    if(on('hr') && (on('mail')||on('env'))) m += `<div class="hp-hr"></div>`;
+    if(on('mail')) m += `<p>ご意見・ご感想は <span class="hp-mail">✉</span> <a>${esc(st.h)}にメール</a> まで</p>`;
+    if(on('env')) m += `<p class="hp-env">※このページは Netscape Navigator 3.0 / 800×600 / 256色 で見るのがおすすめです。<br>リンクはトップページにお願いします。</p>`;
+    if(on('since')) m += `<p class="hp-since">Since 1996.11.01 / Copyright (C) 1996 ${esc(st.h)} All rights reserved.</p>`;
+    const side = on('menu') ? `<nav class="hp-side"><b>★MENU★</b><a>ごあいさつ</a><a>${esc(st.h)}のプロフィール</a><a>日記 <span class="hp-new hp-blink">NEW!</span></a><a>掲示板</a><a>ゲストブック</a><a>リンク集</a><a>相互リンク</a></nav>` : '';
+    return `<div class="hp" style="${vars}">${side}<div class="hp-main">${m}</div></div>`;
+  }
+  // BGM: テアシ商会オリジナルの短い曲(当時の着メロ・MIDI風の矩形波)
+  let ac;
+  function playBgm(){
+    ac = ac || new (window.AudioContext||window.webkitAudioContext)();
+    const N = {C4:262,D4:294,E4:330,F4:349,G4:392,A4:440,B4:494,C5:523,D5:587,E5:659,G5:784,R:0};
+    const seq = 'E4 G4 C5 G4 A4 G4 E4 R D4 F4 A4 F4 G4 E4 C4 R E4 G4 C5 E5 D5 C5 A4 G4 F4 A4 G4 E4 C4 R C5 R'.split(' ');
+    const t0 = ac.currentTime + .05, len = .16;
+    seq.forEach((k,i)=>{ if(!N[k]) return; const o=ac.createOscillator(), g=ac.createGain();
+      o.type='square'; o.frequency.value=N[k]; g.gain.setValueAtTime(.06,t0+i*len); g.gain.exponentialRampToValueAtTime(.001,t0+i*len+len*.95);
+      o.connect(g).connect(ac.destination); o.start(t0+i*len); o.stop(t0+i*len+len); });
+  }
+  function mount(el, st){
+    el.innerHTML = render(st);
+    const c = el.querySelector('[data-cnt]');
+    if(c && !matchMedia('(prefers-reduced-motion: reduce)').matches){ // カウンターが回る
+      const goal=+c.dataset.cnt; let v=Math.max(0,goal-30);
+      const id=setInterval(()=>{v++;c.textContent=String(v).padStart(6,'0');if(v>=goal)clearInterval(id)},40);
+    }
+    const b = el.querySelector('[data-bgm]'); if(b) b.onclick = playBgm;
+  }
+  const encode = st => btoa(unescape(encodeURIComponent(JSON.stringify(st)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  const decode = s => { try { const j = JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/'))))); 
+    if(typeof j.t!=='string'||!Array.isArray(j.p)) return null; j.t=j.t.slice(0,30); j.w=String(j.w||'').slice(0,60); j.h=String(j.h||'').slice(0,12); return j; } catch(e){ return null } };
+  // 画像保存用: CSSの模様(html2canvasが描けない)を小さな画像の敷き詰めに置き換える
+  function tile(key){
+    const T={star:[34,34],pink:[22,22],grid:[16,16],brick:[36,18],koji:[24,24]}[key]; if(!T) return null;
+    const c=document.createElement('canvas'); c.width=T[0]; c.height=T[1]; const x=c.getContext('2d'), [w,h]=T;
+    const dot=(bg,fg,r)=>{x.fillStyle=bg;x.fillRect(0,0,w,h);x.fillStyle=fg;x.beginPath();x.arc(w/2,h/2,r,0,7);x.fill()};
+    if(key==='star') dot('#000','#fff',1.3);
+    if(key==='pink') dot('#fff0f8','#ffb3dd',3.5);
+    if(key==='grid'){x.fillStyle='#fff';x.fillRect(0,0,w,h);x.fillStyle='#cde';x.fillRect(0,0,w,1);x.fillRect(0,0,1,h)}
+    if(key==='brick'){x.fillStyle='#a33';x.fillRect(0,0,w,h);x.fillStyle='#ddd';x.fillRect(0,0,w,2);x.fillRect(0,0,2,h)}
+    if(key==='koji'){x.fillStyle='#ff0';x.fillRect(0,0,w,h);x.fillStyle='#000';
+      for(const o of [-w,0,w]){x.beginPath();x.moveTo(o,h);x.lineTo(o+w/2,h);x.lineTo(o+w/2+h,0);x.lineTo(o+h,0);x.closePath();x.fill()}}
+    return c.toDataURL('image/png');
+  }
+  return {BG, PARTS, DEFAULT, render, mount, encode, decode, esc, tile};
+})();
+
+/* ===== 作成ソフトの画面 ===== */
+(() => {
+  const app = document.getElementById('app');
+  const m = location.hash.match(/^#s=(.+)$/);
+  const shared = m && HP96.decode(m[1]);
+  if(shared){ // 見るだけ
+    document.title = shared.t + ' - 1996年風ホームページ';
+    app.innerHTML = `<div id="v" style="min-height:100vh;display:flex;flex-direction:column"></div><div class="view-bar"><span>これは「1996年風ホームページ メーカー」で作った、当時の再現ページです。</span><a href="${location.pathname}">自分も作ってみる →</a></div>`;
+    const v = document.getElementById('v'); HP96.mount(v, shared); v.firstChild.style.paddingBottom='60px'; v.firstChild.style.flex='1';
+    return;
+  }
+  const st = JSON.parse(JSON.stringify(HP96.DEFAULT));
+  const E = HP96.esc;
+  app.innerHTML = `<div class="hm"><div class="hm-win">
+    <div class="hm-tb"><span>ホームページ作成ソフト 96 - 新規ページ.htm</span><i><b>_</b><b>□</b><b>×</b></i></div>
+    <div class="hm-menu"><span>ファイル(<u>F</u>)</span><span>編集(<u>E</u>)</span><span>表示(<u>V</u>)</span><span>挿入(<u>I</u>)</span><span>ヘルプ(<u>H</u>)</span></div>
+    <div class="hm-body">
+      <form class="hm-panel" id="f" onsubmit="return false">
+        <fieldset><legend>1. ページの文字</legend>
+          <label>ページの名前<input type="text" name="t" maxlength="30" value="${E(st.t)}"></label>
+          <label>ひとこと<input type="text" name="w" maxlength="60" value="${E(st.w)}"></label>
+          <label>ハンドルネーム<input type="text" name="h" maxlength="12" value="${E(st.h)}"></label>
+        </fieldset>
+        <fieldset><legend>2. 背景</legend>
+          <select name="bg">${Object.entries(HP96.BG).map(([k,v])=>`<option value="${k}"${k===st.bg?' selected':''}>${v.name}</option>`).join('')}</select>
+        </fieldset>
+        <fieldset><legend>3. 部品(何個でも)</legend>
+          ${HP96.PARTS.map(([k,n])=>`<label><input type="checkbox" name="p" value="${k}"${st.p.includes(k)?' checked':''}>${n}</label>`).join('')}
+        </fieldset>
+        <button type="button" class="hm-btn" id="rand">おまかせで作る</button>
+      </form>
+      <div class="br"><div class="br-top"><span>場所:</span><span class="addr" id="addr"></span><span class="br-logo">N</span></div>
+        <div class="br-page" id="pv"></div><div class="br-stat" id="bst">ドキュメント: 完了</div></div>
+    </div>
+    <div class="hm-foot"><span class="hm-msg" id="msg">左で選ぶと、右のページがすぐ変わります。</span>
+      <button type="button" class="hm-btn" id="save">画像で保存</button>
+      <button type="button" class="hm-btn" id="share">URLで見せる</button></div>
+    <div class="hm-status"><span>1996年の再現です</span><span>テアシ商会</span></div>
+  </div></div>`;
+  const f = document.getElementById('f'), pv = document.getElementById('pv'), msg = document.getElementById('msg');
+  const romaji = s => (s.match(/[a-z0-9]/gi)||[]).join('').toLowerCase() || 'user';
+  function read(){
+    st.t = f.t.value.trim() || '名無しのホームページ'; st.w = f.w.value.trim(); st.h = f.h.value.trim() || '名無し'; st.bg = f.bg.value;
+    st.p = [...f.querySelectorAll('[name=p]:checked')].map(x=>x.value);
+  }
+  function draw(){ read(); HP96.mount(pv, st);
+    document.getElementById('addr').textContent = `http://www.teashi.or.jp/~${romaji(st.h)}${HP96.encode(st).length%97}/index.htm`; }
+  f.addEventListener('input', draw); f.addEventListener('change', draw);
+  document.getElementById('rand').onclick = () => {
+    const pick = a => a[Math.floor(Math.random()*a.length)];
+    f.t.value = pick(['☆ゆかいな部屋☆','ようこそ!わたしの城へ','熱血!ラーメン研究所','ねこまみれの館','秘密基地へようこそ','電脳カフェ★ぽっぽ']);
+    f.w.value = pick(['ゆっくりしていってね!!','キリ番ゲッターさん大歓迎♪','毎日更新(できたらいいな)','ただいま工事中です m(_ _)m','相互リンクしてください!']);
+    f.bg.value = pick(Object.keys(HP96.BG));
+    f.querySelectorAll('[name=p]').forEach(c=>c.checked=Math.random()<.65);
+    draw(); msg.textContent = 'おまかせで作りました。気に入らなければもう一度。';
+  };
+  document.getElementById('save').onclick = async () => {
+    if(!window.html2canvas){ msg.textContent='画像の保存に失敗しました(通信を確かめてください)。'; return; }
+    msg.textContent = '画像を作っています…';
+    try{
+      const box = document.createElement('div'); box.style.cssText='position:fixed;left:-10000px;top:0;width:800px;height:600px;overflow:hidden';
+      document.body.appendChild(box); HP96.mount(box, st); box.firstChild.style.height='600px';
+      box.querySelectorAll('[data-cnt]').forEach(c=>c.textContent=String(c.dataset.cnt).padStart(6,'0'));
+      const t=HP96.tile(st.bg), hp=box.querySelector('.hp'); if(t) hp.style.background=`url(${t}) 0 0 repeat`;
+      const k=HP96.tile('koji'); box.querySelectorAll('.hp-koji').forEach(e=>e.style.background=`url(${k}) 0 0 repeat`);
+      box.querySelectorAll('.hp-mq span').forEach(s=>{s.style.animation='none';s.style.paddingLeft='0'});
+      const cv = await html2canvas(box, {width:800, height:600, scale:1, backgroundColor:null});
+      box.remove();
+      const a = document.createElement('a'); a.download = 'homepage-1996.png'; a.href = cv.toDataURL('image/png'); a.click();
+      msg.textContent = '画像を保存しました(800×600、当時のふつうの画面の大きさです)。';
+    }catch(e){ msg.textContent = '画像の保存に失敗しました。'; }
+  };
+  document.getElementById('share').onclick = async () => {
+    const url = location.href.split('#')[0] + '#s=' + HP96.encode(st);
+    try{ await navigator.clipboard.writeText(url); msg.textContent = 'URLをコピーしました。貼り付けて送ると、完成したページだけが見えます。'; }
+    catch(e){ prompt('このURLをコピーしてください', url); }
+  };
+  draw();
+})();
+window.addEventListener('hashchange', () => location.reload());
+</script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a67113dc7b04408eb6fe773998c85dfe"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
